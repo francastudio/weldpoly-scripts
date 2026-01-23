@@ -1124,12 +1124,18 @@
     }
   }
 
+  let initAllCalled = false; // Flag to prevent duplicate initialization
+
   function initAll() {
+    // Prevent duplicate initialization
+    if (initAllCalled) return;
+    initAllCalled = true;
+
     init();
     initNavigationButtonHandler();
     initModalSync();
     
-    // Log cart status on page load
+    // Log cart status on page load (only once)
     setTimeout(() => {
       logCartStatus('📦 Page loaded - ');
     }, 500);
@@ -1154,7 +1160,10 @@
 
   if (typeof Webflow !== 'undefined') {
     Webflow.push(function() {
-      setTimeout(initAll, 800);
+      // Only call initAll if it hasn't been called yet
+      if (!initAllCalled) {
+        setTimeout(initAll, 800);
+      }
     });
   }
 })();
