@@ -154,33 +154,58 @@
       // Enable vertical scroll inside modal content
       quoteContent.style.overflowY = 'auto';
       quoteContent.style.overflowX = 'hidden';
-      quoteContent.style.maxHeight = 'calc(100vh - 250px)'; // Adjust based on header + actions height
+      quoteContent.style.WebkitOverflowScrolling = 'touch'; // Smooth scroll on iOS
+      
+      // Calculate max height based on viewport minus header and actions
+      // Header + Actions typically take ~200-250px, leaving space for content
+      const maxHeight = window.innerHeight - 250;
+      quoteContent.style.maxHeight = maxHeight + 'px';
       
       // Prevent Locomotive Scroll from interfering with modal scroll
-      if (quoteContent) {
-        quoteContent.setAttribute('data-locomotive-scroll', 'ignore');
-        quoteContent.setAttribute('data-scroll-container', 'true');
-      }
+      quoteContent.setAttribute('data-locomotive-scroll', 'ignore');
+      quoteContent.setAttribute('data-scroll-container', 'true');
+      
+      // Add class for CSS targeting if needed
+      quoteContent.classList.add('quote-modal-scrollable');
     }
 
     function handleLocomotiveScroll(modalOpen) {
       // Pause Locomotive Scroll when modal is open
-      if (typeof window.LocomotiveScroll !== 'undefined' && window.locomotiveScroll) {
-        if (modalOpen) {
-          window.locomotiveScroll.stop();
-          document.body.style.overflow = 'hidden';
-        } else {
-          window.locomotiveScroll.start();
-          document.body.style.overflow = '';
+      if (typeof window.LocomotiveScroll !== 'undefined') {
+        // Try to find locomotive instance
+        const locomotiveInstance = window.locomotiveScroll || 
+                                   (window.scroll && window.scroll.locomotive) ||
+                                   document.querySelector('[data-scroll-container]')?.__locomotiveScroll;
+        
+        if (locomotiveInstance) {
+          if (modalOpen) {
+            locomotiveInstance.stop();
+            // Prevent body scroll
+            document.body.style.overflow = 'hidden';
+            document.documentElement.style.overflow = 'hidden';
+          } else {
+            locomotiveInstance.start();
+            document.body.style.overflow = '';
+            document.documentElement.style.overflow = '';
+          }
         }
       }
       
       // Also handle Lenis (Locomotive V5 is based on Lenis)
-      if (typeof window.Lenis !== 'undefined' && window.lenis) {
-        if (modalOpen) {
-          window.lenis.stop();
-        } else {
-          window.lenis.start();
+      if (typeof window.Lenis !== 'undefined') {
+        const lenisInstance = window.lenis || 
+                             (window.scroll && window.scroll.lenis);
+        
+        if (lenisInstance) {
+          if (modalOpen) {
+            lenisInstance.stop();
+            document.body.style.overflow = 'hidden';
+            document.documentElement.style.overflow = 'hidden';
+          } else {
+            lenisInstance.start();
+            document.body.style.overflow = '';
+            document.documentElement.style.overflow = '';
+          }
         }
       }
     }
