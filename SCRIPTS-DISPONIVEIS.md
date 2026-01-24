@@ -50,6 +50,43 @@ https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@5821697/weldpoly-spare
 
 ---
 
+### 3. **weldpoly-lenis-scroll-control.js** 🆕
+**Função:** Controle de scroll em seções específicas usando Lenis Scroll
+- Habilita/desabilita scroll em seções específicas
+- Suporta atributos `data-lenis-scroll="disabled"` ou `data-lenis-scroll="enabled"`
+- API JavaScript para controle dinâmico
+- Detecta automaticamente novos elementos adicionados ao DOM
+- Compatível com Lenis puro e Locomotive Scroll V5
+
+**URL:**
+```
+https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@5e0b249/weldpoly-lenis-scroll-control.js
+```
+
+**Quando usar:**
+- ✅ Quando precisar desabilitar scroll em modais, formulários ou seções específicas
+- ✅ Para controle dinâmico de scroll baseado em interações do usuário
+- ⚠️ Requer Lenis Scroll ou Locomotive Scroll V5 estar carregado
+
+**Exemplo de uso:**
+```html
+<!-- Desabilitar scroll em uma seção -->
+<section data-lenis-scroll="disabled">
+  Conteúdo sem scroll
+</section>
+
+<!-- JavaScript -->
+<script>
+disableLenisScroll('.minha-secao');
+enableLenisScroll('.minha-secao');
+toggleLenisScroll('.minha-secao');
+</script>
+```
+
+**Documentação completa:** `docs/LENIS-SCROLL-CONTROL.md`
+
+---
+
 ## 🔧 Como Usar no Webflow
 
 ### Sistema Completo (Quote + Spare Parts)
@@ -67,7 +104,8 @@ https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@5821697/weldpoly-spare
 ```
 weldpoly-scripts/
 ├── weldpoly-quote-system.js (⭐ UNIFICADO - Quote + Modal)
-└── weldpoly-spare-parts-quantity-control-FIXED-ECOMMERCE.js
+├── weldpoly-spare-parts-quantity-control-FIXED-ECOMMERCE.js
+└── weldpoly-lenis-scroll-control.js (🆕 Controle de Scroll)
 ```
 
 Todos os scripts estão no **mesmo nível**, sem subpastas.
@@ -78,7 +116,7 @@ Todos os scripts estão no **mesmo nível**, sem subpastas.
 
 O commit SHA na URL garante que você sempre usa a versão exata do código.
 
-**Último commit:** `5b2636e`
+**Último commit:** `5e0b249`
 
 Para atualizar, substitua o commit SHA na URL pelo mais recente:
 ```bash
