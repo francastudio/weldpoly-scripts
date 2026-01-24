@@ -1,0 +1,38 @@
+===========================================
+COMANDOS GIT PRONTOS PARA EXECUTAR
+===========================================
+
+APÓS CRIAR O REPOSITÓRIO NO GITHUB:
+
+1. Crie o repositório em: https://github.com/new
+   - Nome: weldpoly-scripts
+   - Público: ✅ SIM
+   - NÃO adicione README, .gitignore ou license
+
+2. Execute estes comandos (substitua SEU_USUARIO e NOME_REPO):
+
+   cd dist
+   git remote add origin https://github.com/SEU_USUARIO/NOME_REPO.git
+   git push -u origin main
+
+OU use o script automático:
+
+   cd dist
+   bash push-to-github.sh SEU_USUARIO NOME_REPO
+
+===========================================
+EXEMPLO COMPLETO:
+===========================================
+
+Se seu usuário for "mikaelsouza" e o repositório for "weldpoly-scripts":
+
+cd dist
+bash push-to-github.sh mikaelsouza weldpoly-scripts
+
+OU manualmente:
+
+cd dist
+git remote add origin https://github.com/mikaelsouza/weldpoly-scripts.git
+git push -u origin main
+
+===========================================
