@@ -2,8 +2,8 @@
 CÓDIGO PARA WEBFLOW FOOTER CODE
 ===========================================
 
-<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@6ee32ca/weldpoly-quote-system.js" defer></script>
-<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@6ee32ca/weldpoly-spare-parts-quantity-control-FIXED-ECOMMERCE.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@343c3a2/weldpoly-quote-system.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@343c3a2/weldpoly-spare-parts-quantity-control-FIXED-ECOMMERCE.js" defer></script>
 
 ===========================================
 INSTRUÇÕES:
@@ -23,10 +23,10 @@ URLs DOS SCRIPTS:
 ===========================================
 
 Quote System (Unified):
-https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@6ee32ca/weldpoly-quote-system.js
+https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@343c3a2/weldpoly-quote-system.js
 
 Spare Parts:
-https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@6ee32ca/weldpoly-spare-parts-quantity-control-FIXED-ECOMMERCE.js
+https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@343c3a2/weldpoly-spare-parts-quantity-control-FIXED-ECOMMERCE.js
 
 Repositório GitHub:
 https://github.com/francastudio/weldpoly-scripts
@@ -53,7 +53,7 @@ ATUALIZAÇÕES:
 Este arquivo é atualizado automaticamente a cada push no GitHub.
 O commit SHA na URL garante que você sempre usa a versão exata do código.
 
-Último commit: 6ee32ca (2026-01-24 00:13:00)
+Último commit: 343c3a2 (2026-01-24 00:14:00)
 
 Para atualizar os scripts no futuro:
 

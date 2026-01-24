@@ -22,7 +22,7 @@ Todos os scripts estão na **raiz do repositório** (mesmo nível, sem subpastas
 
 **URL:**
 ```
-https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@5b2636e/weldpoly-quote-system.js
+https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@343c3a2/weldpoly-quote-system.js
 ```
 
 **Quando usar:**
@@ -41,7 +41,7 @@ https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@5b2636e/weldpoly-quote
 
 **URL:**
 ```
-https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@5b2636e/weldpoly-spare-parts-quantity-control-FIXED-ECOMMERCE.js
+https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@343c3a2/weldpoly-spare-parts-quantity-control-FIXED-ECOMMERCE.js
 ```
 
 **Quando usar:**
