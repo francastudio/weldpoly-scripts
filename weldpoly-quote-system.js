@@ -147,10 +147,55 @@
       toggleEmptyState();
     }
 
+    // ===== Locomotive Scroll Integration =====
+    function setupModalScroll() {
+      if (!quoteContent) return;
+      
+      // Enable vertical scroll inside modal content
+      quoteContent.style.overflowY = 'auto';
+      quoteContent.style.overflowX = 'hidden';
+      quoteContent.style.maxHeight = 'calc(100vh - 250px)'; // Adjust based on header + actions height
+      
+      // Prevent Locomotive Scroll from interfering with modal scroll
+      if (quoteContent) {
+        quoteContent.setAttribute('data-locomotive-scroll', 'ignore');
+        quoteContent.setAttribute('data-scroll-container', 'true');
+      }
+    }
+
+    function handleLocomotiveScroll(modalOpen) {
+      // Pause Locomotive Scroll when modal is open
+      if (typeof window.LocomotiveScroll !== 'undefined' && window.locomotiveScroll) {
+        if (modalOpen) {
+          window.locomotiveScroll.stop();
+          document.body.style.overflow = 'hidden';
+        } else {
+          window.locomotiveScroll.start();
+          document.body.style.overflow = '';
+        }
+      }
+      
+      // Also handle Lenis (Locomotive V5 is based on Lenis)
+      if (typeof window.Lenis !== 'undefined' && window.lenis) {
+        if (modalOpen) {
+          window.lenis.stop();
+        } else {
+          window.lenis.start();
+        }
+      }
+    }
+
     // ===== Modal Control =====
     function openQuoteModal() {
       if (modalGroup) modalGroup.setAttribute('data-modal-group-status', 'active');
       if (quoteModal) quoteModal.setAttribute('data-modal-status', 'active');
+      
+      // Setup scroll for modal content
+      setupModalScroll();
+      
+      // Pause Locomotive Scroll
+      handleLocomotiveScroll(true);
+      
       // Re-render cart when modal opens to ensure it's up to date
       renderCart();
     }
@@ -158,6 +203,9 @@
     function closeQuoteModal() {
       if (modalGroup) modalGroup.setAttribute('data-modal-group-status', 'not-active');
       if (quoteModal) quoteModal.setAttribute('data-modal-status', 'not-active');
+      
+      // Resume Locomotive Scroll
+      handleLocomotiveScroll(false);
     }
 
     // Expose globally for other scripts
@@ -219,10 +267,39 @@
       });
     });
 
+    // ===== Modal Scroll Observer =====
+    // Watch for modal status changes to handle scroll
+    if (quoteModal) {
+      const modalObserver = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+          if (mutation.type === 'attributes' && mutation.attributeName === 'data-modal-status') {
+            const isActive = quoteModal.getAttribute('data-modal-status') === 'active';
+            if (isActive) {
+              setupModalScroll();
+              handleLocomotiveScroll(true);
+            } else {
+              handleLocomotiveScroll(false);
+            }
+          }
+        });
+      });
+      
+      modalObserver.observe(quoteModal, {
+        attributes: true,
+        attributeFilter: ['data-modal-status']
+      });
+    }
+
     // ===== Inicialização =====
     loadCart();
     renderCart();
     updateNavQty();
+    
+    // Setup modal scroll on init (in case modal is already open)
+    if (quoteModal && quoteModal.getAttribute('data-modal-status') === 'active') {
+      setupModalScroll();
+      handleLocomotiveScroll(true);
+    }
   }
 
   // Expose globally
