@@ -189,8 +189,14 @@
       return;
     }
 
-    // Remove existing items
-    quoteContent.querySelectorAll('.quote_item:not([style*="display: none"])').forEach(el => el.remove());
+    // Hide empty state and show actions block
+    const emptyWrapper = quoteContent.querySelector('[quote-empty]');
+    const actionsBlock = quoteModal.querySelector('.quote_modal-content-bottom');
+    if (emptyWrapper) emptyWrapper.style.display = 'none';
+    if (actionsBlock) actionsBlock.style.display = 'block';
+
+    // Remove existing items (but keep the template)
+    quoteContent.querySelectorAll('.quote_item:not([style*="display: none"]):not([data-quote-item]):not([data-quote-part-item])').forEach(el => el.remove());
 
     // Render each item
     cart.forEach((item, index) => {
@@ -310,6 +316,11 @@
       }
       if (actionsBlock) {
         actionsBlock.style.display = cart.length === 0 ? 'none' : 'block';
+      }
+      // Also hide the template item if it's visible
+      const templateItem = quoteModal.querySelector('[data-quote-item]');
+      if (templateItem && cart.length > 0) {
+        templateItem.style.display = 'none';
       }
     };
 
