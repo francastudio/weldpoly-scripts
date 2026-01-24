@@ -146,11 +146,25 @@
   // Function to manually render cart items when renderCart fails
   function manualRenderCart() {
     const quoteModal = document.querySelector('[data-modal-name="quote-modal"]');
-    if (!quoteModal) return;
+    if (!quoteModal) {
+      console.log('[Quote Cart] ⚠️ Quote modal not found');
+      return;
+    }
 
     const quoteContent = quoteModal.querySelector('.quote_modal-content');
+    if (!quoteContent) {
+      console.log('[Quote Cart] ⚠️ Quote content not found');
+      return;
+    }
+
+    // Get templates
     const templateItem = quoteModal.querySelector('[data-quote-item]');
-    if (!quoteContent || !templateItem) return;
+    const templatePartItem = quoteModal.querySelector('[data-quote-part-item]');
+    
+    if (!templateItem && !templatePartItem) {
+      console.log('[Quote Cart] ⚠️ No template found (neither data-quote-item nor data-quote-part-item)');
+      return;
+    }
 
     // Get cart from localStorage
     let cart = [];
@@ -161,7 +175,18 @@
         if (!Array.isArray(cart)) cart = [];
       }
     } catch (err) {
+      console.log('[Quote Cart] ⚠️ Error reading cart:', err);
       cart = [];
+    }
+
+    if (cart.length === 0) {
+      console.log('[Quote Cart] ℹ️ Cart is empty');
+      // Update empty state
+      const emptyWrapper = quoteContent.querySelector('[quote-empty]');
+      const actionsBlock = quoteModal.querySelector('.quote_modal-content-bottom');
+      if (emptyWrapper) emptyWrapper.style.display = 'flex';
+      if (actionsBlock) actionsBlock.style.display = 'none';
+      return;
     }
 
     // Remove existing items
@@ -169,35 +194,21 @@
 
     // Render each item
     cart.forEach((item, index) => {
-      const clone = templateItem.cloneNode(true);
+      // Choose template based on item type
+      const isSparePart = item.isSparePart === true;
+      const useTemplate = isSparePart && templatePartItem ? templatePartItem : templateItem;
+      
+      if (!useTemplate) {
+        console.log('[Quote Cart] ⚠️ No template available for item:', item.title);
+        return;
+      }
+
+      const clone = useTemplate.cloneNode(true);
       clone.style.display = 'flex';
+      clone.classList.add('quote_item');
 
-      // Safely set title
-      const titleEl = clone.querySelector('[data-quote-title]');
-      if (titleEl) {
-        titleEl.textContent = item.title || '';
-      }
-
-      // Safely set description
-      const descEl = clone.querySelector('[data-quote-description]');
-      if (descEl) {
-        descEl.textContent = item.description || '';
-      }
-
-      // Safely set quantity
-      const qtyEl = clone.querySelector('[data-quote-number]');
-      if (qtyEl) {
-        qtyEl.textContent = item.qty || 1;
-        const nestedDiv = qtyEl.querySelector('div');
-        if (nestedDiv) nestedDiv.textContent = item.qty || 1;
-      }
-
-      // Remove image if exists
-      const imgEl = clone.querySelector('[data-quote-image]');
-      if (imgEl) imgEl.remove();
-
-      // If it's a spare part, replace content with custom HTML
-      if (item.isSparePart && item.sparePartContentHTML) {
+      // If it's a spare part with custom HTML, use that
+      if (isSparePart && item.sparePartContentHTML) {
         const contentContainer = clone.querySelector('[data-quote-part-content]') || 
                                 clone.querySelector('.quote_item_content') ||
                                 clone;
@@ -219,6 +230,31 @@
             if (nestedDiv) nestedDiv.textContent = item.qty || 1;
           }
         }
+      } else {
+        // Regular product item
+        // Safely set title
+        const titleEl = clone.querySelector('[data-quote-title]');
+        if (titleEl) {
+          titleEl.textContent = item.title || '';
+        }
+
+        // Safely set description
+        const descEl = clone.querySelector('[data-quote-description]');
+        if (descEl) {
+          descEl.textContent = item.description || '';
+        }
+
+        // Safely set quantity
+        const qtyEl = clone.querySelector('[data-quote-number]');
+        if (qtyEl) {
+          qtyEl.textContent = item.qty || 1;
+          const nestedDiv = qtyEl.querySelector('div');
+          if (nestedDiv) nestedDiv.textContent = item.qty || 1;
+        }
+
+        // Remove image if exists
+        const imgEl = clone.querySelector('[data-quote-image]');
+        if (imgEl) imgEl.remove();
       }
 
       // Add event listeners for controls
@@ -292,7 +328,7 @@
         // Check if items were rendered, if not, use manual render
         const quoteContent = document.querySelector('.quote_modal-content');
         if (quoteContent) {
-          const renderedItems = quoteContent.querySelectorAll('.quote_item');
+          const renderedItems = quoteContent.querySelectorAll('.quote_item:not([style*="display: none"])');
           let cart = [];
           try {
             const saved = localStorage.getItem('quoteCart');
@@ -316,7 +352,7 @@
             console.log('[Quote Cart] ℹ️ Cart is empty');
           }
         }
-      }, 150);
+      }, 200);
     }
   }
 
@@ -1106,7 +1142,19 @@
   }
 
   // Function to log cart status
+  const logCartStatusCache = new Set(); // Cache to prevent duplicate logs
   function logCartStatus(context = '') {
+    // Create unique key for this log call
+    const logKey = `${context}-${Date.now()}`;
+    const cacheKey = context.trim();
+    
+    // Prevent duplicate logs within 1 second
+    if (logCartStatusCache.has(cacheKey)) {
+      return [];
+    }
+    logCartStatusCache.add(cacheKey);
+    setTimeout(() => logCartStatusCache.delete(cacheKey), 1000);
+    
     try {
       const saved = localStorage.getItem('quoteCart');
       let cart = [];
@@ -1116,7 +1164,7 @@
       }
       const itemCount = cart.length;
       const totalQty = cart.reduce((sum, item) => sum + (item.qty || 0), 0);
-      console.log(`[Quote Cart] ${context}Total items: ${itemCount} | Total quantity: ${totalQty}`, cart);
+      console.log(`[Quote Cart] ${context}Total items: ${itemCount} | Total quantity: ${totalQty}`, cart.length > 0 ? cart : '');
       return cart;
     } catch (err) {
       console.log(`[Quote Cart] ${context}Error reading cart:`, err);
