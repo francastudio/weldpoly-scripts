@@ -1286,27 +1286,90 @@
 
   // Function to close modal (support for data-modal-close buttons)
   function closeQuoteModal() {
+    console.log('[Quote Cart] 🔒 Closing quote modal...');
     const modalGroup = document.querySelector('[data-modal-group-status]');
     const quoteModal = document.querySelector('[data-modal-name="quote-modal"]');
-    if (modalGroup) modalGroup.setAttribute('data-modal-group-status', 'not-active');
-    if (quoteModal) quoteModal.setAttribute('data-modal-status', 'not-active');
+    
+    if (modalGroup) {
+      modalGroup.setAttribute('data-modal-group-status', 'not-active');
+      console.log('[Quote Cart] ✅ Modal group set to not-active');
+    } else {
+      console.log('[Quote Cart] ⚠️ Modal group not found');
+    }
+    
+    if (quoteModal) {
+      quoteModal.setAttribute('data-modal-status', 'not-active');
+      console.log('[Quote Cart] ✅ Quote modal set to not-active');
+    } else {
+      console.log('[Quote Cart] ⚠️ Quote modal not found');
+    }
+    
+    // Also call the original closeAllModals if it exists
+    if (typeof window.closeAllModals === 'function') {
+      console.log('[Quote Cart] 🔄 Calling original closeAllModals()');
+      window.closeAllModals();
+    }
   }
 
   // Initialize modal close buttons (ensure they work even if original script hasn't loaded)
   function initModalCloseButtons() {
+    console.log('[Quote Cart] 🔧 Initializing modal close buttons...');
+    
     // Use event delegation for all close buttons (works for dynamically added buttons too)
-    document.addEventListener('click', (e) => {
+    // Use capture phase to ensure it runs before other handlers
+    document.addEventListener('click', function(e) {
+      // Check if the clicked element or its parent has data-modal-close
       const closeBtn = e.target.closest('[data-modal-close]');
+      
       if (closeBtn) {
+        console.log('[Quote Cart] 🔘 Close button clicked:', closeBtn);
         e.preventDefault();
         e.stopPropagation();
+        e.stopImmediatePropagation(); // Prevent other handlers from running
+        
+        // Close the modal
         closeQuoteModal();
-        // Also call the original closeAllModals if it exists
-        if (typeof window.closeAllModals === 'function') {
-          window.closeAllModals();
-        }
+        
+        return false;
       }
-    }, true); // Use capture phase to ensure it runs before other handlers
+    }, true); // Use capture phase (true) to ensure it runs before other handlers
+    
+    // Also add direct listeners to existing close buttons as backup
+    function attachDirectListeners() {
+      const closeButtons = document.querySelectorAll('[data-modal-close]');
+      closeButtons.forEach(btn => {
+        // Remove any existing listeners to avoid duplicates
+        const newBtn = btn.cloneNode(true);
+        btn.parentNode.replaceChild(newBtn, btn);
+        
+        // Add click listener
+        newBtn.addEventListener('click', function(e) {
+          console.log('[Quote Cart] 🔘 Direct close button clicked:', newBtn);
+          e.preventDefault();
+          e.stopPropagation();
+          closeQuoteModal();
+        }, true);
+      });
+      
+      if (closeButtons.length > 0) {
+        console.log(`[Quote Cart] ✅ Attached direct listeners to ${closeButtons.length} close buttons`);
+      }
+    }
+    
+    // Attach listeners immediately
+    attachDirectListeners();
+    
+    // Also attach to dynamically added buttons
+    const observer = new MutationObserver(() => {
+      attachDirectListeners();
+    });
+    
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true
+    });
+    
+    console.log('[Quote Cart] ✅ Modal close buttons initialized');
   }
 
   function initAll() {
