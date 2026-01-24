@@ -152,6 +152,8 @@
 
   // Function to manually render cart items when renderCart fails
   function manualRenderCart() {
+    console.log('[Quote Cart] 🔄 manualRenderCart() called');
+    
     const quoteModal = document.querySelector('[data-modal-name="quote-modal"]');
     if (!quoteModal) {
       console.log('[Quote Cart] ⚠️ Quote modal not found');
@@ -177,9 +179,11 @@
     let cart = [];
     try {
       const saved = localStorage.getItem('quoteCart');
+      console.log('[Quote Cart] 📦 Reading cart from localStorage:', saved ? `Found ${saved.length} chars` : 'Empty');
       if (saved) {
         cart = JSON.parse(saved);
         if (!Array.isArray(cart)) cart = [];
+        console.log(`[Quote Cart] 📦 Cart parsed: ${cart.length} items`, cart);
       }
     } catch (err) {
       console.log('[Quote Cart] ⚠️ Error reading cart:', err);
@@ -187,14 +191,21 @@
     }
 
     if (cart.length === 0) {
-      console.log('[Quote Cart] ℹ️ Cart is empty');
+      console.log('[Quote Cart] ℹ️ Cart is empty - showing empty state');
       // Update empty state
       const emptyWrapper = quoteContent.querySelector('[quote-empty]');
       const actionsBlock = quoteModal.querySelector('.quote_modal-content-bottom');
       if (emptyWrapper) emptyWrapper.style.display = 'flex';
       if (actionsBlock) actionsBlock.style.display = 'none';
+      
+      // Update title
+      const titleEl = quoteModal.querySelector('.quote_header-title');
+      if (titleEl) titleEl.textContent = 'QUOTE (0 ITEMS)';
+      
       return;
     }
+    
+    console.log(`[Quote Cart] ✅ Cart has ${cart.length} items, rendering...`);
 
     // Hide empty state and show actions block
     const emptyWrapper = quoteContent.querySelector('[quote-empty]');
