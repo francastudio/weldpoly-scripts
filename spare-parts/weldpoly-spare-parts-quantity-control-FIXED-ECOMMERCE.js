@@ -1349,7 +1349,7 @@
     }, 100);
   }
 
-  // Initialize modal close buttons (ensure they work even if original script hasn't loaded)
+  // Initialize modal close buttons (ensure they work correctly)
   function initModalCloseButtons() {
     console.log('[Quote Cart] 🔧 Initializing modal close buttons...');
     
@@ -1363,13 +1363,19 @@
         attributes: Array.from(btn.attributes).map(attr => `${attr.name}="${attr.value}"`).join(', '),
         visible: btn.offsetParent !== null,
         display: window.getComputedStyle(btn).display,
-        pointerEvents: window.getComputedStyle(btn).pointerEvents
+        pointerEvents: window.getComputedStyle(btn).pointerEvents,
+        zIndex: window.getComputedStyle(btn).zIndex
       });
     });
     
-    // Use event delegation for all close buttons (works for dynamically added buttons too)
-    // Use capture phase to ensure it runs before other handlers
-    document.addEventListener('click', function(e) {
+    // Remove any existing listeners from our previous initialization
+    if (window._quoteCartCloseHandler) {
+      document.removeEventListener('click', window._quoteCartCloseHandler, true);
+      console.log('[Quote Cart] 🧹 Removed previous click handler');
+    }
+    
+    // Create a named function so we can remove it later if needed
+    window._quoteCartCloseHandler = function(e) {
       // Log all clicks for debugging
       const clickedElement = e.target;
       const hasDataModalClose = clickedElement.hasAttribute('data-modal-close') || clickedElement.closest('[data-modal-close]');
@@ -1378,6 +1384,7 @@
         console.log('[Quote Cart] 🎯 Click detected on element with data-modal-close');
         console.log('[Quote Cart]   - Clicked element:', clickedElement);
         console.log('[Quote Cart]   - Element classes:', clickedElement.className);
+        console.log('[Quote Cart]   - Element tag:', clickedElement.tagName);
         console.log('[Quote Cart]   - Element attributes:', Array.from(clickedElement.attributes).map(attr => `${attr.name}="${attr.value}"`).join(', '));
         
         // Check if the clicked element or its parent has data-modal-close
@@ -1389,6 +1396,8 @@
           console.log('[Quote Cart]   - Close button visible:', closeBtn.offsetParent !== null);
           console.log('[Quote Cart]   - Close button display:', window.getComputedStyle(closeBtn).display);
           console.log('[Quote Cart]   - Event phase:', e.eventPhase === 1 ? 'CAPTURE' : e.eventPhase === 2 ? 'TARGET' : 'BUBBLE');
+          console.log('[Quote Cart]   - Event defaultPrevented:', e.defaultPrevented);
+          console.log('[Quote Cart]   - Event isTrusted:', e.isTrusted);
           
           // Stop all event propagation FIRST
           e.preventDefault();
@@ -1404,9 +1413,16 @@
           return false;
         } else {
           console.log('[Quote Cart] ⚠️ Element has data-modal-close but closest() returned null');
+          console.log('[Quote Cart]   - clickedElement:', clickedElement);
+          console.log('[Quote Cart]   - clickedElement.parentElement:', clickedElement.parentElement);
         }
       }
-    }, true); // Use capture phase (true) to ensure it runs before other handlers
+    };
+    
+    // Use event delegation for all close buttons (works for dynamically added buttons too)
+    // Use capture phase to ensure it runs before other handlers
+    document.addEventListener('click', window._quoteCartCloseHandler, true);
+    console.log('[Quote Cart] ✅ Global click handler attached (capture phase)');
     
     // Also add direct listeners to existing close buttons as backup
     function attachDirectListeners() {
@@ -1414,16 +1430,18 @@
       console.log(`[Quote Cart] 🔍 attachDirectListeners: Found ${closeButtons.length} close buttons`);
       
       closeButtons.forEach((btn, index) => {
-        // Check if button already has our listener (avoid duplicates)
+        // Remove any existing listeners first
         if (btn._quoteCartCloseListener) {
-          console.log(`[Quote Cart]   - Button ${index + 1} already has listener, skipping`);
-          return;
+          console.log(`[Quote Cart]   - Button ${index + 1} has existing listener, removing it first`);
+          btn.removeEventListener('click', btn._quoteCartCloseListener, true);
         }
         
         console.log(`[Quote Cart]   - Attaching direct listener to button ${index + 1}:`, {
           element: btn,
           classes: btn.className,
-          visible: btn.offsetParent !== null
+          visible: btn.offsetParent !== null,
+          display: window.getComputedStyle(btn).display,
+          pointerEvents: window.getComputedStyle(btn).pointerEvents
         });
         
         // Add click listener with capture phase
@@ -1431,17 +1449,22 @@
           console.log('[Quote Cart] 🔘 Direct close button clicked (direct listener):', btn);
           console.log('[Quote Cart]   - Event target:', e.target);
           console.log('[Quote Cart]   - Event currentTarget:', e.currentTarget);
+          console.log('[Quote Cart]   - Event phase:', e.eventPhase === 1 ? 'CAPTURE' : e.eventPhase === 2 ? 'TARGET' : 'BUBBLE');
+          
           e.preventDefault();
           e.stopPropagation();
           e.stopImmediatePropagation();
+          
           console.log('[Quote Cart] ✅ Calling closeQuoteModal() from direct listener...');
           closeQuoteModal();
+          
           return false;
         };
         
+        // Add listener with capture phase (runs before other handlers)
         btn.addEventListener('click', handler, true);
         btn._quoteCartCloseListener = handler; // Mark as having listener
-        console.log(`[Quote Cart]   ✅ Direct listener attached to button ${index + 1}`);
+        console.log(`[Quote Cart]   ✅ Direct listener attached to button ${index + 1} (capture phase)`);
       });
       
       if (closeButtons.length > 0) {
