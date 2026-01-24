@@ -1,0 +1,29 @@
+===========================================
+CÓDIGO PARA WEBFLOW FOOTER CODE
+(APENAS MODAL - SEM SPARE PARTS)
+===========================================
+
+<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@e9fad52/dist/quote/weldpoly-quote-modal-simple.js" defer></script>
+
+===========================================
+INSTRUÇÕES:
+===========================================
+
+1. Acesse: Webflow → Site Settings → Custom Code
+2. Cole o código acima no campo "Footer Code"
+3. Clique em "Save"
+4. Publique o site
+
+===========================================
+FUNCIONALIDADES:
+===========================================
+
+✅ Abre o modal quando clicar em elementos com:
+   data-modal-target="quote-modal"
+
+✅ Fecha o modal quando clicar em elementos com:
+   classe "modal__btn-close"
+
+===========================================
+Último commit: e9fad52 (2026-01-23 23:10:00)
+===========================================
