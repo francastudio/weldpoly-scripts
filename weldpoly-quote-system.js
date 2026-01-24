@@ -148,32 +148,23 @@
     }
 
     // ===== Locomotive Scroll Integration =====
-    let savedScrollPosition = 0;
-    
     function setupModalScroll() {
       if (!quoteContent) return;
-      
-      // Get the wrapper that contains the content and actions
-      const quoteContentWrapper = quoteContent.closest('.quote_content-wrapper') || quoteContent.parentElement;
       
       // Enable vertical scroll ONLY inside modal content
       quoteContent.style.overflowY = 'auto';
       quoteContent.style.overflowX = 'hidden';
       quoteContent.style.WebkitOverflowScrolling = 'touch';
-      quoteContent.style.position = 'relative';
       
       // Calculate max height based on viewport minus header and actions
-      // Get the modal card to calculate available space
       const modalCard = quoteModal?.querySelector('.modal__card') || quoteModal;
       if (modalCard) {
-        const cardRect = modalCard.getBoundingClientRect();
         const headerHeight = quoteModal?.querySelector('.quote_header')?.offsetHeight || 0;
         const actionsHeight = quoteModal?.querySelector('.quote_modal-content-bottom')?.offsetHeight || 0;
-        const padding = 40; // Extra padding for spacing
+        const padding = 40;
         
         const maxHeight = window.innerHeight - headerHeight - actionsHeight - padding;
         quoteContent.style.maxHeight = maxHeight + 'px';
-        quoteContent.style.height = 'auto';
       }
       
       // Prevent Locomotive Scroll from interfering with modal scroll
@@ -184,80 +175,6 @@
       quoteContent.classList.add('quote-modal-scrollable');
     }
 
-    function handleLocomotiveScroll(modalOpen) {
-      if (modalOpen) {
-        // Save current scroll position
-        savedScrollPosition = window.pageYOffset || document.documentElement.scrollTop;
-        
-        // Pause Locomotive Scroll
-        if (typeof window.LocomotiveScroll !== 'undefined') {
-          const locomotiveInstance = window.locomotiveScroll || 
-                                     window.scroll?.locomotive ||
-                                     document.querySelector('[data-scroll-container]')?.__locomotiveScroll;
-          
-          if (locomotiveInstance && typeof locomotiveInstance.stop === 'function') {
-            locomotiveInstance.stop();
-          }
-        }
-        
-        // Pause Lenis (Locomotive V5 is based on Lenis)
-        if (typeof window.Lenis !== 'undefined') {
-          const lenisInstance = window.lenis || window.scroll?.lenis;
-          
-          if (lenisInstance && typeof lenisInstance.stop === 'function') {
-            lenisInstance.stop();
-          }
-        }
-        
-        // Completely block body scroll
-        document.body.style.overflow = 'hidden';
-        document.body.style.position = 'fixed';
-        document.body.style.top = `-${savedScrollPosition}px`;
-        document.body.style.width = '100%';
-        document.documentElement.style.overflow = 'hidden';
-        
-        // Prevent scroll on modal wrapper
-        if (quoteModal) {
-          quoteModal.style.overflow = 'hidden';
-        }
-      } else {
-        // Resume Locomotive Scroll
-        if (typeof window.LocomotiveScroll !== 'undefined') {
-          const locomotiveInstance = window.locomotiveScroll || 
-                                     window.scroll?.locomotive ||
-                                     document.querySelector('[data-scroll-container]')?.__locomotiveScroll;
-          
-          if (locomotiveInstance && typeof locomotiveInstance.start === 'function') {
-            locomotiveInstance.start();
-          }
-        }
-        
-        // Resume Lenis
-        if (typeof window.Lenis !== 'undefined') {
-          const lenisInstance = window.lenis || window.scroll?.lenis;
-          
-          if (lenisInstance && typeof lenisInstance.start === 'function') {
-            lenisInstance.start();
-          }
-        }
-        
-        // Restore body scroll
-        document.body.style.overflow = '';
-        document.body.style.position = '';
-        document.body.style.top = '';
-        document.body.style.width = '';
-        document.documentElement.style.overflow = '';
-        
-        // Restore scroll position
-        window.scrollTo(0, savedScrollPosition);
-        
-        // Restore modal wrapper
-        if (quoteModal) {
-          quoteModal.style.overflow = '';
-        }
-      }
-    }
-
     // ===== Modal Control =====
     function openQuoteModal() {
       if (modalGroup) modalGroup.setAttribute('data-modal-group-status', 'active');
@@ -266,9 +183,6 @@
       // Setup scroll for modal content
       setupModalScroll();
       
-      // Pause Locomotive Scroll
-      handleLocomotiveScroll(true);
-      
       // Re-render cart when modal opens to ensure it's up to date
       renderCart();
     }
@@ -276,9 +190,6 @@
     function closeQuoteModal() {
       if (modalGroup) modalGroup.setAttribute('data-modal-group-status', 'not-active');
       if (quoteModal) quoteModal.setAttribute('data-modal-status', 'not-active');
-      
-      // Resume Locomotive Scroll
-      handleLocomotiveScroll(false);
     }
 
     // Expose globally for other scripts
@@ -341,21 +252,17 @@
     });
 
     // ===== Modal Scroll Observer =====
-    // Watch for modal status changes to handle scroll
+    // Watch for modal status changes to setup scroll
     if (quoteModal) {
       const modalObserver = new MutationObserver((mutations) => {
         mutations.forEach((mutation) => {
           if (mutation.type === 'attributes' && mutation.attributeName === 'data-modal-status') {
             const isActive = quoteModal.getAttribute('data-modal-status') === 'active';
-            // Use setTimeout to ensure DOM is updated
-            setTimeout(() => {
-              if (isActive) {
+            if (isActive) {
+              setTimeout(() => {
                 setupModalScroll();
-                handleLocomotiveScroll(true);
-              } else {
-                handleLocomotiveScroll(false);
-              }
-            }, 50);
+              }, 50);
+            }
           }
         });
       });
@@ -364,40 +271,6 @@
         attributes: true,
         attributeFilter: ['data-modal-status']
       });
-      
-      // Also watch modal group status
-      if (modalGroup) {
-        modalObserver.observe(modalGroup, {
-          attributes: true,
-          attributeFilter: ['data-modal-group-status']
-        });
-      }
-    }
-    
-    // Prevent scroll propagation from modal content to body
-    if (quoteContent) {
-      quoteContent.addEventListener('wheel', function(e) {
-        const isScrollingDown = e.deltaY > 0;
-        const isScrollingUp = e.deltaY < 0;
-        const content = e.currentTarget;
-        const isAtTop = content.scrollTop === 0;
-        const isAtBottom = content.scrollTop + content.clientHeight >= content.scrollHeight - 1;
-        
-        // Prevent body scroll when scrolling inside modal
-        if ((isScrollingUp && isAtTop) || (isScrollingDown && isAtBottom)) {
-          e.stopPropagation();
-        }
-      }, { passive: false });
-      
-      quoteContent.addEventListener('touchmove', function(e) {
-        const content = e.currentTarget;
-        const isAtTop = content.scrollTop === 0;
-        const isAtBottom = content.scrollTop + content.clientHeight >= content.scrollHeight - 1;
-        
-        if (isAtTop || isAtBottom) {
-          e.stopPropagation();
-        }
-      }, { passive: false });
     }
 
     // ===== Inicialização =====
@@ -408,7 +281,6 @@
     // Setup modal scroll on init (in case modal is already open)
     if (quoteModal && quoteModal.getAttribute('data-modal-status') === 'active') {
       setupModalScroll();
-      handleLocomotiveScroll(true);
     }
   }
 
