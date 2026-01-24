@@ -1,0 +1,31 @@
+===========================================
+COMANDO COMPLETO PARA EXECUTAR
+===========================================
+
+APÓS CRIAR O REPOSITÓRIO NO GITHUB:
+
+1. Crie em: https://github.com/new
+   - Nome: weldpoly-scripts
+   - Público: ✅ SIM
+
+2. Execute este comando (substitua SEU_USUARIO):
+
+cd dist
+bash push-to-github.sh SEU_USUARIO weldpoly-scripts
+
+===========================================
+EXEMPLO:
+===========================================
+
+cd dist
+bash push-to-github.sh mikaelsouza weldpoly-scripts
+
+===========================================
+O SCRIPT VAI:
+===========================================
+
+✅ Adicionar remote do GitHub
+✅ Fazer push dos arquivos
+✅ Mostrar URLs prontas para usar
+
+===========================================

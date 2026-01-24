@@ -1,0 +1,63 @@
+===========================================
+CÓDIGO PARA WEBFLOW FOOTER CODE
+===========================================
+
+<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@COMMIT_SHA/weldpoly-quote-system-init.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@COMMIT_SHA/weldpoly-spare-parts-quantity-control-FIXED-ECOMMERCE.js" defer></script>
+
+===========================================
+INSTRUÇÕES:
+===========================================
+
+1. Acesse: Webflow → Site Settings → Custom Code
+2. Cole o código acima no campo "Footer Code"
+3. Clique em "Save"
+4. Publique o site
+
+⚠️ IMPORTANTE: Mantenha a ordem dos scripts (quote system primeiro)
+
+===========================================
+URLs DOS SCRIPTS:
+===========================================
+
+Quote System:
+https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@COMMIT_SHA/weldpoly-quote-system-init.js
+
+Spare Parts:
+https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@COMMIT_SHA/weldpoly-spare-parts-quantity-control-FIXED-ECOMMERCE.js
+
+Repositório GitHub:
+https://github.com/francastudio/weldpoly-scripts
+
+===========================================
+VERIFICAÇÃO:
+===========================================
+
+✅ Repositório verificado e acessível
+✅ Arquivos confirmados em dist/quote/ e dist/spare-parts/
+✅ URLs testadas e funcionando
+
+Para verificar se os scripts estão carregando:
+
+1. Abra o console do navegador (F12)
+2. Verifique se não há erros de carregamento
+3. Digite: typeof window.initQuoteSystem === 'function'
+4. Deve retornar: true
+
+===========================================
+ATUALIZAÇÕES:
+===========================================
+
+Este arquivo é atualizado automaticamente a cada push no GitHub.
+O commit SHA na URL garante que você sempre usa a versão exata do código.
+
+Último commit: bca5c2e (2026-01-23 23:08:11)
+
+Para atualizar os scripts no futuro:
+
+1. Edite os arquivos localmente
+2. Execute: bash scripts/atualizar-github-auto.sh
+3. O script atualiza automaticamente este arquivo com o novo commit SHA
+4. Cole o código atualizado no Webflow Footer Code
+
+===========================================

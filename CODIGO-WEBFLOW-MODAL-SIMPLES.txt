@@ -3,7 +3,7 @@ CÓDIGO PARA WEBFLOW FOOTER CODE
 (APENAS MODAL - SEM SPARE PARTS)
 ===========================================
 
-<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@00d7b20/quote/weldpoly-quote-modal-simple.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@COMMIT_SHA/weldpoly-quote-modal-simple.js" defer></script>
 
 ===========================================
 INSTRUÇÕES:
