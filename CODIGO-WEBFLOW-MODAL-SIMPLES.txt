@@ -3,7 +3,7 @@ CÓDIGO PARA WEBFLOW FOOTER CODE
 (APENAS MODAL - SEM SPARE PARTS)
 ===========================================
 
-<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@0330e0f/quote/weldpoly-quote-modal-simple.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@00d7b20/quote/weldpoly-quote-modal-simple.js" defer></script>
 
 ===========================================
 INSTRUÇÕES:
@@ -25,5 +25,5 @@ FUNCIONALIDADES:
    classe "modal__btn-close" OU atributo "data-modal-close"
 
 ===========================================
-Último commit: 0330e0f (2026-01-23 23:18:00)
+Último commit: 00d7b20 (2026-01-24 00:01:00)
 ===========================================
