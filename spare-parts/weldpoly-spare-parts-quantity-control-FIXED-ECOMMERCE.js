@@ -1022,7 +1022,7 @@
               setTimeout(() => {
                 const quoteContent = document.querySelector('.quote_modal-content');
                 if (quoteContent) {
-                  const renderedItems = quoteContent.querySelectorAll('.quote_item');
+                  const renderedItems = quoteContent.querySelectorAll('.quote_item:not([style*="display: none"])');
                   let cart = [];
                   try {
                     const saved = localStorage.getItem('quoteCart');
@@ -1040,7 +1040,7 @@
                     console.log('[Quote Cart] ✅ Modal opened with items rendered');
                   }
                 }
-              }, 200);
+              }, 300);
               updateNavQtyFromCart();
               syncSparePartsWithCart();
             }, 300);
