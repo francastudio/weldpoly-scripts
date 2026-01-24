@@ -67,7 +67,7 @@ https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@6f162ee/weldpoly-spare
 ### Opção 1: Sistema Completo (Quote + Spare Parts)
 ```html
 <script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@d816149/weldpoly-quote-system-init.js" defer></script>
-<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@d816149/weldpoly-spare-parts-quantity-control-FIXED-ECOMMERCE.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@2473b0b/weldpoly-spare-parts-quantity-control-FIXED-ECOMMERCE.js" defer></script>
 ```
 
 ### Opção 2: Apenas Modal Simples
@@ -84,8 +84,7 @@ https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@6f162ee/weldpoly-spare
 
 ```
 weldpoly-scripts/
-├── weldpoly-quote-system-init.js
-├── weldpoly-quote-modal-simple.js
+├── weldpoly-quote-system.js (⭐ UNIFICADO - Quote + Modal)
 └── weldpoly-spare-parts-quantity-control-FIXED-ECOMMERCE.js
 ```
 
@@ -97,7 +96,7 @@ Todos os scripts estão no **mesmo nível**, sem subpastas.
 
 O commit SHA na URL garante que você sempre usa a versão exata do código.
 
-**Último commit:** `d816149`
+**Último commit:** `2473b0b`
 
 Para atualizar, substitua o commit SHA na URL pelo mais recente:
 ```bash
