@@ -252,26 +252,49 @@
 
       // If it's a spare part with custom HTML, use that
       if (isSparePart && item.sparePartContentHTML) {
+        console.log(`[Quote Cart] 🔧 Rendering spare part with custom HTML: ${item.title}`);
+        console.log(`[Quote Cart] 📦 HTML content length: ${item.sparePartContentHTML.length} chars`);
+        
+        // Find the content container - try multiple selectors
         const contentContainer = clone.querySelector('[data-quote-part-content]') || 
                                 clone.querySelector('.quote_item_content') ||
+                                clone.querySelector('.quote_item-content') ||
                                 clone;
         
         if (contentContainer) {
+          console.log('[Quote Cart] ✅ Content container found, inserting HTML');
+          // Clear existing content
           contentContainer.innerHTML = '';
+          // Insert the spare part content HTML
           contentContainer.insertAdjacentHTML('beforeend', item.sparePartContentHTML);
+          console.log('[Quote Cart] ✅ HTML inserted into content container');
           
-          // Re-query elements after HTML insertion
+          // Re-query elements after HTML insertion to update title, description, quantity
           const newTitleEl = clone.querySelector('[data-quote-title]');
           const newDescEl = clone.querySelector('[data-quote-description]');
           const newQtyEl = clone.querySelector('[data-quote-number]');
           
-          if (newTitleEl) newTitleEl.textContent = item.title || '';
-          if (newDescEl) newDescEl.textContent = item.description || '';
+          if (newTitleEl) {
+            newTitleEl.textContent = item.title || '';
+            console.log(`[Quote Cart] ✅ Title set: ${item.title}`);
+          } else {
+            console.log('[Quote Cart] ⚠️ Title element not found after HTML insertion');
+          }
+          
+          if (newDescEl) {
+            newDescEl.textContent = item.description || '';
+          }
+          
           if (newQtyEl) {
             newQtyEl.textContent = item.qty || 1;
             const nestedDiv = newQtyEl.querySelector('div');
             if (nestedDiv) nestedDiv.textContent = item.qty || 1;
+            console.log(`[Quote Cart] ✅ Quantity set: ${item.qty}`);
+          } else {
+            console.log('[Quote Cart] ⚠️ Quantity element not found after HTML insertion');
           }
+        } else {
+          console.log('[Quote Cart] ⚠️ Content container not found for spare part HTML');
         }
       } else {
         // Regular product item
