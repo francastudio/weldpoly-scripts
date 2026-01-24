@@ -192,17 +192,38 @@
     // Hide empty state and show actions block
     const emptyWrapper = quoteContent.querySelector('[quote-empty]');
     const actionsBlock = quoteModal.querySelector('.quote_modal-content-bottom');
-    if (emptyWrapper) emptyWrapper.style.display = 'none';
-    if (actionsBlock) actionsBlock.style.display = 'block';
+    if (emptyWrapper) {
+      emptyWrapper.style.display = 'none';
+      console.log('[Quote Cart] ✅ Empty state hidden');
+    } else {
+      console.log('[Quote Cart] ⚠️ Empty state element not found');
+    }
+    if (actionsBlock) {
+      actionsBlock.style.display = 'block';
+      console.log('[Quote Cart] ✅ Actions block shown');
+    } else {
+      console.log('[Quote Cart] ⚠️ Actions block not found');
+    }
 
     // Hide the template item if it exists and is visible
     const templateItem = quoteModal.querySelector('[data-quote-item]');
     const templatePartItem = quoteModal.querySelector('[data-quote-part-item]');
-    if (templateItem) templateItem.style.display = 'none';
-    if (templatePartItem) templatePartItem.style.display = 'none';
+    if (templateItem) {
+      templateItem.style.display = 'none';
+      console.log('[Quote Cart] ✅ Template item hidden');
+    }
+    if (templatePartItem) {
+      templatePartItem.style.display = 'none';
+      console.log('[Quote Cart] ✅ Template part item hidden');
+    }
 
     // Remove existing rendered items (but keep templates)
-    quoteContent.querySelectorAll('.quote_item:not([style*="display: none"]):not([data-quote-item]):not([data-quote-part-item])').forEach(el => el.remove());
+    const existingItems = quoteContent.querySelectorAll('.quote_item:not([style*="display: none"]):not([data-quote-item]):not([data-quote-part-item])');
+    const removedCount = existingItems.length;
+    existingItems.forEach(el => el.remove());
+    if (removedCount > 0) {
+      console.log(`[Quote Cart] ✅ Removed ${removedCount} existing items`);
+    }
 
     // Render each item
     cart.forEach((item, index) => {
@@ -306,7 +327,10 @@
       }
 
       quoteContent.appendChild(clone);
+      console.log(`[Quote Cart] ✅ Item rendered: ${item.title} (qty: ${item.qty})`);
     });
+
+    console.log(`[Quote Cart] ✅ Total items rendered: ${cart.length}`);
 
     // Update title and empty state
     const updateTitle = () => {
