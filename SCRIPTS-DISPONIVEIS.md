@@ -22,7 +22,7 @@ Todos os scripts estão na **raiz do repositório** (mesmo nível, sem subpastas
 
 **URL:**
 ```
-https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@343c3a2/weldpoly-quote-system.js
+https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@5821697/weldpoly-quote-system.js
 ```
 
 **Quando usar:**
@@ -41,7 +41,7 @@ https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@343c3a2/weldpoly-quote
 
 **URL:**
 ```
-https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@343c3a2/weldpoly-spare-parts-quantity-control-FIXED-ECOMMERCE.js
+https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@5821697/weldpoly-spare-parts-quantity-control-FIXED-ECOMMERCE.js
 ```
 
 **Quando usar:**
@@ -54,8 +54,8 @@ https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@343c3a2/weldpoly-spare
 
 ### Sistema Completo (Quote + Spare Parts)
 ```html
-<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@6ee32ca/weldpoly-quote-system.js" defer></script>
-<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@6ee32ca/weldpoly-spare-parts-quantity-control-FIXED-ECOMMERCE.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@5821697/weldpoly-quote-system.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@5821697/weldpoly-spare-parts-quantity-control-FIXED-ECOMMERCE.js" defer></script>
 ```
 
 ⚠️ **IMPORTANTE:** Sempre carregue `weldpoly-quote-system.js` primeiro!
@@ -116,6 +116,8 @@ O `weldpoly-quote-system.js` gerencia:
 - ✅ Renderiza itens do carrinho automaticamente
 - ✅ Atualiza título com quantidade de itens
 - ✅ Gerencia estado vazio do carrinho
+- ✅ Scroll vertical dentro do modal (compatível com Locomotive Scroll)
+- ✅ Pausa Locomotive Scroll quando modal está aberto
 
 ### Navegação
 - ✅ Atualiza badge de quantidade no navegador
