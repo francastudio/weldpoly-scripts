@@ -31,8 +31,14 @@
     }
   }
   
+  let handlersInitialized = false; // Prevent duplicate initialization
+  
   // Initialize modal handlers
   function initModalHandlers() {
+    // Prevent duplicate initialization
+    if (handlersInitialized) return;
+    handlersInitialized = true;
+    
     // Open modal: elements with data-modal-target="quote-modal"
     document.addEventListener('click', function(e) {
       const openBtn = e.target.closest('[data-modal-target="quote-modal"]');
@@ -46,6 +52,13 @@
         
         // Then open the modal
         openQuoteModal();
+        
+        // Trigger render if initQuoteSystem exists
+        if (typeof window.initQuoteSystem === 'function') {
+          setTimeout(() => {
+            window.initQuoteSystem();
+          }, 100);
+        }
       }
     });
     
@@ -72,7 +85,7 @@
         cart = JSON.parse(saved);
       }
     } catch (e) {
-      console.log('Error loading cart:', e);
+      // Silent error
     }
     
     // Check if product already exists in cart
@@ -93,23 +106,24 @@
     // Save cart to localStorage
     try {
       localStorage.setItem('quoteCart', JSON.stringify(cart));
-      console.log('Product added to cart:', title);
     } catch (e) {
-      console.log('Error saving cart:', e);
+      // Silent error
     }
   }
   
-  // Initialize when DOM is ready
+  // Initialize when DOM is ready (only once)
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initModalHandlers);
   } else {
     initModalHandlers();
   }
   
-  // Also initialize after Webflow loads
+  // Also initialize after Webflow loads (only if not already initialized)
   if (typeof Webflow !== 'undefined') {
     Webflow.push(function() {
-      initModalHandlers();
+      if (!handlersInitialized) {
+        initModalHandlers();
+      }
     });
   }
 })();
