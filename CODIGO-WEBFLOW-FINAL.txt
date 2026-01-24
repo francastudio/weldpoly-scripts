@@ -2,8 +2,8 @@
 CÓDIGO PARA WEBFLOW FOOTER CODE
 ===========================================
 
-<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@6f162ee/weldpoly-quote-system-init.js" defer></script>
-<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@6f162ee/weldpoly-spare-parts-quantity-control-FIXED-ECOMMERCE.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@COMMIT_SHA/weldpoly-quote-system.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@COMMIT_SHA/weldpoly-spare-parts-quantity-control-FIXED-ECOMMERCE.js" defer></script>
 
 ===========================================
 INSTRUÇÕES:
@@ -16,15 +16,17 @@ INSTRUÇÕES:
 
 ⚠️ IMPORTANTE: Mantenha a ordem dos scripts (quote system primeiro)
 
+✅ O script weldpoly-quote-system.js unifica quote e modal em um único sistema
+
 ===========================================
 URLs DOS SCRIPTS:
 ===========================================
 
-Quote System:
-https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@6f162ee/weldpoly-quote-system-init.js
+Quote System (Unified):
+https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@COMMIT_SHA/weldpoly-quote-system.js
 
 Spare Parts:
-https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@6f162ee/weldpoly-spare-parts-quantity-control-FIXED-ECOMMERCE.js
+https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@COMMIT_SHA/weldpoly-spare-parts-quantity-control-FIXED-ECOMMERCE.js
 
 Repositório GitHub:
 https://github.com/francastudio/weldpoly-scripts

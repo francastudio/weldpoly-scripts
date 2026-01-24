@@ -1,8 +1,8 @@
 /**
- * Weldpoly Quote System - Init Script
+ * Weldpoly Quote System - Unified Script
  * 
- * Este script gerencia o sistema de quote (carrinho de cotação) do Webflow.
- * Ele deve ser adicionado ANTES do script de spare parts no footer code.
+ * Este script gerencia o sistema completo de quote (carrinho de cotação) e modal do Webflow.
+ * Ele unifica o gerenciamento do carrinho, renderização e controle do modal.
  * 
  * INSTRUÇÕES:
  * 1. Copie TODO o conteúdo deste arquivo
@@ -14,7 +14,13 @@
 (function() {
   'use strict';
 
+  let systemInitialized = false; // Prevent duplicate initialization
+
   function initQuoteSystem() {
+    // Prevent duplicate initialization
+    if (systemInitialized) return;
+    systemInitialized = true;
+
     const modalGroup = document.querySelector('[data-modal-group-status]');
     const quoteModal = document.querySelector('[data-modal-name="quote-modal"]');
     const quoteContent = quoteModal?.querySelector('.quote_modal-content');
@@ -141,27 +147,74 @@
       toggleEmptyState();
     }
 
-    // ===== Abrir modal =====
+    // ===== Modal Control =====
     function openQuoteModal() {
       if (modalGroup) modalGroup.setAttribute('data-modal-group-status', 'active');
       if (quoteModal) quoteModal.setAttribute('data-modal-status', 'active');
+      // Re-render cart when modal opens to ensure it's up to date
+      renderCart();
     }
 
-    // ===== Botões Add to Quote =====
+    function closeQuoteModal() {
+      if (modalGroup) modalGroup.setAttribute('data-modal-group-status', 'not-active');
+      if (quoteModal) quoteModal.setAttribute('data-modal-status', 'not-active');
+    }
+
+    // Expose globally for other scripts
+    window.openQuoteModal = openQuoteModal;
+    window.closeQuoteModal = closeQuoteModal;
+
+    // ===== Add Product to Cart =====
+    function addProductToCart(button) {
+      const title = button.getAttribute('data-quote-title') || 'Unnamed item';
+      const description = button.getAttribute('data-quote-description') || '';
+      
+      const existing = cart.find(i => i.title === title);
+      if (existing) {
+        existing.qty++;
+      } else {
+        cart.push({ title, description, qty: 1 });
+      }
+      
+      renderCart();
+      saveCart();
+      updateNavQty();
+    }
+
+    // ===== Modal Handlers =====
+    // Open modal: elements with data-modal-target="quote-modal"
+    document.addEventListener('click', function(e) {
+      const openBtn = e.target.closest('[data-modal-target="quote-modal"]');
+      if (openBtn) {
+        e.preventDefault();
+        
+        // If button has data-add-quote, add product to cart first
+        if (openBtn.hasAttribute('data-add-quote')) {
+          addProductToCart(openBtn);
+        }
+        
+        // Then open the modal
+        openQuoteModal();
+      }
+    });
+    
+    // Close modal: elements with class "modal__btn-close" OR data-modal-close attribute
+    document.addEventListener('click', function(e) {
+      const closeBtn = e.target.closest('.modal__btn-close, [data-modal-close]');
+      if (closeBtn) {
+        e.preventDefault();
+        closeQuoteModal();
+      }
+    });
+
+    // ===== Botões Add to Quote (direct) =====
     document.querySelectorAll('[data-add-quote]').forEach(btn => {
+      // Skip if button also has data-modal-target (already handled above)
+      if (btn.hasAttribute('data-modal-target')) return;
+      
       btn.addEventListener('click', (e) => {
         e.preventDefault();
-        const title = btn.getAttribute('data-quote-title') || 'Unnamed item';
-        const description = btn.getAttribute('data-quote-description') || '';
-        const existing = cart.find(i => i.title === title);
-        if (existing) {
-          existing.qty++;
-        } else {
-          cart.push({ title, description, qty: 1 });
-        }
-        renderCart();
-        saveCart();
-        updateNavQty();
+        addProductToCart(btn);
         openQuoteModal();
       });
     });
@@ -172,20 +225,22 @@
     updateNavQty();
   }
 
-  // Expor globalmente
+  // Expose globally
   window.initQuoteSystem = initQuoteSystem;
 
-  // Inicializar quando DOM estiver pronto
+  // Initialize when DOM is ready
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initQuoteSystem);
   } else {
     initQuoteSystem();
   }
 
-  // Inicializar após Webflow carregar
+  // Initialize after Webflow loads
   if (typeof Webflow !== 'undefined') {
     Webflow.push(function() {
-      setTimeout(initQuoteSystem, 100);
+      if (!systemInitialized) {
+        initQuoteSystem();
+      }
     });
   }
 })();
