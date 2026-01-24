@@ -49,9 +49,9 @@
       }
     });
     
-    // Close modal: elements with class "modal__btn-close"
+    // Close modal: elements with class "modal__btn-close" OR data-modal-close attribute
     document.addEventListener('click', function(e) {
-      const closeBtn = e.target.closest('.modal__btn-close');
+      const closeBtn = e.target.closest('.modal__btn-close, [data-modal-close]');
       if (closeBtn) {
         e.preventDefault();
         closeQuoteModal();
