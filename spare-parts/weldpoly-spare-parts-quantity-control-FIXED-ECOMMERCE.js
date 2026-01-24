@@ -1091,19 +1091,36 @@
   // Listen for modal opening to ensure cart is rendered
   function initModalOpenListener() {
     const quoteModal = document.querySelector('[data-modal-name="quote-modal"]');
-    if (!quoteModal) return;
+    if (!quoteModal) {
+      console.log('[Quote Cart] ⚠️ Quote modal not found for observer');
+      return;
+    }
+
+    console.log('[Quote Cart] ✅ Setting up modal open listener');
 
     const modalObserver = new MutationObserver((mutations) => {
       mutations.forEach((mutation) => {
         if (mutation.type === 'attributes' && mutation.attributeName === 'data-modal-status') {
           const status = quoteModal.getAttribute('data-modal-status');
+          console.log(`[Quote Cart] 🔍 Modal status changed: ${status}`);
+          
           if (status === 'active') {
+            console.log('[Quote Cart] 🔓 Modal opened - checking cart and rendering...');
+            
             ensureAllSparePartsInCart();
+            
             setTimeout(() => {
               // Log cart status when modal opens
               logCartStatus('🔓 Modal opened - ');
+              
+              // Always try manual render first to ensure it works
+              console.log('[Quote Cart] 🔄 Calling manualRenderCart() when modal opened');
+              manualRenderCart();
+              
+              // Also trigger original render as backup
               triggerOriginalRenderCart();
-              // Also try manual render as fallback
+              
+              // Double-check after a delay
               setTimeout(() => {
                 const quoteContent = document.querySelector('.quote_modal-content');
                 if (quoteContent) {
@@ -1118,14 +1135,20 @@
                   } catch {
                     cart = [];
                   }
+                  
+                  console.log(`[Quote Cart] 🔍 After render: ${renderedItems.length} items rendered, ${cart.length} items in cart`);
+                  
                   if (cart.length > 0 && renderedItems.length === 0) {
-                    console.log('[Quote Cart] ⚠️ Modal opened but no items rendered, using manual render');
+                    console.log('[Quote Cart] ⚠️ Cart has items but none rendered, forcing manual render again');
                     manualRenderCart();
-                  } else if (cart.length > 0) {
-                    console.log('[Quote Cart] ✅ Modal opened with items rendered');
+                  } else if (cart.length > 0 && renderedItems.length > 0) {
+                    console.log('[Quote Cart] ✅ Modal opened with items rendered successfully');
+                  } else if (cart.length === 0) {
+                    console.log('[Quote Cart] ℹ️ Modal opened but cart is empty');
                   }
                 }
-              }, 300);
+              }, 500);
+              
               updateNavQtyFromCart();
               syncSparePartsWithCart();
             }, 300);
@@ -1138,6 +1161,8 @@
       attributes: true,
       attributeFilter: ['data-modal-status']
     });
+    
+    console.log('[Quote Cart] ✅ Modal observer set up');
   }
 
   // Event delegation for navigation buttons
