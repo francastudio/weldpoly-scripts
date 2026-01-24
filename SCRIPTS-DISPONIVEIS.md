@@ -54,8 +54,8 @@ https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@5b2636e/weldpoly-spare
 
 ### Sistema Completo (Quote + Spare Parts)
 ```html
-<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@5b2636e/weldpoly-quote-system.js" defer></script>
-<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@5b2636e/weldpoly-spare-parts-quantity-control-FIXED-ECOMMERCE.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@6ee32ca/weldpoly-quote-system.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@6ee32ca/weldpoly-spare-parts-quantity-control-FIXED-ECOMMERCE.js" defer></script>
 ```
 
 ⚠️ **IMPORTANTE:** Sempre carregue `weldpoly-quote-system.js` primeiro!
