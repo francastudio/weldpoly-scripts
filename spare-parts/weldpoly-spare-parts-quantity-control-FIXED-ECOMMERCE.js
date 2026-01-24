@@ -195,7 +195,13 @@
     if (emptyWrapper) emptyWrapper.style.display = 'none';
     if (actionsBlock) actionsBlock.style.display = 'block';
 
-    // Remove existing items (but keep the template)
+    // Hide the template item if it exists and is visible
+    const templateItem = quoteModal.querySelector('[data-quote-item]');
+    const templatePartItem = quoteModal.querySelector('[data-quote-part-item]');
+    if (templateItem) templateItem.style.display = 'none';
+    if (templatePartItem) templatePartItem.style.display = 'none';
+
+    // Remove existing rendered items (but keep templates)
     quoteContent.querySelectorAll('.quote_item:not([style*="display: none"]):not([data-quote-item]):not([data-quote-part-item])').forEach(el => el.remove());
 
     // Render each item
@@ -1185,6 +1191,31 @@
 
   let initAllCalled = false; // Flag to prevent duplicate initialization
 
+  // Function to close modal (support for data-modal-close buttons)
+  function closeQuoteModal() {
+    const modalGroup = document.querySelector('[data-modal-group-status]');
+    const quoteModal = document.querySelector('[data-modal-name="quote-modal"]');
+    if (modalGroup) modalGroup.setAttribute('data-modal-group-status', 'not-active');
+    if (quoteModal) quoteModal.setAttribute('data-modal-status', 'not-active');
+  }
+
+  // Initialize modal close buttons (ensure they work even if original script hasn't loaded)
+  function initModalCloseButtons() {
+    // Use event delegation for all close buttons (works for dynamically added buttons too)
+    document.addEventListener('click', (e) => {
+      const closeBtn = e.target.closest('[data-modal-close]');
+      if (closeBtn) {
+        e.preventDefault();
+        e.stopPropagation();
+        closeQuoteModal();
+        // Also call the original closeAllModals if it exists
+        if (typeof window.closeAllModals === 'function') {
+          window.closeAllModals();
+        }
+      }
+    }, true); // Use capture phase to ensure it runs before other handlers
+  }
+
   function initAll() {
     // Prevent duplicate initialization
     if (initAllCalled) return;
@@ -1193,6 +1224,7 @@
     init();
     initNavigationButtonHandler();
     initModalSync();
+    initModalCloseButtons();
     
     // Log cart status on page load (only once)
     setTimeout(() => {
