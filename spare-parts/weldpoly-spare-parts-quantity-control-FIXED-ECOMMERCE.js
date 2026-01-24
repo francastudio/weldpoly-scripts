@@ -56,13 +56,20 @@
   }
 
   function getSparePartContentHTML(container) {
+    // Try multiple selectors to find the spare part content element
     const sparePartContent = container.querySelector('[spare-part-content]') || 
-                            container.querySelector('.spare-part-content-wrap');
+                            container.querySelector('.spare-part-content-wrap') ||
+                            container.closest('[spare-part-item]')?.querySelector('[spare-part-content]') ||
+                            container.closest('[spare-part-item]')?.querySelector('.spare-part-content-wrap');
     
     if (sparePartContent) {
-      return sparePartContent.outerHTML || sparePartContent.innerHTML;
+      // Use outerHTML to capture the element with its attributes and content
+      const html = sparePartContent.outerHTML || sparePartContent.innerHTML;
+      console.log('[Quote Cart] ✅ Spare part content captured:', html.substring(0, 100) + '...');
+      return html;
     }
     
+    console.log('[Quote Cart] ⚠️ Spare part content not found in container');
     return '';
   }
 
