@@ -2,11 +2,9 @@
 CÓDIGO PARA WEBFLOW FOOTER CODE
 ===========================================
 
-<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@b6e1c5f/weldpoly-quote-system.js" defer></script>
-<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@b6e1c5f/weldpoly-spare-parts-quantity-control-FIXED-ECOMMERCE.js" defer></script>
-
-<!-- OPCIONAL: Controle de Scroll com Lenis (descomente se necessário) -->
-<!-- <script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@5e0b249/weldpoly-lenis-scroll-control.js" defer></script> -->
+<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@b6e72a3/weldpoly-lenis-scroll-control.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@b6e72a3/weldpoly-quote-system.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@b6e72a3/weldpoly-spare-parts-quantity-control-FIXED-ECOMMERCE.js" defer></script>
 
 ===========================================
 INSTRUÇÕES:
@@ -17,7 +15,10 @@ INSTRUÇÕES:
 3. Clique em "Save"
 4. Publique o site
 
-⚠️ IMPORTANTE: Mantenha a ordem dos scripts (quote system primeiro)
+⚠️ IMPORTANTE: Mantenha a ordem dos scripts:
+1. weldpoly-lenis-scroll-control.js (primeiro - necessário para controle de scroll)
+2. weldpoly-quote-system.js (segundo - usa o controle de scroll)
+3. weldpoly-spare-parts-quantity-control-FIXED-ECOMMERCE.js (terceiro)
 
 ✅ O script weldpoly-quote-system.js unifica quote e modal em um único sistema
 
@@ -25,14 +26,14 @@ INSTRUÇÕES:
 URLs DOS SCRIPTS:
 ===========================================
 
+Controle de Scroll (Obrigatório):
+https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@b6e72a3/weldpoly-lenis-scroll-control.js
+
 Quote System (Unified):
-https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@b6e1c5f/weldpoly-quote-system.js
+https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@b6e72a3/weldpoly-quote-system.js
 
 Spare Parts:
-https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@b6e1c5f/weldpoly-spare-parts-quantity-control-FIXED-ECOMMERCE.js
-
-Controle de Scroll (Opcional):
-https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@5e0b249/weldpoly-lenis-scroll-control.js
+https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@b6e72a3/weldpoly-spare-parts-quantity-control-FIXED-ECOMMERCE.js
 
 Repositório GitHub:
 https://github.com/francastudio/weldpoly-scripts
@@ -59,12 +60,13 @@ ATUALIZAÇÕES:
 Este arquivo é atualizado automaticamente a cada push no GitHub.
 O commit SHA na URL garante que você sempre usa a versão exata do código.
 
-Último commit: b6e1c5f (2026-01-24 00:36:00)
+Último commit: b6e72a3 (2026-01-24 00:42:00)
 
 ✅ Scroll vertical dentro da div do modal (`.quote_modal-content`)
 ✅ Altura máxima calculada dinamicamente para manter ações visíveis
 ✅ Compatível com Locomotive Scroll/Lenis
-✅ Novo: Sistema de controle de scroll com Lenis (opcional)
+✅ Scroll da página desabilitado quando modal está aberto
+✅ Scroll habilitado apenas no content wrapper do modal
 
 Para atualizar os scripts no futuro:
 
