@@ -218,6 +218,9 @@
       const clone = useTemplate.cloneNode(true);
       clone.style.display = 'flex';
       clone.classList.add('quote_item');
+      // Remove template attributes to avoid confusion
+      clone.removeAttribute('data-quote-item');
+      clone.removeAttribute('data-quote-part-item');
 
       // If it's a spare part with custom HTML, use that
       if (isSparePart && item.sparePartContentHTML) {
