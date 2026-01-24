@@ -38,6 +38,13 @@
       const openBtn = e.target.closest('[data-modal-target="quote-modal"]');
       if (openBtn) {
         e.preventDefault();
+        
+        // If button has data-add-quote, add product to cart first
+        if (openBtn.hasAttribute('data-add-quote')) {
+          addProductToCart(openBtn);
+        }
+        
+        // Then open the modal
         openQuoteModal();
       }
     });
@@ -50,6 +57,46 @@
         closeQuoteModal();
       }
     });
+  }
+  
+  // Add product to cart
+  function addProductToCart(button) {
+    const title = button.getAttribute('data-quote-title') || 'Unnamed item';
+    const description = button.getAttribute('data-quote-description') || '';
+    
+    // Get existing cart from localStorage
+    let cart = [];
+    try {
+      const saved = localStorage.getItem('quoteCart');
+      if (saved) {
+        cart = JSON.parse(saved);
+      }
+    } catch (e) {
+      console.log('Error loading cart:', e);
+    }
+    
+    // Check if product already exists in cart
+    const existing = cart.find(item => item.title === title);
+    
+    if (existing) {
+      // Increase quantity if product exists
+      existing.qty++;
+    } else {
+      // Add new product to cart
+      cart.push({
+        title: title,
+        description: description,
+        qty: 1
+      });
+    }
+    
+    // Save cart to localStorage
+    try {
+      localStorage.setItem('quoteCart', JSON.stringify(cart));
+      console.log('Product added to cart:', title);
+    } catch (e) {
+      console.log('Error saving cart:', e);
+    }
   }
   
   // Initialize when DOM is ready
