@@ -1541,7 +1541,7 @@
     init();
     initNavigationButtonHandler();
     initModalSync();
-    initModalCloseButtons();
+    initModalHandlers();
     
     // Log cart status on page load (only once)
     setTimeout(() => {
