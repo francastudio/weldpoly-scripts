@@ -175,6 +175,43 @@
       quoteContent.classList.add('quote-modal-scrollable');
     }
 
+    // ===== Scroll Control Integration =====
+    function handleModalScrollControl(modalOpen) {
+      // Wait for scroll control to be available
+      if (typeof window.disableLenisScroll !== 'function' || 
+          typeof window.enableLenisScroll !== 'function') {
+        // Retry after a short delay
+        setTimeout(() => handleModalScrollControl(modalOpen), 100);
+        return;
+      }
+
+      if (modalOpen) {
+        // Disable scroll on body/page when modal is open
+        const body = document.body;
+        const html = document.documentElement;
+        
+        // Disable scroll on body and html
+        window.disableLenisScroll(body);
+        window.disableLenisScroll(html);
+        
+        // Enable scroll only in quote content wrapper
+        if (quoteContent) {
+          // Remove disabled attribute if exists
+          quoteContent.removeAttribute('data-lenis-scroll');
+          // Ensure scroll is enabled in content
+          quoteContent.style.overflowY = 'auto';
+          quoteContent.style.overflowX = 'hidden';
+        }
+      } else {
+        // Enable scroll on body/page when modal closes
+        const body = document.body;
+        const html = document.documentElement;
+        
+        window.enableLenisScroll(body);
+        window.enableLenisScroll(html);
+      }
+    }
+
     // ===== Modal Control =====
     function openQuoteModal() {
       if (modalGroup) modalGroup.setAttribute('data-modal-group-status', 'active');
@@ -183,6 +220,9 @@
       // Setup scroll for modal content
       setupModalScroll();
       
+      // Disable page scroll, enable only in modal content
+      handleModalScrollControl(true);
+      
       // Re-render cart when modal opens to ensure it's up to date
       renderCart();
     }
@@ -190,6 +230,9 @@
     function closeQuoteModal() {
       if (modalGroup) modalGroup.setAttribute('data-modal-group-status', 'not-active');
       if (quoteModal) quoteModal.setAttribute('data-modal-status', 'not-active');
+      
+      // Re-enable page scroll
+      handleModalScrollControl(false);
     }
 
     // Expose globally for other scripts
@@ -258,11 +301,14 @@
         mutations.forEach((mutation) => {
           if (mutation.type === 'attributes' && mutation.attributeName === 'data-modal-status') {
             const isActive = quoteModal.getAttribute('data-modal-status') === 'active';
-            if (isActive) {
-              setTimeout(() => {
+            setTimeout(() => {
+              if (isActive) {
                 setupModalScroll();
-              }, 50);
-            }
+                handleModalScrollControl(true);
+              } else {
+                handleModalScrollControl(false);
+              }
+            }, 50);
           }
         });
       });
@@ -281,6 +327,7 @@
     // Setup modal scroll on init (in case modal is already open)
     if (quoteModal && quoteModal.getAttribute('data-modal-status') === 'active') {
       setupModalScroll();
+      handleModalScrollControl(true);
     }
   }
 
