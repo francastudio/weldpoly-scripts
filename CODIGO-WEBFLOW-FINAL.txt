@@ -2,8 +2,8 @@
 CÓDIGO PARA WEBFLOW FOOTER CODE
 ===========================================
 
-<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@7385484/weldpoly-quote-system.js" defer></script>
-<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@7385484/weldpoly-spare-parts-quantity-control-FIXED-ECOMMERCE.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@2f453dd/weldpoly-quote-system.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@2f453dd/weldpoly-spare-parts-quantity-control-FIXED-ECOMMERCE.js" defer></script>
 
 ===========================================
 INSTRUÇÕES:
@@ -23,10 +23,10 @@ URLs DOS SCRIPTS:
 ===========================================
 
 Quote System (Unified):
-https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@7385484/weldpoly-quote-system.js
+https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@2f453dd/weldpoly-quote-system.js
 
 Spare Parts:
-https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@7385484/weldpoly-spare-parts-quantity-control-FIXED-ECOMMERCE.js
+https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@2f453dd/weldpoly-spare-parts-quantity-control-FIXED-ECOMMERCE.js
 
 Repositório GitHub:
 https://github.com/francastudio/weldpoly-scripts
@@ -53,10 +53,12 @@ ATUALIZAÇÕES:
 Este arquivo é atualizado automaticamente a cada push no GitHub.
 O commit SHA na URL garante que você sempre usa a versão exata do código.
 
-Último commit: 7385484 (2026-01-24 00:19:00)
+Último commit: 2f453dd (2026-01-24 00:33:00)
 
-✅ Suporte para scroll vertical no modal (compatível com Locomotive Scroll/Lenis)
-✅ Pausa Locomotive Scroll automaticamente quando modal está aberto
+✅ Scroll vertical APENAS dentro da div do modal (`.quote_modal-content`)
+✅ Bloqueia completamente o scroll da página quando modal está aberto
+✅ Pausa Locomotive Scroll/Lenis automaticamente
+✅ Previne propagação de eventos de scroll do modal para o body
 
 Para atualizar os scripts no futuro:
 
