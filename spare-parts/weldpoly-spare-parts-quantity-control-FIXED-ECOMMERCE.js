@@ -1291,22 +1291,32 @@
   // Function to close modal (support for data-modal-close buttons)
   function closeQuoteModal() {
     console.log('[Quote Cart] 🔒 Closing quote modal...');
+    console.log('[Quote Cart]   - Function called from:', new Error().stack.split('\n')[2]?.trim() || 'unknown');
     
     // Find and close the quote modal by setting its attributes
     const modalGroup = document.querySelector('[data-modal-group-status]');
     const quoteModal = document.querySelector('[data-modal-name="quote-modal"]');
     
-    // Close modal group
+    console.log('[Quote Cart]   - Modal group found:', !!modalGroup);
+    console.log('[Quote Cart]   - Quote modal found:', !!quoteModal);
+    
     if (modalGroup) {
+      const currentStatus = modalGroup.getAttribute('data-modal-group-status');
+      console.log('[Quote Cart]   - Modal group current status:', currentStatus);
       modalGroup.setAttribute('data-modal-group-status', 'not-active');
+      const newStatus = modalGroup.getAttribute('data-modal-group-status');
+      console.log('[Quote Cart]   - Modal group new status:', newStatus);
       console.log('[Quote Cart] ✅ Modal group set to not-active');
     } else {
       console.log('[Quote Cart] ⚠️ Modal group not found');
     }
     
-    // Close quote modal
     if (quoteModal) {
+      const currentStatus = quoteModal.getAttribute('data-modal-status');
+      console.log('[Quote Cart]   - Quote modal current status:', currentStatus);
       quoteModal.setAttribute('data-modal-status', 'not-active');
+      const newStatus = quoteModal.getAttribute('data-modal-status');
+      console.log('[Quote Cart]   - Quote modal new status:', newStatus);
       console.log('[Quote Cart] ✅ Quote modal set to not-active');
     } else {
       console.log('[Quote Cart] ⚠️ Quote modal not found');
@@ -1314,62 +1324,130 @@
     
     // Also close any other active modals in the same group
     if (modalGroup) {
-      modalGroup.querySelectorAll('[data-modal-status="active"]').forEach(modal => {
+      const activeModals = modalGroup.querySelectorAll('[data-modal-status="active"]');
+      console.log('[Quote Cart]   - Found', activeModals.length, 'active modals in group');
+      activeModals.forEach((modal, index) => {
         modal.setAttribute('data-modal-status', 'not-active');
-        console.log('[Quote Cart] ✅ Closed additional modal:', modal);
+        console.log(`[Quote Cart] ✅ Closed additional modal ${index + 1}:`, modal);
       });
     }
+    
+    // Verify the modal is actually closed
+    setTimeout(() => {
+      const verifyModal = document.querySelector('[data-modal-name="quote-modal"]');
+      const verifyGroup = document.querySelector('[data-modal-group-status]');
+      if (verifyModal) {
+        const finalStatus = verifyModal.getAttribute('data-modal-status');
+        const groupStatus = verifyGroup?.getAttribute('data-modal-group-status');
+        console.log('[Quote Cart] 🔍 Verification - Modal status:', finalStatus, '| Group status:', groupStatus);
+        if (finalStatus === 'not-active' && groupStatus === 'not-active') {
+          console.log('[Quote Cart] ✅ Modal successfully closed');
+        } else {
+          console.log('[Quote Cart] ⚠️ Modal may not be fully closed');
+        }
+      }
+    }, 100);
   }
 
   // Initialize modal close buttons (ensure they work even if original script hasn't loaded)
   function initModalCloseButtons() {
     console.log('[Quote Cart] 🔧 Initializing modal close buttons...');
     
+    // First, log all existing close buttons
+    const existingCloseButtons = document.querySelectorAll('[data-modal-close]');
+    console.log(`[Quote Cart] 🔍 Found ${existingCloseButtons.length} close buttons on page load:`, existingCloseButtons);
+    existingCloseButtons.forEach((btn, index) => {
+      console.log(`[Quote Cart]   - Close button ${index + 1}:`, {
+        element: btn,
+        classes: btn.className,
+        attributes: Array.from(btn.attributes).map(attr => `${attr.name}="${attr.value}"`).join(', '),
+        visible: btn.offsetParent !== null,
+        display: window.getComputedStyle(btn).display,
+        pointerEvents: window.getComputedStyle(btn).pointerEvents
+      });
+    });
+    
     // Use event delegation for all close buttons (works for dynamically added buttons too)
     // Use capture phase to ensure it runs before other handlers
     document.addEventListener('click', function(e) {
-      // Check if the clicked element or its parent has data-modal-close
-      const closeBtn = e.target.closest('[data-modal-close]');
+      // Log all clicks for debugging
+      const clickedElement = e.target;
+      const hasDataModalClose = clickedElement.hasAttribute('data-modal-close') || clickedElement.closest('[data-modal-close]');
       
-      if (closeBtn) {
-        console.log('[Quote Cart] 🔘 Close button clicked:', closeBtn);
+      if (hasDataModalClose) {
+        console.log('[Quote Cart] 🎯 Click detected on element with data-modal-close');
+        console.log('[Quote Cart]   - Clicked element:', clickedElement);
+        console.log('[Quote Cart]   - Element classes:', clickedElement.className);
+        console.log('[Quote Cart]   - Element attributes:', Array.from(clickedElement.attributes).map(attr => `${attr.name}="${attr.value}"`).join(', '));
         
-        // Stop all event propagation FIRST
-        e.preventDefault();
-        e.stopPropagation();
-        e.stopImmediatePropagation();
+        // Check if the clicked element or its parent has data-modal-close
+        const closeBtn = clickedElement.closest('[data-modal-close]');
         
-        // Close the modal immediately
-        closeQuoteModal();
-        
-        // Return false to prevent default behavior
-        return false;
+        if (closeBtn) {
+          console.log('[Quote Cart] 🔘 Close button found via closest():', closeBtn);
+          console.log('[Quote Cart]   - Close button classes:', closeBtn.className);
+          console.log('[Quote Cart]   - Close button visible:', closeBtn.offsetParent !== null);
+          console.log('[Quote Cart]   - Close button display:', window.getComputedStyle(closeBtn).display);
+          console.log('[Quote Cart]   - Event phase:', e.eventPhase === 1 ? 'CAPTURE' : e.eventPhase === 2 ? 'TARGET' : 'BUBBLE');
+          
+          // Stop all event propagation FIRST
+          e.preventDefault();
+          e.stopPropagation();
+          e.stopImmediatePropagation();
+          
+          console.log('[Quote Cart] ✅ Event propagation stopped, calling closeQuoteModal()...');
+          
+          // Close the modal immediately
+          closeQuoteModal();
+          
+          // Return false to prevent default behavior
+          return false;
+        } else {
+          console.log('[Quote Cart] ⚠️ Element has data-modal-close but closest() returned null');
+        }
       }
     }, true); // Use capture phase (true) to ensure it runs before other handlers
     
     // Also add direct listeners to existing close buttons as backup
     function attachDirectListeners() {
       const closeButtons = document.querySelectorAll('[data-modal-close]');
-      closeButtons.forEach(btn => {
+      console.log(`[Quote Cart] 🔍 attachDirectListeners: Found ${closeButtons.length} close buttons`);
+      
+      closeButtons.forEach((btn, index) => {
         // Check if button already has our listener (avoid duplicates)
-        if (btn._quoteCartCloseListener) return;
+        if (btn._quoteCartCloseListener) {
+          console.log(`[Quote Cart]   - Button ${index + 1} already has listener, skipping`);
+          return;
+        }
+        
+        console.log(`[Quote Cart]   - Attaching direct listener to button ${index + 1}:`, {
+          element: btn,
+          classes: btn.className,
+          visible: btn.offsetParent !== null
+        });
         
         // Add click listener with capture phase
         const handler = function(e) {
-          console.log('[Quote Cart] 🔘 Direct close button clicked:', btn);
+          console.log('[Quote Cart] 🔘 Direct close button clicked (direct listener):', btn);
+          console.log('[Quote Cart]   - Event target:', e.target);
+          console.log('[Quote Cart]   - Event currentTarget:', e.currentTarget);
           e.preventDefault();
           e.stopPropagation();
           e.stopImmediatePropagation();
+          console.log('[Quote Cart] ✅ Calling closeQuoteModal() from direct listener...');
           closeQuoteModal();
           return false;
         };
         
         btn.addEventListener('click', handler, true);
         btn._quoteCartCloseListener = handler; // Mark as having listener
+        console.log(`[Quote Cart]   ✅ Direct listener attached to button ${index + 1}`);
       });
       
       if (closeButtons.length > 0) {
         console.log(`[Quote Cart] ✅ Attached direct listeners to ${closeButtons.length} close buttons`);
+      } else {
+        console.log('[Quote Cart] ⚠️ No close buttons found for direct listeners');
       }
     }
     
