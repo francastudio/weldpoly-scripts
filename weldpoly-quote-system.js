@@ -148,64 +148,112 @@
     }
 
     // ===== Locomotive Scroll Integration =====
+    let savedScrollPosition = 0;
+    
     function setupModalScroll() {
       if (!quoteContent) return;
       
-      // Enable vertical scroll inside modal content
+      // Get the wrapper that contains the content and actions
+      const quoteContentWrapper = quoteContent.closest('.quote_content-wrapper') || quoteContent.parentElement;
+      
+      // Enable vertical scroll ONLY inside modal content
       quoteContent.style.overflowY = 'auto';
       quoteContent.style.overflowX = 'hidden';
-      quoteContent.style.WebkitOverflowScrolling = 'touch'; // Smooth scroll on iOS
+      quoteContent.style.WebkitOverflowScrolling = 'touch';
+      quoteContent.style.position = 'relative';
       
       // Calculate max height based on viewport minus header and actions
-      // Header + Actions typically take ~200-250px, leaving space for content
-      const maxHeight = window.innerHeight - 250;
-      quoteContent.style.maxHeight = maxHeight + 'px';
+      // Get the modal card to calculate available space
+      const modalCard = quoteModal?.querySelector('.modal__card') || quoteModal;
+      if (modalCard) {
+        const cardRect = modalCard.getBoundingClientRect();
+        const headerHeight = quoteModal?.querySelector('.quote_header')?.offsetHeight || 0;
+        const actionsHeight = quoteModal?.querySelector('.quote_modal-content-bottom')?.offsetHeight || 0;
+        const padding = 40; // Extra padding for spacing
+        
+        const maxHeight = window.innerHeight - headerHeight - actionsHeight - padding;
+        quoteContent.style.maxHeight = maxHeight + 'px';
+        quoteContent.style.height = 'auto';
+      }
       
       // Prevent Locomotive Scroll from interfering with modal scroll
       quoteContent.setAttribute('data-locomotive-scroll', 'ignore');
-      quoteContent.setAttribute('data-scroll-container', 'true');
+      quoteContent.setAttribute('data-scroll', 'ignore');
       
-      // Add class for CSS targeting if needed
+      // Add class for CSS targeting
       quoteContent.classList.add('quote-modal-scrollable');
     }
 
     function handleLocomotiveScroll(modalOpen) {
-      // Pause Locomotive Scroll when modal is open
-      if (typeof window.LocomotiveScroll !== 'undefined') {
-        // Try to find locomotive instance
-        const locomotiveInstance = window.locomotiveScroll || 
-                                   (window.scroll && window.scroll.locomotive) ||
-                                   document.querySelector('[data-scroll-container]')?.__locomotiveScroll;
+      if (modalOpen) {
+        // Save current scroll position
+        savedScrollPosition = window.pageYOffset || document.documentElement.scrollTop;
         
-        if (locomotiveInstance) {
-          if (modalOpen) {
+        // Pause Locomotive Scroll
+        if (typeof window.LocomotiveScroll !== 'undefined') {
+          const locomotiveInstance = window.locomotiveScroll || 
+                                     window.scroll?.locomotive ||
+                                     document.querySelector('[data-scroll-container]')?.__locomotiveScroll;
+          
+          if (locomotiveInstance && typeof locomotiveInstance.stop === 'function') {
             locomotiveInstance.stop();
-            // Prevent body scroll
-            document.body.style.overflow = 'hidden';
-            document.documentElement.style.overflow = 'hidden';
-          } else {
-            locomotiveInstance.start();
-            document.body.style.overflow = '';
-            document.documentElement.style.overflow = '';
           }
         }
-      }
-      
-      // Also handle Lenis (Locomotive V5 is based on Lenis)
-      if (typeof window.Lenis !== 'undefined') {
-        const lenisInstance = window.lenis || 
-                             (window.scroll && window.scroll.lenis);
         
-        if (lenisInstance) {
-          if (modalOpen) {
+        // Pause Lenis (Locomotive V5 is based on Lenis)
+        if (typeof window.Lenis !== 'undefined') {
+          const lenisInstance = window.lenis || window.scroll?.lenis;
+          
+          if (lenisInstance && typeof lenisInstance.stop === 'function') {
             lenisInstance.stop();
-            document.body.style.overflow = 'hidden';
-            document.documentElement.style.overflow = 'hidden';
-          } else {
-            lenisInstance.start();
-            document.body.style.overflow = '';
-            document.documentElement.style.overflow = '';
           }
+        }
+        
+        // Completely block body scroll
+        document.body.style.overflow = 'hidden';
+        document.body.style.position = 'fixed';
+        document.body.style.top = `-${savedScrollPosition}px`;
+        document.body.style.width = '100%';
+        document.documentElement.style.overflow = 'hidden';
+        
+        // Prevent scroll on modal wrapper
+        if (quoteModal) {
+          quoteModal.style.overflow = 'hidden';
+        }
+      } else {
+        // Resume Locomotive Scroll
+        if (typeof window.LocomotiveScroll !== 'undefined') {
+          const locomotiveInstance = window.locomotiveScroll || 
+                                     window.scroll?.locomotive ||
+                                     document.querySelector('[data-scroll-container]')?.__locomotiveScroll;
+          
+          if (locomotiveInstance && typeof locomotiveInstance.start === 'function') {
+            locomotiveInstance.start();
+          }
+        }
+        
+        // Resume Lenis
+        if (typeof window.Lenis !== 'undefined') {
+          const lenisInstance = window.lenis || window.scroll?.lenis;
+          
+          if (lenisInstance && typeof lenisInstance.start === 'function') {
+            lenisInstance.start();
+          }
+        }
+        
+        // Restore body scroll
+        document.body.style.overflow = '';
+        document.body.style.position = '';
+        document.body.style.top = '';
+        document.body.style.width = '';
+        document.documentElement.style.overflow = '';
+        
+        // Restore scroll position
+        window.scrollTo(0, savedScrollPosition);
+        
+        // Restore modal wrapper
+        if (quoteModal) {
+          quoteModal.style.overflow = '';
         }
       }
     }
@@ -299,12 +347,15 @@
         mutations.forEach((mutation) => {
           if (mutation.type === 'attributes' && mutation.attributeName === 'data-modal-status') {
             const isActive = quoteModal.getAttribute('data-modal-status') === 'active';
-            if (isActive) {
-              setupModalScroll();
-              handleLocomotiveScroll(true);
-            } else {
-              handleLocomotiveScroll(false);
-            }
+            // Use setTimeout to ensure DOM is updated
+            setTimeout(() => {
+              if (isActive) {
+                setupModalScroll();
+                handleLocomotiveScroll(true);
+              } else {
+                handleLocomotiveScroll(false);
+              }
+            }, 50);
           }
         });
       });
@@ -313,6 +364,40 @@
         attributes: true,
         attributeFilter: ['data-modal-status']
       });
+      
+      // Also watch modal group status
+      if (modalGroup) {
+        modalObserver.observe(modalGroup, {
+          attributes: true,
+          attributeFilter: ['data-modal-group-status']
+        });
+      }
+    }
+    
+    // Prevent scroll propagation from modal content to body
+    if (quoteContent) {
+      quoteContent.addEventListener('wheel', function(e) {
+        const isScrollingDown = e.deltaY > 0;
+        const isScrollingUp = e.deltaY < 0;
+        const content = e.currentTarget;
+        const isAtTop = content.scrollTop === 0;
+        const isAtBottom = content.scrollTop + content.clientHeight >= content.scrollHeight - 1;
+        
+        // Prevent body scroll when scrolling inside modal
+        if ((isScrollingUp && isAtTop) || (isScrollingDown && isAtBottom)) {
+          e.stopPropagation();
+        }
+      }, { passive: false });
+      
+      quoteContent.addEventListener('touchmove', function(e) {
+        const content = e.currentTarget;
+        const isAtTop = content.scrollTop === 0;
+        const isAtBottom = content.scrollTop + content.clientHeight >= content.scrollHeight - 1;
+        
+        if (isAtTop || isAtBottom) {
+          e.stopPropagation();
+        }
+      }, { passive: false });
     }
 
     // ===== Inicialização =====
