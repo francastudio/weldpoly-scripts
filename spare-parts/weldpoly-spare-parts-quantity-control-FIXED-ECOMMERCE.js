@@ -1292,34 +1292,33 @@
   function closeQuoteModal() {
     console.log('[Quote Cart] 🔒 Closing quote modal...');
     
-    // First, try to call the original closeAllModals if it exists (Webflow's native function)
-    if (typeof window.closeAllModals === 'function') {
-      console.log('[Quote Cart] 🔄 Calling original closeAllModals()');
-      try {
-        window.closeAllModals();
-      } catch (e) {
-        console.log('[Quote Cart] ⚠️ Error calling closeAllModals:', e);
-      }
-    }
-    
-    // Also manually set the attributes
+    // Find and close the quote modal by setting its attributes
     const modalGroup = document.querySelector('[data-modal-group-status]');
     const quoteModal = document.querySelector('[data-modal-name="quote-modal"]');
     
+    // Close modal group
     if (modalGroup) {
       modalGroup.setAttribute('data-modal-group-status', 'not-active');
       console.log('[Quote Cart] ✅ Modal group set to not-active');
+    } else {
+      console.log('[Quote Cart] ⚠️ Modal group not found');
     }
     
+    // Close quote modal
     if (quoteModal) {
       quoteModal.setAttribute('data-modal-status', 'not-active');
       console.log('[Quote Cart] ✅ Quote modal set to not-active');
+    } else {
+      console.log('[Quote Cart] ⚠️ Quote modal not found');
     }
     
-    // Also close all modals by finding all modal elements
-    document.querySelectorAll('[data-modal-status="active"]').forEach(modal => {
-      modal.setAttribute('data-modal-status', 'not-active');
-    });
+    // Also close any other active modals in the same group
+    if (modalGroup) {
+      modalGroup.querySelectorAll('[data-modal-status="active"]').forEach(modal => {
+        modal.setAttribute('data-modal-status', 'not-active');
+        console.log('[Quote Cart] ✅ Closed additional modal:', modal);
+      });
+    }
   }
 
   // Initialize modal close buttons (ensure they work even if original script hasn't loaded)
