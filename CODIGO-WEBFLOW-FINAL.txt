@@ -2,9 +2,10 @@
 CÓDIGO PARA WEBFLOW FOOTER CODE
 ===========================================
 
-<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@b6e72a3/weldpoly-lenis-scroll-control.js" defer></script>
-<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@b6e72a3/weldpoly-quote-system.js" defer></script>
-<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@b6e72a3/weldpoly-spare-parts-quantity-control-FIXED-ECOMMERCE.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-lenis-scroll-control.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-quote-system.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-spare-parts-quantity-control-FIXED-ECOMMERCE.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-nav-contrast.js" defer></script>
 
 ===========================================
 INSTRUÇÕES:
@@ -16,9 +17,10 @@ INSTRUÇÕES:
 4. Publique o site
 
 ⚠️ IMPORTANTE: Mantenha a ordem dos scripts:
-1. weldpoly-lenis-scroll-control.js (primeiro - necessário para controle de scroll)
-2. weldpoly-quote-system.js (segundo - usa o controle de scroll)
+1. weldpoly-lenis-scroll-control.js (primeiro - controle de scroll)
+2. weldpoly-quote-system.js (segundo - quote e modal)
 3. weldpoly-spare-parts-quantity-control-FIXED-ECOMMERCE.js (terceiro)
+4. weldpoly-nav-contrast.js (quarto - contraste do menu em seções claras/escuras)
 
 ✅ O script weldpoly-quote-system.js unifica quote e modal em um único sistema
 
@@ -26,14 +28,17 @@ INSTRUÇÕES:
 URLs DOS SCRIPTS:
 ===========================================
 
-Controle de Scroll (Obrigatório):
-https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@b6e72a3/weldpoly-lenis-scroll-control.js
+Controle de Scroll:
+https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-lenis-scroll-control.js
 
-Quote System (Unified):
-https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@b6e72a3/weldpoly-quote-system.js
+Quote System:
+https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-quote-system.js
 
 Spare Parts:
-https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@b6e72a3/weldpoly-spare-parts-quantity-control-FIXED-ECOMMERCE.js
+https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-spare-parts-quantity-control-FIXED-ECOMMERCE.js
+
+Nav Contrast:
+https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-nav-contrast.js
 
 Repositório GitHub:
 https://github.com/francastudio/weldpoly-scripts
@@ -60,7 +65,7 @@ ATUALIZAÇÕES:
 Este arquivo é atualizado automaticamente a cada push no GitHub.
 O commit SHA na URL garante que você sempre usa a versão exata do código.
 
-Último commit: b6e72a3 (2026-01-24 00:42:00)
+Último commit: verificar com "git log -1 --format=%h" no diretório dist/
 
 ✅ Scroll vertical dentro da div do modal (`.quote_modal-content`)
 ✅ Altura máxima calculada dinamicamente para manter ações visíveis
