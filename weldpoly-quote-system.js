@@ -1,14 +1,14 @@
 /**
  * Weldpoly Quote System - Unified Script
  * 
- * Este script gerencia o sistema completo de quote (carrinho de cotação) e modal do Webflow.
- * Ele unifica o gerenciamento do carrinho, renderização e controle do modal.
+ * This script manages the complete quote system (quote cart) and modal in Webflow.
+ * It unifies cart management, rendering, and modal control.
  * 
- * INSTRUÇÕES:
- * 1. Copie TODO o conteúdo deste arquivo
- * 2. No Webflow: Site Settings → Custom Code → Footer Code
- * 3. Cole este script PRIMEIRO
- * 4. Depois cole o script de spare parts (weldpoly-spare-parts-quantity-control-FIXED-ECOMMERCE.js)
+ * INSTRUCTIONS:
+ * 1. Copy ALL content from this file
+ * 2. In Webflow: Site Settings → Custom Code → Footer Code
+ * 3. Paste this script FIRST
+ * 4. Then paste the spare parts script (weldpoly-spare-parts-quantity-control-FIXED-ECOMMERCE.js)
  */
 
 (function() {
@@ -30,7 +30,7 @@
     const actionsBlock = quoteModal?.querySelector('.quote_modal-content-bottom');
     let cart = [];
 
-    // ===== Utilidades =====
+    // ===== Utilities =====
     function saveCart() {
       localStorage.setItem('quoteCart', JSON.stringify(cart));
     }
@@ -47,7 +47,7 @@
       }
     }
 
-    // ===== Botão Submit do Modal → Redirecionar =====
+    // ===== Modal Submit Button → Redirect =====
     const modalSubmitBtn = document.querySelector("[data-quote-modal-submit]");
     if (modalSubmitBtn) {
       modalSubmitBtn.addEventListener("click", (e) => {
@@ -84,7 +84,7 @@
       }
     }
 
-    // ===== Renderizar conteúdo =====
+    // ===== Render content =====
     function renderCart() {
       if (!quoteContent || !templateItem) return;
       quoteContent.querySelectorAll('.quote_item:not([style*="display: none"])').forEach(el => el.remove());
@@ -92,7 +92,7 @@
         const clone = templateItem.cloneNode(true);
         clone.style.display = 'flex';
         
-        // Preenche dados - com verificação de null
+        // Fill data - with null check
         const titleEl = clone.querySelector('[data-quote-title]');
         const descEl = clone.querySelector('[data-quote-description]');
         const qtyEl = clone.querySelector('[data-quote-number]');
@@ -282,7 +282,7 @@
       }
     });
 
-    // ===== Botões Add to Quote (direct) =====
+    // ===== Add to Quote buttons (direct) =====
     document.querySelectorAll('[data-add-quote]').forEach(btn => {
       // Skip if button also has data-modal-target (already handled above)
       if (btn.hasAttribute('data-modal-target')) return;
@@ -319,7 +319,7 @@
       });
     }
 
-    // ===== Inicialização =====
+    // ===== Initialization =====
     loadCart();
     renderCart();
     updateNavQty();

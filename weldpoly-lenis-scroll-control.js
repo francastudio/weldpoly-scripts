@@ -1,22 +1,22 @@
 /**
  * Weldpoly Lenis Scroll Control
  * 
- * Sistema para habilitar/desabilitar scroll em seções específicas usando Lenis Scroll.
+ * System to enable/disable scroll in specific sections using Lenis Scroll.
  * 
- * INSTRUÇÕES:
- * 1. Adicione este script após o Lenis Scroll estar carregado
- * 2. Use atributos data para controlar o scroll:
- *    - data-lenis-scroll="disabled" - Desabilita scroll nesta seção
- *    - data-lenis-scroll="enabled" - Habilita scroll nesta seção (padrão)
- * 3. Ou use as funções JavaScript para controle dinâmico
+ * INSTRUCTIONS:
+ * 1. Add this script after Lenis Scroll is loaded
+ * 2. Use data attributes to control scroll:
+ *    - data-lenis-scroll="disabled" - Disable scroll in this section
+ *    - data-lenis-scroll="enabled" - Enable scroll in this section (default)
+ * 3. Or use JavaScript functions for dynamic control
  * 
- * EXEMPLO HTML:
+ * HTML EXAMPLE:
  * <section data-lenis-scroll="disabled">
- *   Conteúdo sem scroll
+ *   Content without scroll
  * </section>
  * 
  * <div data-lenis-scroll="enabled">
- *   Conteúdo com scroll
+ *   Content with scroll
  * </div>
  */
 

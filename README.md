@@ -63,6 +63,6 @@ To verify scripts are loading correctly:
 
 ## 📚 Documentation
 
-For full script list and details, see `SCRIPTS-DISPONIVEIS.md`.
+For full script list and details, see `AVAILABLE-SCRIPTS.md`.
 
-For Webflow embed code and prerequisites, see `CODIGO-WEBFLOW-FINAL.txt`.
+For Webflow embed code and prerequisites, see `WEBFLOW-FOOTER-CODE.txt`.
