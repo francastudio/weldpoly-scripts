@@ -6,7 +6,7 @@
  */
 (function() {
   // Light sections: add data-nav-contrast="light" to any section with white/light bg
-  const LIGHT_SECTIONS = '.background-color-white, .background-color-primary';
+  const LIGHT_SECTIONS = '.background-color-white, .background-color-primary, .color-scheme-1, .section_solutions, .section_about-us, [data-nav-contrast="light"]';
   const DEBUG = !!(window.NAV_CONTRAST_DEBUG || /[?&]nav_debug=1/.test(location.search));
 
   function debug(...args) {
