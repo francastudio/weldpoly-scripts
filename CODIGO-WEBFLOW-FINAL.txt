@@ -1,13 +1,13 @@
 ===========================================
-CÓDIGO PARA WEBFLOW FOOTER CODE
+WEBFLOW FOOTER CODE
 ===========================================
 
-PRÉ-REQUISITOS (carregar antes, no Head ou Footer):
+PREREQUISITES (load before, in Head or Footer):
 - Locomotive Scroll: https://cdn.jsdelivr.net/npm/locomotive-scroll@beta/bundled/locomotive-scroll.min.js
 - GSAP + ScrollTrigger: https://cdn.prod.website-files.com/gsap/3.14.2/gsap.min.js, ScrollTrigger.min.js
-- Finsweet Attributes (para listas): https://attributes.finsweet.com/list/list.js
+- Finsweet Attributes (for lists): https://attributes.finsweet.com/list/list.js
 
-SCRIPTS WELDPOLY (ordem importa):
+WELDPOLY SCRIPTS (order matters):
 <script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-lenis-scroll-control.js" defer></script>
 <script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-quote-system.js" defer></script>
 <script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-spare-parts-quantity-control-FIXED-ECOMMERCE.js" defer></script>
@@ -18,27 +18,27 @@ SCRIPTS WELDPOLY (ordem importa):
 <script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-finsweet-sort.js" defer></script>
 
 ===========================================
-INSTRUÇÕES:
+INSTRUCTIONS:
 ===========================================
 
-1. Acesse: Webflow → Site Settings → Custom Code
-2. Carregue Locomotive Scroll, GSAP, ScrollTrigger e Finsweet (se usar listas) antes
-3. Cole os scripts weldpoly acima no Footer Code
-4. Clique em "Save"
-5. Publique o site
+1. Go to: Webflow → Site Settings → Custom Code
+2. Load Locomotive Scroll, GSAP, ScrollTrigger and Finsweet (if using lists) first
+3. Paste the weldpoly scripts above in the Footer Code
+4. Click "Save"
+5. Publish the site
 
-⚠️ ORDEM DOS SCRIPTS:
+⚠️ SCRIPT ORDER:
 1. weldpoly-lenis-scroll-control.js
 2. weldpoly-quote-system.js
 3. weldpoly-spare-parts-quantity-control-FIXED-ECOMMERCE.js
 4. weldpoly-nav-contrast.js
 5. weldpoly-centered-nav.js (menu toggle)
-6. weldpoly-locomotive-init.js (requer Locomotive Scroll)
-7. weldpoly-content-reveal.js (requer GSAP + ScrollTrigger)
-8. weldpoly-finsweet-sort.js (requer Finsweet Attributes - só em páginas com listas)
+6. weldpoly-locomotive-init.js (requires Locomotive Scroll)
+7. weldpoly-content-reveal.js (requires GSAP + ScrollTrigger)
+8. weldpoly-finsweet-sort.js (requires Finsweet Attributes - only on pages with lists)
 
 ===========================================
-URLs DOS SCRIPTS:
+SCRIPT URLs:
 ===========================================
 
 weldpoly-lenis-scroll-control.js:
@@ -65,44 +65,44 @@ https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-content-
 weldpoly-finsweet-sort.js:
 https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-finsweet-sort.js
 
-Repositório GitHub:
+GitHub Repository:
 https://github.com/francastudio/weldpoly-scripts
 
 ===========================================
-VERIFICAÇÃO:
+VERIFICATION:
 ===========================================
 
-✅ Repositório verificado e acessível
-✅ Arquivos confirmados na raiz do repositório (mesmo nível)
-✅ URLs testadas e funcionando
+✅ Repository verified and accessible
+✅ Files confirmed at repository root (same level)
+✅ URLs tested and working
 
-Para verificar se os scripts estão carregando:
+To verify scripts are loading:
 
-1. Abra o console do navegador (F12)
-2. Verifique se não há erros de carregamento
-3. Digite: typeof window.initQuoteSystem === 'function'
-4. Deve retornar: true
+1. Open the browser console (F12)
+2. Check for loading errors
+3. Type: typeof window.initQuoteSystem === 'function'
+4. Should return: true
 
 ===========================================
-ATUALIZAÇÕES:
+UPDATES:
 ===========================================
 
-Este arquivo é atualizado automaticamente a cada push no GitHub.
-O commit SHA na URL garante que você sempre usa a versão exata do código.
+This file is updated automatically on each GitHub push.
+The commit SHA in the URL ensures you always use the exact version of the code.
 
-Último commit: verificar com "git log -1 --format=%h" no diretório dist/
+Latest commit: run "git log -1 --format=%h" in the dist/ directory
 
-✅ Scroll vertical dentro da div do modal (`.quote_modal-content`)
-✅ Altura máxima calculada dinamicamente para manter ações visíveis
-✅ Compatível com Locomotive Scroll/Lenis
-✅ Scroll da página desabilitado quando modal está aberto
-✅ Scroll habilitado apenas no content wrapper do modal
+✅ Vertical scroll inside modal div (`.quote_modal-content`)
+✅ Dynamic max-height to keep actions visible
+✅ Compatible with Locomotive Scroll/Lenis
+✅ Page scroll disabled when modal is open
+✅ Scroll enabled only in modal content wrapper
 
-Para atualizar os scripts no futuro:
+To update scripts in the future:
 
-1. Edite os arquivos localmente
-2. Execute: bash scripts/atualizar-github-auto.sh
-3. O script atualiza automaticamente este arquivo com o novo commit SHA
-4. Cole o código atualizado no Webflow Footer Code
+1. Edit files locally
+2. Run: bash scripts/atualizar-github-auto.sh
+3. The script automatically updates this file with the new commit SHA
+4. Paste the updated code in the Webflow Footer Code
 
 ===========================================

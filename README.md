@@ -1,82 +1,68 @@
-# Weldpoly Scripts - Repositório GitHub
+# Weldpoly Scripts - GitHub Repository
 
-Este repositório contém os scripts JavaScript para o sistema de quote (cotação) do site Weldpoly no Webflow.
+This repository contains JavaScript scripts for the Weldpoly quote system on Webflow.
 
-## 📁 Estrutura
-
-```
-quote/
-  └── weldpoly-quote-system-init.js
-
-spare-parts/
-  └── weldpoly-spare-parts-quantity-control-FIXED-ECOMMERCE.js
-```
-
-## 🚀 Como Usar no Webflow
-
-### Passo 1: Obter URLs do jsDelivr
-
-Após fazer upload deste repositório no GitHub, use estas URLs (substitua `SEU_USUARIO` e `NOME_REPO`):
+## 📁 Structure
 
 ```
-https://cdn.jsdelivr.net/gh/SEU_USUARIO/NOME_REPO@main/quote/weldpoly-quote-system-init.js
-https://cdn.jsdelivr.net/gh/SEU_USUARIO/NOME_REPO@main/spare-parts/weldpoly-spare-parts-quantity-control-FIXED-ECOMMERCE.js
+weldpoly-scripts/
+├── weldpoly-quote-system.js
+├── weldpoly-spare-parts-quantity-control-FIXED-ECOMMERCE.js
+├── weldpoly-lenis-scroll-control.js
+├── weldpoly-nav-contrast.js
+├── weldpoly-centered-nav.js
+├── weldpoly-locomotive-init.js
+├── weldpoly-content-reveal.js
+└── weldpoly-finsweet-sort.js
 ```
 
-### Passo 2: Adicionar no Webflow
+## 🚀 How to Use in Webflow
 
-No **Footer Code** do Webflow (Site Settings → Custom Code → Footer Code), adicione:
+### Step 1: Add to Footer Code
+
+In **Webflow Footer Code** (Site Settings → Custom Code → Footer Code), add:
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/SEU_USUARIO/NOME_REPO@main/quote/weldpoly-quote-system-init.js" defer></script>
-<script src="https://cdn.jsdelivr.net/gh/SEU_USUARIO/NOME_REPO@main/spare-parts/weldpoly-spare-parts-quantity-control-FIXED-ECOMMERCE.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-lenis-scroll-control.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-quote-system.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-spare-parts-quantity-control-FIXED-ECOMMERCE.js" defer></script>
 ```
 
-**⚠️ IMPORTANTE:** 
-- Mantenha a ordem (quote system primeiro)
-- Substitua `SEU_USUARIO` pelo seu usuário do GitHub
-- Substitua `NOME_REPO` pelo nome do repositório
+**⚠️ IMPORTANT:**
+- Maintain the order (quote system first)
+- Load Locomotive Scroll, GSAP, ScrollTrigger and Finsweet before these scripts if needed
 
-## 📋 Exemplo
+### Step 2: Publish
 
-Se seu usuário do GitHub for `mikaelsouza` e o repositório for `weldpoly-scripts`:
+1. Save changes
+2. Publish the site
+3. jsDelivr updates automatically within a few minutes
 
-```html
-<script src="https://cdn.jsdelivr.net/gh/mikaelsouza/weldpoly-scripts@main/quote/weldpoly-quote-system-init.js" defer></script>
-<script src="https://cdn.jsdelivr.net/gh/mikaelsouza/weldpoly-scripts@main/spare-parts/weldpoly-spare-parts-quantity-control-FIXED-ECOMMERCE.js" defer></script>
-```
+## 🔄 How to Update
 
-## 🔄 Como Atualizar
+1. Edit the JavaScript files in this repository
+2. Commit your changes
+3. Push to GitHub
+4. To force immediate update, add `?v=2` (or another number) to the URL in Webflow
 
-1. Edite os arquivos JavaScript neste repositório
-2. Faça commit das mudanças
-3. Faça push para o GitHub
-4. jsDelivr atualiza automaticamente em alguns minutos
-5. Para forçar atualização imediata, adicione `?v=2` (ou outro número) na URL do Webflow
+## ✅ Benefits
 
-## ✅ Vantagens
+- ✅ **Free** - No costs
+- ✅ **Global CDN** - Fast everywhere
+- ✅ **Easy to update** - Just push to GitHub
+- ✅ **Version control** - Full change history
 
-- ✅ **Gratuito** - Sem custos
-- ✅ **CDN Global** - Rápido em qualquer lugar
-- ✅ **Não conta no limite** - Apenas 2 tags `<script>` no Webflow
-- ✅ **Fácil de atualizar** - Apenas push no GitHub
-- ✅ **Versionamento** - Histórico completo de mudanças
+## 🔍 Verification
 
-## 📝 Versão
+To verify scripts are loading correctly:
 
-Última atualização: 2025-01-23
+1. Open the browser console (F12)
+2. Check for loading errors
+3. Type: `typeof window.initQuoteSystem === 'function'`
+4. Should return `true`
 
-## 🔍 Verificação
+## 📚 Documentation
 
-Para verificar se os scripts estão carregando corretamente:
+For full script list and details, see `SCRIPTS-DISPONIVEIS.md`.
 
-1. Abra o console do navegador (F12)
-2. Verifique se não há erros de carregamento
-3. Digite: `typeof window.initQuoteSystem === 'function'`
-4. Deve retornar `true`
-
-## 📚 Documentação
-
-Para mais informações, consulte:
-- `docs/HOSPEDAGEM-SCRIPTS-GRATUITA.md` - Guia completo
-- `docs/GUIA-RAPIDO-HOSPEDAGEM.md` - Guia rápido
+For Webflow embed code and prerequisites, see `CODIGO-WEBFLOW-FINAL.txt`.
