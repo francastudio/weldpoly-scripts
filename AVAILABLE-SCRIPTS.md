@@ -99,7 +99,7 @@ https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-nav-cont
 
 **When to use:**
 - ✅ Webflow site with fixed menu and sections alternating light/dark background
-- ⚠️ Requires CSS classes on nav: `.navigation.nav--over-light` (add to Custom Code)
+- ⚠️ Requires CSS classes: `.navigation_container.nav--over-light` (add to Custom Code)
 
 ---
 

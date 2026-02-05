@@ -84,6 +84,17 @@ To verify scripts are loading:
 4. Should return: true
 
 ===========================================
+NAV CONTRAST - CSS (add to Head Code):
+===========================================
+Target: .navigation_container (not .navigation)
+
+.navigation_container.nav--over-light { color: #131313 !important; }
+.navigation_container.nav--over-light .nav__logo,
+.navigation_container.nav--over-light .nav__button-text,
+.navigation_container.nav--over-light a { color: #131313 !important; }
+.navigation_container.nav--over-light .centered-nav__toggle-bar { background-color: #131313 !important; }
+
+===========================================
 UPDATES:
 ===========================================
 
