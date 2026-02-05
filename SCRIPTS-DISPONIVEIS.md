@@ -87,6 +87,24 @@ toggleLenisScroll('.minha-secao');
 
 ---
 
+### 4. **weldpoly-nav-contrast.js** 🆕
+**Função:** Alterna a cor do logo e do menu conforme o fundo da seção sob o nav
+- Logo e texto ficam escuros em seções com `.background-color-white`
+- Logo e texto ficam claros em seções com `.background-color-black`
+- Usa Intersection Observer para detectar a seção atual
+- Suporta `[data-nav-contrast="light"]` para controle manual
+
+**URL (após push):**
+```
+https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-nav-contrast.js
+```
+
+**Quando usar:**
+- ✅ Site Webflow com menu fixo e seções alternando fundo claro/escuro
+- ⚠️ Requer classes CSS no nav: `.navigation.nav--over-light` (incluir no Custom Code)
+
+---
+
 ## 🔧 Como Usar no Webflow
 
 ### Sistema Completo (Quote + Spare Parts)
@@ -105,7 +123,8 @@ toggleLenisScroll('.minha-secao');
 weldpoly-scripts/
 ├── weldpoly-quote-system.js (⭐ UNIFICADO - Quote + Modal)
 ├── weldpoly-spare-parts-quantity-control-FIXED-ECOMMERCE.js
-└── weldpoly-lenis-scroll-control.js (🆕 Controle de Scroll)
+├── weldpoly-lenis-scroll-control.js (🆕 Controle de Scroll)
+└── weldpoly-nav-contrast.js (🆕 Contraste do Menu)
 ```
 
 Todos os scripts estão no **mesmo nível**, sem subpastas.
