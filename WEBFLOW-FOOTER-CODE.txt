@@ -8,14 +8,14 @@ PREREQUISITES (load before, in Head or Footer):
 - Finsweet Attributes (for lists): https://attributes.finsweet.com/list/list.js
 
 WELDPOLY SCRIPTS (order matters):
-<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-lenis-scroll-control.js" defer></script>
-<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-quote-system.js" defer></script>
-<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-spare-parts-quantity-control-FIXED-ECOMMERCE.js" defer></script>
-<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-nav-contrast.js" defer></script>
-<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-centered-nav.js" defer></script>
-<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-locomotive-init.js" defer></script>
-<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-content-reveal.js" defer></script>
-<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-finsweet-sort.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@e771017/weldpoly-lenis-scroll-control.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@e771017/weldpoly-quote-system.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@e771017/weldpoly-spare-parts-quantity-control-FIXED-ECOMMERCE.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@e771017/weldpoly-nav-contrast.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@e771017/weldpoly-centered-nav.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@e771017/weldpoly-locomotive-init.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@e771017/weldpoly-content-reveal.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@e771017/weldpoly-finsweet-sort.js" defer></script>
 
 ===========================================
 INSTRUCTIONS:
@@ -42,28 +42,28 @@ SCRIPT URLs:
 ===========================================
 
 weldpoly-lenis-scroll-control.js:
-https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-lenis-scroll-control.js
+https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@e771017/weldpoly-lenis-scroll-control.js
 
 weldpoly-quote-system.js:
-https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-quote-system.js
+https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@e771017/weldpoly-quote-system.js
 
 weldpoly-spare-parts-quantity-control-FIXED-ECOMMERCE.js:
-https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-spare-parts-quantity-control-FIXED-ECOMMERCE.js
+https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@e771017/weldpoly-spare-parts-quantity-control-FIXED-ECOMMERCE.js
 
 weldpoly-nav-contrast.js:
-https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-nav-contrast.js
+https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@e771017/weldpoly-nav-contrast.js
 
 weldpoly-centered-nav.js:
-https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-centered-nav.js
+https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@e771017/weldpoly-centered-nav.js
 
 weldpoly-locomotive-init.js:
-https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-locomotive-init.js
+https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@e771017/weldpoly-locomotive-init.js
 
 weldpoly-content-reveal.js:
-https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-content-reveal.js
+https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@e771017/weldpoly-content-reveal.js
 
 weldpoly-finsweet-sort.js:
-https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-finsweet-sort.js
+https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@e771017/weldpoly-finsweet-sort.js
 
 GitHub Repository:
 https://github.com/francastudio/weldpoly-scripts
@@ -90,7 +90,7 @@ UPDATES:
 This file is updated automatically on each GitHub push.
 The commit SHA in the URL ensures you always use the exact version of the code.
 
-Latest commit: run "git log -1 --format=%h" in the dist/ directory
+Latest commit: e771017 (2026-02-05 15:57:29)
 
 ✅ Vertical scroll inside modal div (`.quote_modal-content`)
 ✅ Dynamic max-height to keep actions visible
