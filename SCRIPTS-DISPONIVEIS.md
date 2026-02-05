@@ -105,6 +105,58 @@ https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-nav-cont
 
 ---
 
+### 5. **weldpoly-centered-nav.js**
+**Função:** Toggle do menu centralizado e fechar com ESC
+- `[data-navigation-toggle="toggle"]` abre/fecha o menu
+- `[data-navigation-toggle="close"]` fecha o menu
+- Tecla ESC fecha o menu
+- `[data-navigation-status]` controla estado active/not-active
+
+**URL:**
+```
+https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-centered-nav.js
+```
+
+---
+
+### 6. **weldpoly-locomotive-init.js**
+**Função:** Inicializa Locomotive Scroll com Lenis
+- Cria instância em `window.locomotiveScroll`
+- ⚠️ Requer Locomotive Scroll carregado antes
+
+**URL:**
+```
+https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-locomotive-init.js
+```
+
+---
+
+### 7. **weldpoly-content-reveal.js**
+**Função:** Animações de reveal no scroll com GSAP ScrollTrigger
+- `[data-reveal-group]` – grupo de elementos
+- `[data-reveal-group-nested]` – subgrupos
+- `data-stagger`, `data-distance`, `data-start` para configuração
+- ⚠️ Requer GSAP e ScrollTrigger carregados antes
+
+**URL:**
+```
+https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-content-reveal.js
+```
+
+---
+
+### 8. **weldpoly-finsweet-sort.js**
+**Função:** Ordenação alfanumérica (natural sort) em listas Finsweet
+- Ordena por campo `name` usando natural sort (ex: Item 2 antes de Item 10)
+- ⚠️ Requer Finsweet Attributes List API carregada antes
+
+**URL:**
+```
+https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-finsweet-sort.js
+```
+
+---
+
 ## 🔧 Como Usar no Webflow
 
 ### Sistema Completo (Quote + Spare Parts)
@@ -121,10 +173,14 @@ https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-nav-cont
 
 ```
 weldpoly-scripts/
-├── weldpoly-quote-system.js (⭐ UNIFICADO - Quote + Modal)
+├── weldpoly-quote-system.js
 ├── weldpoly-spare-parts-quantity-control-FIXED-ECOMMERCE.js
-├── weldpoly-lenis-scroll-control.js (🆕 Controle de Scroll)
-└── weldpoly-nav-contrast.js (🆕 Contraste do Menu)
+├── weldpoly-lenis-scroll-control.js
+├── weldpoly-nav-contrast.js
+├── weldpoly-centered-nav.js
+├── weldpoly-locomotive-init.js
+├── weldpoly-content-reveal.js
+└── weldpoly-finsweet-sort.js
 ```
 
 Todos os scripts estão no **mesmo nível**, sem subpastas.

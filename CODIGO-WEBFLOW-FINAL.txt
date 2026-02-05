@@ -2,43 +2,68 @@
 CÓDIGO PARA WEBFLOW FOOTER CODE
 ===========================================
 
+PRÉ-REQUISITOS (carregar antes, no Head ou Footer):
+- Locomotive Scroll: https://cdn.jsdelivr.net/npm/locomotive-scroll@beta/bundled/locomotive-scroll.min.js
+- GSAP + ScrollTrigger: https://cdn.prod.website-files.com/gsap/3.14.2/gsap.min.js, ScrollTrigger.min.js
+- Finsweet Attributes (para listas): https://attributes.finsweet.com/list/list.js
+
+SCRIPTS WELDPOLY (ordem importa):
 <script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-lenis-scroll-control.js" defer></script>
 <script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-quote-system.js" defer></script>
 <script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-spare-parts-quantity-control-FIXED-ECOMMERCE.js" defer></script>
 <script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-nav-contrast.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-centered-nav.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-locomotive-init.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-content-reveal.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-finsweet-sort.js" defer></script>
 
 ===========================================
 INSTRUÇÕES:
 ===========================================
 
 1. Acesse: Webflow → Site Settings → Custom Code
-2. Cole o código acima no campo "Footer Code"
-3. Clique em "Save"
-4. Publique o site
+2. Carregue Locomotive Scroll, GSAP, ScrollTrigger e Finsweet (se usar listas) antes
+3. Cole os scripts weldpoly acima no Footer Code
+4. Clique em "Save"
+5. Publique o site
 
-⚠️ IMPORTANTE: Mantenha a ordem dos scripts:
-1. weldpoly-lenis-scroll-control.js (primeiro - controle de scroll)
-2. weldpoly-quote-system.js (segundo - quote e modal)
-3. weldpoly-spare-parts-quantity-control-FIXED-ECOMMERCE.js (terceiro)
-4. weldpoly-nav-contrast.js (quarto - contraste do menu em seções claras/escuras)
-
-✅ O script weldpoly-quote-system.js unifica quote e modal em um único sistema
+⚠️ ORDEM DOS SCRIPTS:
+1. weldpoly-lenis-scroll-control.js
+2. weldpoly-quote-system.js
+3. weldpoly-spare-parts-quantity-control-FIXED-ECOMMERCE.js
+4. weldpoly-nav-contrast.js
+5. weldpoly-centered-nav.js (menu toggle)
+6. weldpoly-locomotive-init.js (requer Locomotive Scroll)
+7. weldpoly-content-reveal.js (requer GSAP + ScrollTrigger)
+8. weldpoly-finsweet-sort.js (requer Finsweet Attributes - só em páginas com listas)
 
 ===========================================
 URLs DOS SCRIPTS:
 ===========================================
 
-Controle de Scroll:
+weldpoly-lenis-scroll-control.js:
 https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-lenis-scroll-control.js
 
-Quote System:
+weldpoly-quote-system.js:
 https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-quote-system.js
 
-Spare Parts:
+weldpoly-spare-parts-quantity-control-FIXED-ECOMMERCE.js:
 https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-spare-parts-quantity-control-FIXED-ECOMMERCE.js
 
-Nav Contrast:
+weldpoly-nav-contrast.js:
 https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-nav-contrast.js
+
+weldpoly-centered-nav.js:
+https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-centered-nav.js
+
+weldpoly-locomotive-init.js:
+https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-locomotive-init.js
+
+weldpoly-content-reveal.js:
+https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-content-reveal.js
+
+weldpoly-finsweet-sort.js:
+https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-finsweet-sort.js
 
 Repositório GitHub:
 https://github.com/francastudio/weldpoly-scripts
