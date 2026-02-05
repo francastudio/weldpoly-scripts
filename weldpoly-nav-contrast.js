@@ -6,7 +6,7 @@
  */
 (function() {
   // Light sections: add data-nav-contrast="light" to any section with white/light bg
-  const LIGHT_SECTIONS = '.background-color-white, .color-scheme-1, .section_solutions, .section_about-us, [data-nav-contrast="light"]';
+  const LIGHT_SECTIONS = '.background-color-white, .background-color-primary';
   const DEBUG = !!(window.NAV_CONTRAST_DEBUG || /[?&]nav_debug=1/.test(location.search));
 
   function debug(...args) {
@@ -14,9 +14,9 @@
   }
 
   function initNavContrast() {
-    const nav = document.querySelector('.navigation');
+    const nav = document.querySelector('.navigation_container');
     if (!nav) {
-      debug('❌ Nav not found (.navigation)');
+      debug('❌ Nav not found (.navigation_container)');
       return;
     }
     debug('✅ Nav found:', nav);
