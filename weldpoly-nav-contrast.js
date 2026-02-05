@@ -1,9 +1,9 @@
 /**
  * Weldpoly Nav Contrast
- * Alterna a cor do logo e do menu quando o nav está sobre seções com fundo claro/branco
+ * Toggles logo and menu color when nav is over light/dark background sections
  */
 (function() {
-  // Seções claras: background-color-white | Seções escuras: background-color-black
+  // Light sections: background-color-white | Dark sections: background-color-black
   const LIGHT_SECTIONS = '.background-color-white, [data-nav-contrast="light"]';
 
   function initNavContrast() {
@@ -33,7 +33,7 @@
     const observer = new IntersectionObserver(callback, options);
     lightSections.forEach(section => observer.observe(section));
 
-    // Fallback: verificar ao carregar (para páginas que começam em seção clara)
+    // Fallback: check on load (for pages that start in a light section)
     const checkInitial = () => {
       const rect = nav.getBoundingClientRect();
       const checkY = rect.bottom - 10;
