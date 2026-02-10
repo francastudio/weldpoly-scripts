@@ -23,7 +23,10 @@
  *    - Template for products: [data-quote-item] (existing)
  *    - Template for spare parts: [data-quote-part-item] (optional, if not provided, uses product template)
  * 
- * 3. Add this script to Webflow footer (AFTER the initQuoteSystem script)
+ * 3. On product detail page, add attribute data-quote-product-title on the product name element
+ *    (or the main "Add to quote" button with data-quote-title) so spare parts can be shown below that product.
+ * 
+ * 4. Add this script to Webflow footer (AFTER the initQuoteSystem script)
  */
 
 (function() {
@@ -53,6 +56,25 @@
     }
     
     return 'Unnamed spare part';
+  }
+
+  /**
+   * Get the current page's product title (parent product for spare parts).
+   * Used when adding a spare part via [spare-part-add] so it appears below this product in the modal.
+   * Looks for: [data-quote-product-title] text, or main [data-add-quote] button's data-quote-title.
+   */
+  function getParentProductTitle() {
+    const byAttr = document.querySelector('[data-quote-product-title]');
+    if (byAttr) {
+      const title = (byAttr.getAttribute('data-quote-product-title') || byAttr.textContent || '').trim();
+      if (title && title.length > 0) return title;
+    }
+    const addBtn = document.querySelector('[data-add-quote][data-quote-title]');
+    if (addBtn) {
+      const t = (addBtn.getAttribute('data-quote-title') || '').trim();
+      if (t) return t;
+    }
+    return '';
   }
 
   function getSparePartContentHTML(container) {
@@ -243,12 +265,33 @@
       console.log(`[Quote Cart] ✅ Removed ${removedCount} existing items`);
     }
 
-    // Render each item
-    cart.forEach((item, index) => {
-      // Choose template based on item type
+    // Build display order: each product followed by its spare parts (so spare parts appear below parent)
+    const displayOrder = [];
+    const sparePartsPlaced = new Set();
+    const productTitleNorm = (t) => (t || '').trim().toLowerCase();
+    cart.forEach((item, idx) => {
+      if (!item.isSparePart) {
+        displayOrder.push({ item, cartIndex: idx });
+        const parentTitle = productTitleNorm(item.title);
+        cart.forEach((sp, j) => {
+          if (sp.isSparePart && productTitleNorm(sp.parentProductTitle) === parentTitle) {
+            displayOrder.push({ item: sp, cartIndex: j });
+            sparePartsPlaced.add(j);
+          }
+        });
+      }
+    });
+    cart.forEach((item, idx) => {
+      if (item.isSparePart && !sparePartsPlaced.has(idx)) {
+        displayOrder.push({ item, cartIndex: idx });
+      }
+    });
+
+    // Render each item in display order (spare parts directly under their product)
+    displayOrder.forEach(({ item, cartIndex }) => {
       const isSparePart = item.isSparePart === true;
       const useTemplate = isSparePart && templatePartItem ? templatePartItem : templateItem;
-      
+
       if (!useTemplate) {
         console.log('[Quote Cart] ⚠️ No template available for item:', item.title);
         return;
@@ -257,84 +300,45 @@
       const clone = useTemplate.cloneNode(true);
       clone.style.display = 'flex';
       clone.classList.add('quote_item');
-      // Remove template attributes to avoid confusion
       clone.removeAttribute('data-quote-item');
       clone.removeAttribute('data-quote-part-item');
 
-      // If it's a spare part with custom HTML, use that
       if (isSparePart && item.sparePartContentHTML) {
         console.log(`[Quote Cart] 🔧 Rendering spare part with custom HTML: ${item.title}`);
-        console.log(`[Quote Cart] 📦 HTML content length: ${item.sparePartContentHTML.length} chars`);
-        
-        // Find the content container - try multiple selectors
-        const contentContainer = clone.querySelector('[data-quote-part-content]') || 
+        const contentContainer = clone.querySelector('[data-quote-part-content]') ||
                                 clone.querySelector('.quote_item_content') ||
                                 clone.querySelector('.quote_item-content') ||
                                 clone;
-        
+
         if (contentContainer) {
-          console.log('[Quote Cart] ✅ Content container found, inserting HTML');
-          // Clear existing content
           contentContainer.innerHTML = '';
-          // Insert the spare part content HTML
           contentContainer.insertAdjacentHTML('beforeend', item.sparePartContentHTML);
-          console.log('[Quote Cart] ✅ HTML inserted into content container');
-          
-          // Re-query elements after HTML insertion to update title, description, quantity
           const newTitleEl = clone.querySelector('[data-quote-title]');
           const newDescEl = clone.querySelector('[data-quote-description]');
           const newQtyEl = clone.querySelector('[data-quote-number]');
-          
-          if (newTitleEl) {
-            newTitleEl.textContent = item.title || '';
-            console.log(`[Quote Cart] ✅ Title set: ${item.title}`);
-          } else {
-            console.log('[Quote Cart] ⚠️ Title element not found after HTML insertion');
-          }
-          
-          if (newDescEl) {
-            newDescEl.textContent = item.description || '';
-          }
-          
+          if (newTitleEl) newTitleEl.textContent = item.title || '';
+          if (newDescEl) newDescEl.textContent = item.description || '';
           if (newQtyEl) {
             newQtyEl.textContent = item.qty || 1;
             const nestedDiv = newQtyEl.querySelector('div');
             if (nestedDiv) nestedDiv.textContent = item.qty || 1;
-            console.log(`[Quote Cart] ✅ Quantity set: ${item.qty}`);
-          } else {
-            console.log('[Quote Cart] ⚠️ Quantity element not found after HTML insertion');
           }
-        } else {
-          console.log('[Quote Cart] ⚠️ Content container not found for spare part HTML');
         }
       } else {
-        // Regular product item
-        // Safely set title
         const titleEl = clone.querySelector('[data-quote-title]');
-        if (titleEl) {
-          titleEl.textContent = item.title || '';
-        }
-
-        // Safely set description
         const descEl = clone.querySelector('[data-quote-description]');
-        if (descEl) {
-          descEl.textContent = item.description || '';
-        }
-
-        // Safely set quantity
         const qtyEl = clone.querySelector('[data-quote-number]');
+        if (titleEl) titleEl.textContent = item.title || '';
+        if (descEl) descEl.textContent = item.description || '';
         if (qtyEl) {
           qtyEl.textContent = item.qty || 1;
           const nestedDiv = qtyEl.querySelector('div');
           if (nestedDiv) nestedDiv.textContent = item.qty || 1;
         }
-
-        // Remove image if exists
         const imgEl = clone.querySelector('[data-quote-image]');
         if (imgEl) imgEl.remove();
       }
 
-      // Add event listeners for controls
       const plusBtn = clone.querySelector('.quote_plus');
       const minusBtn = clone.querySelector('.quote_minus');
       const removeBtn = clone.querySelector('[data-quote-remove]');
@@ -360,7 +364,7 @@
       if (removeBtn) {
         removeBtn.addEventListener('click', (e) => {
           e.preventDefault();
-          cart.splice(index, 1);
+          cart.splice(cartIndex, 1);
           saveCartToStorage(cart);
           manualRenderCart();
           triggerOriginalRenderCart();
@@ -373,12 +377,12 @@
 
     console.log(`[Quote Cart] ✅ Total items rendered: ${cart.length}`);
 
-    // Update title and empty state
+    // Update title and empty state (header title, not item title)
     const updateTitle = () => {
-      const titleEl = quoteModal.querySelector('[data-quote-title]');
-      if (titleEl) {
+      const headerTitleEl = quoteModal.querySelector('.quote_header-title');
+      if (headerTitleEl) {
         const itemCount = cart.length;
-        titleEl.textContent = itemCount === 0 ? 'QUOTE (0 ITEMS)' : `QUOTE (${itemCount} ${itemCount === 1 ? 'ITEM' : 'ITEMS'})`;
+        headerTitleEl.textContent = itemCount === 0 ? 'QUOTE (0 ITEMS)' : `QUOTE (${itemCount} ${itemCount === 1 ? 'ITEM' : 'ITEMS'})`;
       }
     };
 
@@ -507,6 +511,9 @@
         if (existing) {
           existing.qty = newQty;
           existing.isSparePart = true;
+          if (!existing.parentProductTitle) {
+            existing.parentProductTitle = getParentProductTitle() || '';
+          }
           if (!sparePartContentHTML && existing.sparePartContentHTML) {
             sparePartContentHTML = existing.sparePartContentHTML;
           }
@@ -516,12 +523,13 @@
           // Log: Item quantity updated
           console.log(`[Quote Cart] Item updated: "${title}" - Quantity: ${previousQty} → ${newQty} | Total items: ${cart.length}`);
         } else {
-          cart.push({ 
-            title, 
-            description, 
-            qty: newQty, 
+          cart.push({
+            title,
+            description,
+            qty: newQty,
             isSparePart: true,
-            sparePartContentHTML: sparePartContentHTML 
+            sparePartContentHTML: sparePartContentHTML,
+            parentProductTitle: getParentProductTitle() || ''
           });
           // Log: Item added
           console.log(`[Quote Cart] ✅ Item ADDED: "${title}" - Quantity: ${newQty} | Total items: ${cart.length}`);
@@ -672,10 +680,80 @@
     setTimeout(trySyncWithCart, 800);
   }
 
+  /**
+   * Add one spare part to the quote (same behaviour as adding a product).
+   * Used when the user clicks a button with [spare-part-add] inside a [spare-part-item].
+   * The spare part is stored with parentProductTitle so it can be rendered below that product in the modal.
+   */
+  function addSparePartToQuote(button) {
+    const container = button.closest('[spare-part-item]');
+    if (!container) return;
+
+    const title = getSparePartTitle(container);
+    if (title === 'Unnamed spare part') return;
+
+    function getSparePartDescription() {
+      const selectors = ['.card_description', '[data-quote-description]', '.spare-part-description'];
+      for (const selector of selectors) {
+        const el = container.querySelector(selector);
+        if (el) {
+          const text = el.textContent.trim();
+          if (isValidSparePartName(text)) return text;
+        }
+      }
+      return '';
+    }
+
+    const description = getSparePartDescription();
+    const sparePartContentHTML = getSparePartContentHTML(container);
+    const parentProductTitle = getParentProductTitle();
+
+    let cart = [];
+    try {
+      const saved = localStorage.getItem('quoteCart');
+      if (saved) cart = JSON.parse(saved);
+      if (!Array.isArray(cart)) cart = [];
+    } catch {
+      cart = [];
+    }
+
+    const sameItem = (item) => {
+      if (!item || !item.title) return false;
+      const titleMatch = item.title.trim().toLowerCase() === title.trim().toLowerCase();
+      const parentMatch = (item.parentProductTitle || '') === (parentProductTitle || '');
+      return item.isSparePart && titleMatch && parentMatch;
+    };
+    const existingIndex = cart.findIndex(sameItem);
+    if (existingIndex >= 0) {
+      cart[existingIndex].qty += 1;
+      if (sparePartContentHTML && !cart[existingIndex].sparePartContentHTML) {
+        cart[existingIndex].sparePartContentHTML = sparePartContentHTML;
+      }
+    } else {
+      cart.push({
+        title,
+        description,
+        qty: 1,
+        isSparePart: true,
+        sparePartContentHTML: sparePartContentHTML || '',
+        parentProductTitle: parentProductTitle || ''
+      });
+    }
+
+    saveCartToStorage(cart);
+    updateNavQtyFromCart(cart);
+    document.dispatchEvent(new CustomEvent('quoteCartUpdated', {
+      detail: { cart, source: 'spare-part-add' },
+      bubbles: true
+    }));
+    setTimeout(() => triggerOriginalRenderCart(), 50);
+    setTimeout(() => openQuoteModal(), 200);
+  }
+
   function init() {
     const sparePartItems = document.querySelectorAll('[spare-part-item]');
     const directInputs = document.querySelectorAll('.spare-part-qty-input');
-    
+
     sparePartItems.forEach((item) => {
       if (item.querySelector('.spare-part-qty-input') && !processed.has(item)) {
         initQuantityControl(item);
@@ -687,6 +765,17 @@
       if (sparePartItem && !processed.has(sparePartItem)) {
         initQuantityControl(sparePartItem);
       }
+    });
+  }
+
+  /** Click handler for [spare-part-add] button: add spare part to quote and open modal */
+  function initSparePartAddButtons() {
+    document.addEventListener('click', function(e) {
+      const btn = e.target.closest('[spare-part-add]');
+      if (!btn) return;
+      e.preventDefault();
+      e.stopPropagation();
+      addSparePartToQuote(btn);
     });
   }
 
@@ -1331,6 +1420,7 @@
     initAllCalled = true;
 
     init();
+    initSparePartAddButtons();
     initNavigationButtonHandler();
     initModalSync();
     initModalHandlers();
