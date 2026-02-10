@@ -1,21 +1,24 @@
 ===========================================
 WEBFLOW FOOTER CODE
 ===========================================
+Use apenas as linhas <script src="..."> abaixo.
+NÃO cole o conteúdo dos .js no Webflow (limite de 50.000 caracteres).
+O navegador carrega o script pela URL — sem limite.
 
 PREREQUISITES (load before, in Head or Footer):
 - Locomotive Scroll: https://cdn.jsdelivr.net/npm/locomotive-scroll@beta/bundled/locomotive-scroll.min.js
 - GSAP + ScrollTrigger: https://cdn.prod.website-files.com/gsap/3.14.2/gsap.min.js, ScrollTrigger.min.js
 - Finsweet Attributes (for lists): https://attributes.finsweet.com/list/list.js
 
-WELDPOLY SCRIPTS (order matters):
-<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@6c5feb6/weldpoly-lenis-scroll-control.js" defer></script>
-<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@6c5feb6/weldpoly-quote-system.js" defer></script>
-<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@6c5feb6/weldpoly-spare-parts-quantity-control-FIXED-ECOMMERCE.js" defer></script>
-<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@6c5feb6/weldpoly-nav-contrast.js" defer></script>
-<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@6c5feb6/weldpoly-centered-nav.js" defer></script>
-<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@6c5feb6/weldpoly-locomotive-init.js" defer></script>
-<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@6c5feb6/weldpoly-content-reveal.js" defer></script>
-<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@6c5feb6/weldpoly-finsweet-sort.js" defer></script>
+WELDPOLY SCRIPTS (order matters) — sempre @main (última versão):
+<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-lenis-scroll-control.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-quote-system.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-spare-parts-quantity-control-FIXED-ECOMMERCE.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-nav-contrast.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-centered-nav.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-locomotive-init.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-content-reveal.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-finsweet-sort.js" defer></script>
 
 ===========================================
 INSTRUCTIONS:
@@ -42,28 +45,28 @@ SCRIPT URLs:
 ===========================================
 
 weldpoly-lenis-scroll-control.js:
-https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@6c5feb6/weldpoly-lenis-scroll-control.js
+https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-lenis-scroll-control.js
 
 weldpoly-quote-system.js:
-https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@6c5feb6/weldpoly-quote-system.js
+https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-quote-system.js
 
 weldpoly-spare-parts-quantity-control-FIXED-ECOMMERCE.js:
-https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@6c5feb6/weldpoly-spare-parts-quantity-control-FIXED-ECOMMERCE.js
+https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-spare-parts-quantity-control-FIXED-ECOMMERCE.js
 
 weldpoly-nav-contrast.js:
-https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@6c5feb6/weldpoly-nav-contrast.js
+https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-nav-contrast.js
 
 weldpoly-centered-nav.js:
-https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@6c5feb6/weldpoly-centered-nav.js
+https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-centered-nav.js
 
 weldpoly-locomotive-init.js:
-https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@6c5feb6/weldpoly-locomotive-init.js
+https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-locomotive-init.js
 
 weldpoly-content-reveal.js:
-https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@6c5feb6/weldpoly-content-reveal.js
+https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-content-reveal.js
 
 weldpoly-finsweet-sort.js:
-https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@6c5feb6/weldpoly-finsweet-sort.js
+https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-finsweet-sort.js
 
 GitHub Repository:
 https://github.com/francastudio/weldpoly-scripts
@@ -98,22 +101,15 @@ Target: .navigation_container (not .navigation)
 UPDATES:
 ===========================================
 
-This file is updated automatically on each GitHub push.
-The commit SHA in the URL ensures you always use the exact version of the code.
+URLs use @main — o site no Webflow passa a usar a última versão ao publicar no GitHub.
+Não é preciso alterar o Footer Code no Webflow quando houver novo push.
 
-Latest commit: 6c5feb6 (2026-02-05 16:09:13)
+Latest commit: 4fd0eda (2026-02-09 23:49:02)
 
 ✅ Vertical scroll inside modal div (`.quote_modal-content`)
 ✅ Dynamic max-height to keep actions visible
 ✅ Compatible with Locomotive Scroll/Lenis
 ✅ Page scroll disabled when modal is open
 ✅ Scroll enabled only in modal content wrapper
-
-To update scripts in the future:
-
-1. Edit files locally
-2. Run: bash scripts/atualizar-github-auto.sh
-3. The script automatically updates this file with the new commit SHA
-4. Paste the updated code in the Webflow Footer Code
 
 ===========================================
