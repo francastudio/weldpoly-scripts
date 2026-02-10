@@ -45,16 +45,27 @@
   }
 
   function getSparePartTitle(container) {
-    const sparePartItem = container.hasAttribute('spare-part-item') ? container : 
+    const sparePartItem = container.hasAttribute('spare-part-item') ? container :
                           container.closest('[spare-part-item]');
-    
+
     if (sparePartItem) {
       const attrValue = sparePartItem.getAttribute('spare-part-item');
       if (isValidSparePartName(attrValue)) {
         return attrValue.trim();
       }
+      // Fallback: Webflow CMS often leaves attribute empty; get title from content
+      const nameEl = sparePartItem.querySelector('.spare-part-name');
+      if (nameEl) {
+        const text = (nameEl.textContent || '').trim();
+        if (isValidSparePartName(text)) return text;
+      }
+      const wrap = sparePartItem.querySelector('.spare-part-content-wrap');
+      if (wrap) {
+        const firstText = (wrap.textContent || '').trim().split(/\n/)[0].trim();
+        if (isValidSparePartName(firstText)) return firstText;
+      }
     }
-    
+
     return 'Unnamed spare part';
   }
 
@@ -766,10 +777,10 @@
     });
   }
 
-  /** Click handler for [spare-part-add] button: add spare part to quote and open modal */
+  /** Click handler for + add-to-quote: [spare-part-add] or [data-spare-parts-add-to-quote] (Webflow) */
   function initSparePartAddButtons() {
     document.addEventListener('click', function(e) {
-      const btn = e.target.closest('[spare-part-add]');
+      const btn = e.target.closest('[spare-part-add], [data-spare-parts-add-to-quote], [data-spare-part-add]');
       if (!btn) return;
       e.preventDefault();
       e.stopPropagation();
