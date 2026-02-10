@@ -245,9 +245,7 @@
       console.log('[Quote Cart] ⚠️ Actions block not found');
     }
 
-    // Hide the template item if it exists and is visible
-    const templateItem = quoteModal.querySelector('[data-quote-item]');
-    const templatePartItem = quoteModal.querySelector('[data-quote-part-item]');
+    // Hide the template item if it exists and is visible (reuse templateItem/templatePartItem from above)
     if (templateItem) {
       templateItem.style.display = 'none';
       console.log('[Quote Cart] ✅ Template item hidden');
