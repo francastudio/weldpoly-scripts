@@ -204,11 +204,11 @@
       return;
     }
 
-    // Get templates
-    const templateItem = quoteModal.querySelector('[data-quote-item]');
-    const templatePartItem = quoteModal.querySelector('[data-quote-part-item]');
-    
-    if (!templateItem && !templatePartItem) {
+    // Get templates (unique names to avoid redeclaration errors)
+    const manualTemplateProduct = quoteModal.querySelector('[data-quote-item]');
+    const manualTemplatePart = quoteModal.querySelector('[data-quote-part-item]');
+
+    if (!manualTemplateProduct && !manualTemplatePart) {
       console.log('[Quote Cart] ⚠️ No template found (neither data-quote-item nor data-quote-part-item)');
       return;
     }
@@ -261,13 +261,12 @@
       console.log('[Quote Cart] ⚠️ Actions block not found');
     }
 
-    // Hide the template item if it exists and is visible (reuse templateItem/templatePartItem from above)
-    if (templateItem) {
-      templateItem.style.display = 'none';
+    if (manualTemplateProduct) {
+      manualTemplateProduct.style.display = 'none';
       console.log('[Quote Cart] ✅ Template item hidden');
     }
-    if (templatePartItem) {
-      templatePartItem.style.display = 'none';
+    if (manualTemplatePart) {
+      manualTemplatePart.style.display = 'none';
       console.log('[Quote Cart] ✅ Template part item hidden');
     }
 
@@ -304,7 +303,7 @@
     // Render each item in display order (spare parts directly under their product)
     displayOrder.forEach(({ item, cartIndex }) => {
       const isSparePart = item.isSparePart === true;
-      const useTemplate = isSparePart && templatePartItem ? templatePartItem : templateItem;
+      const useTemplate = isSparePart && manualTemplatePart ? manualTemplatePart : manualTemplateProduct;
 
       if (!useTemplate) {
         console.log('[Quote Cart] ⚠️ No template available for item:', item.title);
@@ -409,8 +408,8 @@
       if (actionsBlock) {
         actionsBlock.style.display = cart.length === 0 ? 'none' : 'block';
       }
-      if (templateItem && cart.length > 0) {
-        templateItem.style.display = 'none';
+      if (manualTemplateProduct && cart.length > 0) {
+        manualTemplateProduct.style.display = 'none';
       }
     };
 
