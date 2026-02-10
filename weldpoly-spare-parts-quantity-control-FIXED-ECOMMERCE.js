@@ -32,6 +32,7 @@
 (function() {
   'use strict';
 
+  console.log('[Weldpoly] Spare Parts loaded — add spare parts to quote, quantity +/- , spare parts shown below product in modal');
   const processed = new WeakSet();
   const sparePartInputs = new Map();
 

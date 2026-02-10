@@ -14,6 +14,7 @@
 (function() {
   'use strict';
 
+  console.log('[Weldpoly] Quote System loaded — cart, quote modal, add product to quote');
   let systemInitialized = false; // Prevent duplicate initialization
 
   function initQuoteSystem() {
