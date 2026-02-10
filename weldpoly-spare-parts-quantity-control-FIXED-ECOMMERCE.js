@@ -64,6 +64,10 @@
         const firstText = (wrap.textContent || '').trim().split(/\n/)[0].trim();
         if (isValidSparePartName(firstText)) return firstText;
       }
+      // Fallback: first 2 words from container (e.g. "Heating plate" when content is inline)
+      const fullText = (sparePartItem.textContent || '').trim();
+      const firstTwoWords = fullText.split(/\s+/).slice(0, 2).join(' ').trim();
+      if (isValidSparePartName(firstTwoWords)) return firstTwoWords;
     }
 
     return 'Unnamed spare part';
@@ -777,14 +781,26 @@
     });
   }
 
-  /** Click handler for + add-to-quote: [spare-part-add] or [data-spare-parts-add-to-quote] (Webflow) */
+  /** Click handler: add-to-quote by attribute OR by clicking a button/link inside [spare-part-item] (except quantity controls) */
   function initSparePartAddButtons() {
     document.addEventListener('click', function(e) {
-      const btn = e.target.closest('[spare-part-add], [data-spare-parts-add-to-quote], [data-spare-part-add]');
-      if (!btn) return;
+      // 1) Element has explicit attribute
+      let btn = e.target.closest('[spare-part-add], [data-spare-parts-add-to-quote], [data-spare-part-add]');
+      if (btn) {
+        e.preventDefault();
+        e.stopPropagation();
+        addSparePartToQuote(btn);
+        return;
+      }
+      // 2) Fallback: click on a link/button inside [spare-part-item] that is NOT the quantity control (+/-/input)
+      const container = e.target.closest('[spare-part-item]');
+      if (!container) return;
+      const clickTarget = e.target.closest('a, button, [class*="button"]');
+      if (!clickTarget || !container.contains(clickTarget)) return;
+      if (clickTarget.closest('.spare-part-quantity-control')) return;
       e.preventDefault();
       e.stopPropagation();
-      addSparePartToQuote(btn);
+      addSparePartToQuote(clickTarget);
     });
   }
 
