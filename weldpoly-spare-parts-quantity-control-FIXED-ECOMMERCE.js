@@ -408,8 +408,6 @@
       if (actionsBlock) {
         actionsBlock.style.display = cart.length === 0 ? 'none' : 'block';
       }
-      // Also hide the template item if it's visible
-      const templateItem = quoteModal.querySelector('[data-quote-item]');
       if (templateItem && cart.length > 0) {
         templateItem.style.display = 'none';
       }
