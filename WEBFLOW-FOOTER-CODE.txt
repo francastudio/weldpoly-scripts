@@ -11,12 +11,10 @@ PREREQUISITES (load before, in Head or Footer):
 - Finsweet Attributes (for lists): https://attributes.finsweet.com/list/list.js
 
 WELDPOLY SCRIPTS (order matters) — sempre @main (última versão):
-<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-lenis-scroll-control.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-webflow-core.js" defer></script>
 <script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-quote-system.js" defer></script>
 <script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-spare-parts-quantity-control-FIXED-ECOMMERCE.js" defer></script>
 <script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-navigation.js" defer></script>
-<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-locomotive-init.js" defer></script>
-<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-content-reveal.js" defer></script>
 <script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-finsweet-sort.js" defer></script>
 
 ===========================================
@@ -30,20 +28,18 @@ INSTRUCTIONS:
 5. Publish the site
 
 ⚠️ SCRIPT ORDER:
-1. weldpoly-lenis-scroll-control.js
+1. weldpoly-webflow-core.js (Lenis scroll + Locomotive init + Content reveal - requires Locomotive Scroll, GSAP, ScrollTrigger)
 2. weldpoly-quote-system.js
 3. weldpoly-spare-parts-quantity-control-FIXED-ECOMMERCE.js
 4. weldpoly-navigation.js (menu toggle + nav contrast)
-5. weldpoly-locomotive-init.js (requires Locomotive Scroll)
-6. weldpoly-content-reveal.js (requires GSAP + ScrollTrigger)
-7. weldpoly-finsweet-sort.js (requires Finsweet Attributes - only on pages with lists)
+5. weldpoly-finsweet-sort.js (requires Finsweet Attributes - only on pages with lists)
 
 ===========================================
 SCRIPT URLs:
 ===========================================
 
-weldpoly-lenis-scroll-control.js:
-https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-lenis-scroll-control.js
+weldpoly-webflow-core.js (unified: Lenis + Locomotive + Content reveal):
+https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-webflow-core.js
 
 weldpoly-quote-system.js:
 https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-quote-system.js
@@ -53,12 +49,6 @@ https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-spare-pa
 
 weldpoly-navigation.js:
 https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-navigation.js
-
-weldpoly-locomotive-init.js:
-https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-locomotive-init.js
-
-weldpoly-content-reveal.js:
-https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-content-reveal.js
 
 weldpoly-finsweet-sort.js:
 https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-finsweet-sort.js
@@ -118,7 +108,7 @@ UPDATES:
 URLs use @main — o site no Webflow passa a usar a última versão ao publicar no GitHub.
 Não é preciso alterar o Footer Code no Webflow quando houver novo push.
 
-Latest commit: 73edea5 (2026-02-11 08:03:35)
+Latest commit: b9c5714 (2026-02-11 08:41:28)
 
 ✅ Vertical scroll inside modal div (`.quote_modal-content`)
 ✅ Dynamic max-height to keep actions visible
