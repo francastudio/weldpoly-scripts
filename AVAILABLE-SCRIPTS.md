@@ -85,39 +85,26 @@ toggleLenisScroll('.my-section');
 
 ---
 
-### 4. **weldpoly-nav-contrast.js**
-**Function:** Toggles logo and menu color based on the section background under the nav
-- Logo and text turn dark on sections with `.background-color-white`
-- Logo and text turn light on sections with `.background-color-black`
-- Uses Intersection Observer to detect current section
-- Supports `[data-nav-contrast="light"]` for manual control
+### 4. **weldpoly-navigation.js** (unified)
+**Function:** Menu toggle + nav contrast (logo/menu color by section)
+- `[data-navigation-toggle="toggle"]` opens/closes, `[data-navigation-toggle="close"]`, ESC closes
+- `[data-navigation-status]` active/not-active
+- Adds `.nav--over-light` to `.navigation_container` when over light sections
+- Light sections: `.background-color-white`, `.background-color-primary`, `[data-nav-contrast="light"]`, etc.
+- Debug: `?nav_debug=1` or `window.NAV_CONTRAST_DEBUG = true`
 
 **URL:**
 ```
-https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-nav-contrast.js
+https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-navigation.js
 ```
 
 **When to use:**
-- ✅ Webflow site with fixed menu and sections alternating light/dark background
-- ⚠️ Requires CSS classes: `.navigation_container.nav--over-light` (add to Custom Code)
+- ✅ Replaces weldpoly-nav-contrast.js and weldpoly-centered-nav.js
+- ⚠️ Requires CSS: `.navigation_container.nav--over-light` (add to Custom Code)
 
 ---
 
-### 5. **weldpoly-centered-nav.js**
-**Function:** Centered menu toggle and close with ESC
-- `[data-navigation-toggle="toggle"]` opens/closes the menu
-- `[data-navigation-toggle="close"]` closes the menu
-- ESC key closes the menu
-- `[data-navigation-status]` controls active/not-active state
-
-**URL:**
-```
-https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-centered-nav.js
-```
-
----
-
-### 6. **weldpoly-locomotive-init.js**
+### 5. **weldpoly-locomotive-init.js**
 **Function:** Initializes Locomotive Scroll with Lenis
 - Creates instance in `window.locomotiveScroll`
 - ⚠️ Requires Locomotive Scroll to be loaded first
@@ -129,7 +116,7 @@ https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-locomoti
 
 ---
 
-### 7. **weldpoly-content-reveal.js**
+### 6. **weldpoly-content-reveal.js**
 **Function:** Scroll reveal animations with GSAP ScrollTrigger
 - `[data-reveal-group]` – element group
 - `[data-reveal-group-nested]` – subgroups
@@ -143,7 +130,7 @@ https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-content-
 
 ---
 
-### 8. **weldpoly-finsweet-sort.js**
+### 7. **weldpoly-finsweet-sort.js**
 **Function:** Alphanumeric (natural) sort in Finsweet lists
 - Sorts by `name` field using natural sort (e.g. Item 2 before Item 10)
 - ⚠️ Requires Finsweet Attributes List API loaded first
@@ -174,8 +161,7 @@ weldpoly-scripts/
 ├── weldpoly-quote-system.js
 ├── weldpoly-spare-parts-quantity-control-FIXED-ECOMMERCE.js
 ├── weldpoly-lenis-scroll-control.js
-├── weldpoly-nav-contrast.js
-├── weldpoly-centered-nav.js
+├── weldpoly-navigation.js
 ├── weldpoly-locomotive-init.js
 ├── weldpoly-content-reveal.js
 └── weldpoly-finsweet-sort.js
@@ -219,10 +205,19 @@ The `weldpoly-quote-system.js` manages:
 - ✅ Persistence in `localStorage`
 - ✅ Synchronization across pages
 
+### Modal — 2 Component Templates
+Inside `.quote_modal-content` you must have:
+1. **`[data-quote-item]`** — product template (class `quote_item`). Used for products added via `[data-add-quote]`.
+2. **`[data-quote-part-item]`** — spare part template (class `quote_part-item`). Used for spare parts added via the spare parts script.
+
+Both templates need `[data-quote-title]`, `[data-quote-description]`, `[data-quote-number]`, `.quote_plus`, `.quote_minus`, `[data-quote-remove]`.
+
+**Important:** Set templates to `display: none` by default (in Webflow or via CSS) so they don't appear when the modal opens before the script renders. The scripts clone these elements and only the clones are shown.
+
 ### Modal
 - ✅ Opens automatically when adding products
 - ✅ Closes via `.modal__btn-close` or `[data-modal-close]`
-- ✅ Renders cart items automatically
+- ✅ Renders cart items automatically (products with quote_item, spare parts with quote_part-item)
 - ✅ Updates title with item count
 - ✅ Handles empty cart state
 - ✅ Vertical scroll inside modal (compatible with Locomotive Scroll)
