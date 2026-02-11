@@ -92,6 +92,10 @@ Target: .navigation_container (not .navigation)
 .navigation_container.nav--over-light a { color: #131313 !important; }
 .navigation_container.nav--over-light .centered-nav__toggle-bar { background-color: #131313 !important; }
 
+Menu aberto — background mais escuro (adicione ao Head Code):
+[data-navigation-status="active"] .centered-nav { background-color: #0a0a0a !important; }
+(ajuste: #050505 = quase preto, #111 = um pouco mais claro)
+
 ===========================================
 UPDATES:
 ===========================================
@@ -99,7 +103,7 @@ UPDATES:
 URLs use @main — o site no Webflow passa a usar a última versão ao publicar no GitHub.
 Não é preciso alterar o Footer Code no Webflow quando houver novo push.
 
-Latest commit: 9be6e2e (2026-02-11 06:38:48)
+Latest commit: 960950a (2026-02-11 06:45:18)
 
 ✅ Vertical scroll inside modal div (`.quote_modal-content`)
 ✅ Dynamic max-height to keep actions visible
