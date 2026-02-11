@@ -92,7 +92,7 @@
     lightSections.forEach(section => observer.observe(section));
 
     const checkUnderNav = () => {
-      if (document.querySelector('[data-navigation-status="active"]')) return isOverLight;
+      if (document.querySelector('[data-navigation-status="active"]') || document.querySelector('[data-modal-group-status="active"]')) return isOverLight;
       const rect = nav.getBoundingClientRect();
       const headerBarHeight = 60;
       const checkY = rect.top + headerBarHeight + 2;
@@ -139,6 +139,11 @@
     if (navStatusEl) {
       const obs = new MutationObserver(() => { if (navStatusEl.getAttribute('data-navigation-status') !== 'active') checkUnderNav(); });
       obs.observe(navStatusEl, { attributes: true, attributeFilter: ['data-navigation-status'] });
+    }
+    const modalGroupEl = document.querySelector('[data-modal-group-status]');
+    if (modalGroupEl) {
+      const obsModal = new MutationObserver(() => { if (modalGroupEl.getAttribute('data-modal-group-status') !== 'active') checkUnderNav(); });
+      obsModal.observe(modalGroupEl, { attributes: true, attributeFilter: ['data-modal-group-status'] });
     }
   }
 
