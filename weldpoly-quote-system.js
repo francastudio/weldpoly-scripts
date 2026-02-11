@@ -178,24 +178,28 @@
     }
 
     // ===== Request-a-Quote Page List ([data-quote-list] on /get-a-quote) =====
-    const pageListContainer = document.querySelector('[data-quote-list]');
+    const pageListContainer = document.querySelector('[data-quote-list]') || document.querySelector('.request-a-quote_list');
     const pageTitleEl = document.querySelector('[data-request-a-quote-title]');
-    const pageTemplate = pageListContainer?.querySelector('[data-quote-placeholder]') || pageListContainer?.querySelector('[data-quote-item]');
+    const pageTemplate = pageListContainer?.querySelector('[data-quote-placeholder]') || pageListContainer?.querySelector('[data-quote-item]') || pageListContainer?.querySelector('.quote_item');
 
     function renderRequestQuotePageList() {
-      if (!pageListContainer || !pageTemplate) return;
+      if (!pageListContainer || !pageTemplate) {
+        if (pageTitleEl && !pageListContainer) console.warn('[Weldpoly] Request-a-quote: add [data-quote-list] or class .request-a-quote_list to the list container');
+        if (pageListContainer && !pageTemplate) console.warn('[Weldpoly] Request-a-quote: add [data-quote-placeholder] or [data-quote-item] to a template div INSIDE the list');
+        return;
+      }
       pageTemplate.style.display = 'none';
       pageListContainer.querySelectorAll('.quote_item, .quote_part-item').forEach(el => {
-        if (!el.hasAttribute('data-quote-placeholder') && !el.hasAttribute('data-quote-item')) el.remove();
+        if (el !== pageTemplate && !el.hasAttribute('data-quote-placeholder') && !el.hasAttribute('data-quote-item')) el.remove();
       });
       cart.forEach((item, index) => {
         const clone = pageTemplate.cloneNode(true);
         clone.style.display = 'flex';
         clone.removeAttribute('data-quote-placeholder');
         clone.removeAttribute('data-quote-item');
-        const tEl = clone.querySelector('[data-quote-title]');
-        const dEl = clone.querySelector('[data-quote-description]');
-        const qEl = clone.querySelector('[data-quote-number]');
+        const tEl = clone.querySelector('[data-quote-title]') || clone.querySelector('.quote_item-title');
+        const dEl = clone.querySelector('[data-quote-description]') || clone.querySelector('.quote_item-description');
+        const qEl = clone.querySelector('[data-quote-number]') || clone.querySelector('.quote_number');
         if (tEl) tEl.textContent = item.title || '';
         if (dEl) dEl.textContent = item.description || '';
         if (qEl) {

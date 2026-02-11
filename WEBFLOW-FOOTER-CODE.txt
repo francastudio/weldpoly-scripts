@@ -87,6 +87,16 @@ QUOTE MODAL - Templates hidden by default (add to Head Code):
 (Evita que os templates apareçam ao abrir o modal antes do script renderizar)
 
 ===========================================
+REQUEST-A-QUOTE PAGE - Lista de itens:
+Na página /get-a-quote, adicione estes atributos (Custom Attributes no Webflow):
+
+1. Container da lista: data-quote-list (no div que envolve a lista)
+2. Título: data-request-a-quote-title (no h2 "QUOTE (X ITEMS)")
+3. Template: data-quote-placeholder (num div DENTRO do container, com Display: None)
+   O template precisa ter: [data-quote-title], [data-quote-description], [data-quote-number],
+   .quote_plus, .quote_minus, [data-quote-remove]
+
+===========================================
 NAV CONTRAST - CSS (add to Head Code):
 ===========================================
 Target: .navigation_container (not .navigation)
@@ -108,7 +118,7 @@ UPDATES:
 URLs use @main — o site no Webflow passa a usar a última versão ao publicar no GitHub.
 Não é preciso alterar o Footer Code no Webflow quando houver novo push.
 
-Latest commit: 621765d (2026-02-11 07:11:58)
+Latest commit: 95468b3 (2026-02-11 07:16:51)
 
 ✅ Vertical scroll inside modal div (`.quote_modal-content`)
 ✅ Dynamic max-height to keep actions visible
