@@ -75,15 +75,20 @@
 
           if (fieldKey === 'description') {
             const sortedItems = [...items].sort((a, b) => {
-              const aDesc = a.fields.description?.value || '';
-              const bDesc = b.fields.description?.value || '';
-              const aRange = extractMinMaxMm(aDesc);
-              const bRange = extractMinMaxMm(bDesc);
+              const aMin = a.fields['pipe-min-mm']?.value;
+              const bMin = b.fields['pipe-min-mm']?.value;
+              const aMax = a.fields['pipe-max-mm']?.value;
+              const bMax = b.fields['pipe-max-mm']?.value;
+              const aRange = (aMin != null && !isNaN(Number(aMin)))
+                ? { min: Number(aMin), max: (aMax != null && !isNaN(Number(aMax))) ? Number(aMax) : Number(aMin) }
+                : extractMinMaxMm(a.fields.description?.value || '');
+              const bRange = (bMin != null && !isNaN(Number(bMin)))
+                ? { min: Number(bMin), max: (bMax != null && !isNaN(Number(bMax))) ? Number(bMax) : Number(bMin) }
+                : extractMinMaxMm(b.fields.description?.value || '');
               if (aRange.min !== bRange.min) {
                 const cmp = aRange.min - bRange.min;
                 return direction === 'desc' ? -cmp : cmp;
               }
-              // Tiebreaker: same min -> sort by max asc (smaller machine first, e.g. PolySaw630 before PolySaw800)
               const cmpMax = aRange.max - bRange.max;
               return direction === 'desc' ? -cmpMax : cmpMax;
             });
