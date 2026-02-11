@@ -56,6 +56,18 @@
   window.FinsweetAttributes.push([
     'list',
     (listInstances) => {
+      let resortScheduled = false;
+      const scheduleResort = () => {
+        if (resortScheduled) return;
+        resortScheduled = true;
+        requestAnimationFrame(() => {
+          setTimeout(() => {
+            resortScheduled = false;
+            listInstances.forEach(li => li.triggerHook('sort'));
+          }, 100);
+        });
+      };
+
       listInstances.forEach((listInstance) => {
         listInstance.addHook('sort', (items) => {
           const fieldKey = listInstance.sorting.value.fieldKey;
@@ -106,6 +118,17 @@
           () => {}
         );
       });
+
+      // Re-sort when infinite load adds more items (sort hook initially sees only first batch)
+      setTimeout(() => {
+        const infiniteLists = document.querySelectorAll('[fs-list-element="list"][fs-list-load="infinite"]');
+        infiniteLists.forEach((listEl) => {
+          const obs = new MutationObserver((mutations) => {
+            if (mutations.some(m => m.addedNodes.length > 0)) scheduleResort();
+          });
+          obs.observe(listEl, { childList: true, subtree: true });
+        });
+      }, 0);
     }
   ]);
 })();
