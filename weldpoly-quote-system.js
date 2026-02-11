@@ -138,6 +138,10 @@ let systemInitialized=false;
         const productTitle=normT(item.title);
         const spareMatchesProduct=(c)=>(c.isSparePart===true)&&(productSlug&&c.parentProductSlug===productSlug||normT(c.parentProductTitle)===productTitle);
         const productMatches=(c)=>(!c.isSparePart)&&(productSlug&&c.productSlug===productSlug||normT(c.title)===productTitle);
+        const toRemove=cart.filter(c=>spareMatchesProduct(c)||productMatches(c));
+        if(toRemove.length>0){
+          console.log('[Weldpoly Quote] Removing product parent:',{title:item.title,slug:productSlug,removing:toRemove.length,items:toRemove.map(x=>({title:x.title,isSparePart:x.isSparePart,parentSlug:x.parentProductSlug}))});
+        }
         cart=cart.filter(c=>!(spareMatchesProduct(c)||productMatches(c)));
       }
       saveCart();
@@ -171,9 +175,13 @@ let systemInitialized=false;
 
         const titleNode=findInClone(clone,titleSel)||clone.querySelector('[data-quote-title]');
         const descNode=findInClone(clone,descSel)||clone.querySelector('[data-quote-description]');
+        const sizeRangeNode=clone.querySelector('[data-quote-size-range]');
         const qtyEl = clone.querySelector('[data-quote-number]');
         if (titleNode) titleNode.textContent = item.title || '';
-        if (descNode) descNode.textContent = item.description || '';
+        const descText=item.description||'';
+        const sizeText=item.productSizeRange||'';
+        if (descNode) descNode.textContent = sizeRangeNode ? descText : (descText+(sizeText ? '\n'+sizeText : ''));
+        if (sizeRangeNode) sizeRangeNode.textContent = sizeText;
         if (qtyEl) {
           const q = item.qty || 1;
           qtyEl.textContent = q;
@@ -222,9 +230,12 @@ let systemInitialized=false;
         if (item.isSparePart) clone.classList.add('quote_part-item');
         const tEl = clone.querySelector('[data-quote-title]') || clone.querySelector('.quote_item-title');
         const dEl = clone.querySelector('[data-quote-description]') || clone.querySelector('.quote_item-description');
+        const sEl = clone.querySelector('[data-quote-size-range]');
         const qEl = clone.querySelector('[data-quote-number]') || clone.querySelector('.quote_number');
         if (tEl) tEl.textContent = item.title || '';
-        if (dEl) dEl.textContent = item.description || '';
+        const descT=item.description||'', sizeT=item.productSizeRange||'';
+        if (dEl) dEl.textContent = sEl ? descT : (descT+(sizeT ? '\n'+sizeT : ''));
+        if (sEl) sEl.textContent = sizeT;
         if (qEl) { const q = item.qty || 1; qEl.textContent = q; const i = qEl.querySelector('div'); if (i) i.textContent = q; }
         const plusBtn = clone.querySelector('.quote_plus');
         const minusBtn = clone.querySelector('.quote_minus');
@@ -293,9 +304,11 @@ let systemInitialized=false;
       const description = button.getAttribute('data-quote-description') || '';
       const slugSrc = button.getAttribute('data-quote-product-slug') || button.closest?.('[data-product-slug]')?.getAttribute?.('data-product-slug') || button.closest?.('.w-dyn-item')?.querySelector?.('[data-product-slug]')?.getAttribute?.('data-product-slug') || document.querySelector?.('[data-product-slug]')?.getAttribute?.('data-product-slug');
       const slug = (slugSrc || '').trim();
+      const sizeRangeEl = button.closest?.('.w-dyn-item')?.querySelector?.('[data-product-size-range]') || document.querySelector?.('[data-product-size-range]');
+      const sizeRange = (button.getAttribute('data-quote-size-range') || (sizeRangeEl ? (sizeRangeEl.getAttribute?.('data-product-size-range')||sizeRangeEl.textContent||'').trim() : '')).trim();
       const existing = cart.find(i => i.title === title || (slug && i.productSlug === slug));
       if (existing) existing.qty++;
-      else { const p = { title, description, qty: 1 }; if (slug) p.productSlug = slug; cart.push(p); }
+      else { const p = { title, description, qty: 1 }; if (slug) p.productSlug = slug; if (sizeRange) p.productSizeRange = sizeRange; cart.push(p); }
       renderCart();
       saveCart();
       updateNavQty();

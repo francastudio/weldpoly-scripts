@@ -81,6 +81,11 @@ function getParentProductSlug(){
   return el?(el.getAttribute('data-product-slug')||'').trim():'';
 }
 
+function getParentProductSizeRange(){
+  const el=document.querySelector('[data-product-size-range]');
+  return el?(el.getAttribute('data-product-size-range')||el.textContent||'').trim():'';
+}
+
 function getParentProductDescription(){
   const byAttr=document.querySelector('[data-quote-product-description]');
   if(byAttr){const t=(byAttr.getAttribute('data-quote-product-description')||byAttr.textContent||'').trim();if(t)return t;}
@@ -164,8 +169,10 @@ function toggleSparePartInQuote(trigger){
     const hasParent=(parentTitle&&merged.some(i=>!i.isSparePart&&norm(i.title)===norm(parentTitle)))||(parentSlug&&merged.some(i=>!i.isSparePart&&i.productSlug===parentSlug));
     if(!hasParent&&(parentTitle||parentSlug)){
       const parentDesc=getParentProductDescription();
+      const sizeRange=getParentProductSizeRange();
       const prod={title:parentTitle||'Product',description:parentDesc||'',qty:1};
       if(parentSlug)prod.productSlug=parentSlug;
+      if(sizeRange)prod.productSizeRange=sizeRange;
       merged.push(prod);
     }
     const sp={title,description,qty:1,isSparePart:true,parentProductTitle:parentTitle||''};

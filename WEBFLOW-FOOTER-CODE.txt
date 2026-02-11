@@ -78,12 +78,13 @@ QUOTE MODAL - Templates hidden by default (add to Head Code):
 
 ===========================================
 PRODUCT DETAIL PAGE - Para spare parts + remoção em grupo:
-No template da página de produto, adicione no elemento do título (ex: h1):
+No template da página de produto, adicione:
 
-- data-product-slug="[slug-do-produto]" — ex: field-basic-160 (identificador canônico)
-- data-quote-product-title="" — vazio; o script usa textContent. Ou vincule ao campo do CMS.
+- No h1 ou título: data-product-slug="[slug]" (ex: field-basic-160), data-quote-product-title="" (usa textContent)
+- No tagline/faixa de tamanho: data-product-size-range="" (vazio; usa textContent, ex: "40 TO 160MM 1.5" TO 6.2"")
 
-Assim, ao remover o produto pai, os spare parts associados são removidos corretamente.
+No template do modal (quote_item), opcional: data-quote-size-range (para exibir o size range em elemento separado).
+Se não existir, o size range é concatenado à descrição.
 
 ===========================================
 REQUEST-A-QUOTE PAGE - Lista de itens:
