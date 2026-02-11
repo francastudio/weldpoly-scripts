@@ -14,8 +14,7 @@ WELDPOLY SCRIPTS (order matters) — sempre @main (última versão):
 <script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-lenis-scroll-control.js" defer></script>
 <script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-quote-system.js" defer></script>
 <script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-spare-parts-quantity-control-FIXED-ECOMMERCE.js" defer></script>
-<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-nav-contrast.js" defer></script>
-<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-centered-nav.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-navigation.js" defer></script>
 <script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-locomotive-init.js" defer></script>
 <script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-content-reveal.js" defer></script>
 <script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-finsweet-sort.js" defer></script>
@@ -34,11 +33,10 @@ INSTRUCTIONS:
 1. weldpoly-lenis-scroll-control.js
 2. weldpoly-quote-system.js
 3. weldpoly-spare-parts-quantity-control-FIXED-ECOMMERCE.js
-4. weldpoly-nav-contrast.js
-5. weldpoly-centered-nav.js (menu toggle)
-6. weldpoly-locomotive-init.js (requires Locomotive Scroll)
-7. weldpoly-content-reveal.js (requires GSAP + ScrollTrigger)
-8. weldpoly-finsweet-sort.js (requires Finsweet Attributes - only on pages with lists)
+4. weldpoly-navigation.js (menu toggle + nav contrast)
+5. weldpoly-locomotive-init.js (requires Locomotive Scroll)
+6. weldpoly-content-reveal.js (requires GSAP + ScrollTrigger)
+7. weldpoly-finsweet-sort.js (requires Finsweet Attributes - only on pages with lists)
 
 ===========================================
 SCRIPT URLs:
@@ -53,11 +51,8 @@ https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-quote-sy
 weldpoly-spare-parts-quantity-control-FIXED-ECOMMERCE.js:
 https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-spare-parts-quantity-control-FIXED-ECOMMERCE.js
 
-weldpoly-nav-contrast.js:
-https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-nav-contrast.js
-
-weldpoly-centered-nav.js:
-https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-centered-nav.js
+weldpoly-navigation.js:
+https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-navigation.js
 
 weldpoly-locomotive-init.js:
 https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-locomotive-init.js
@@ -104,7 +99,7 @@ UPDATES:
 URLs use @main — o site no Webflow passa a usar a última versão ao publicar no GitHub.
 Não é preciso alterar o Footer Code no Webflow quando houver novo push.
 
-Latest commit: a7569b5 (2026-02-10 00:21:22)
+Latest commit: 9be6e2e (2026-02-11 06:38:48)
 
 ✅ Vertical scroll inside modal div (`.quote_modal-content`)
 ✅ Dynamic max-height to keep actions visible

@@ -1,0 +1,148 @@
+/**
+ * Weldpoly Navigation — Unified script
+ * Combines: centered nav toggle + nav contrast (logo/menu color by section)
+ *
+ * 1) Centered Nav: [data-navigation-toggle="toggle"], [data-navigation-toggle="close"]
+ *    [data-navigation-status] active/not-active. ESC closes.
+ * 2) Nav Contrast: Logo/menu color by section. Add .nav--over-light to .navigation_container
+ *    when nav is over light sections (.background-color-white, .background-color-primary, etc.)
+ *
+ * DEBUG: ?nav_debug=1 or window.NAV_CONTRAST_DEBUG = true
+ */
+(function() {
+  'use strict';
+
+  // ===== 1) Centered Scaling Navigation Bar =====
+  function initCenteredScalingNavigationBar() {
+    const navigationInnerItems = document.querySelectorAll('[data-navigation-item]');
+    navigationInnerItems.forEach((item, index) => {
+      item.style.transitionDelay = `${index * 0.05}s`;
+    });
+
+    document.querySelectorAll('[data-navigation-toggle="toggle"]').forEach(toggleBtn => {
+      toggleBtn.addEventListener('click', () => {
+        const navStatusEl = document.querySelector('[data-navigation-status]');
+        if (!navStatusEl) return;
+        if (navStatusEl.getAttribute('data-navigation-status') === 'not-active') {
+          navStatusEl.setAttribute('data-navigation-status', 'active');
+        } else {
+          navStatusEl.setAttribute('data-navigation-status', 'not-active');
+        }
+      });
+    });
+
+    document.querySelectorAll('[data-navigation-toggle="close"]').forEach(closeBtn => {
+      closeBtn.addEventListener('click', () => {
+        const navStatusEl = document.querySelector('[data-navigation-status]');
+        if (!navStatusEl) return;
+        navStatusEl.setAttribute('data-navigation-status', 'not-active');
+      });
+    });
+
+    document.addEventListener('keydown', e => {
+      if (e.keyCode === 27) {
+        const navStatusEl = document.querySelector('[data-navigation-status]');
+        if (!navStatusEl) return;
+        if (navStatusEl.getAttribute('data-navigation-status') === 'active') {
+          navStatusEl.setAttribute('data-navigation-status', 'not-active');
+        }
+      }
+    });
+  }
+
+  // ===== 2) Nav Contrast (logo/menu color by section) =====
+  const LIGHT_SECTIONS = '.background-color-white, .background-color-primary, .color-scheme-1, .section_solutions, .section_about-us, [data-nav-contrast="light"]';
+  const NAV_CONTRAST_DEBUG = !!(window.NAV_CONTRAST_DEBUG || /[?&]nav_debug=1/.test(location.search));
+
+  function navContrastDebug(...args) {
+    if (NAV_CONTRAST_DEBUG) console.log('[Nav Contrast]', ...args);
+  }
+
+  function initNavContrast() {
+    const nav = document.querySelector('.navigation_container');
+    if (!nav) {
+      navContrastDebug('Nav not found (.navigation_container)');
+      return;
+    }
+
+    const lightSections = document.querySelectorAll(LIGHT_SECTIONS);
+    if (!lightSections.length) {
+      navContrastDebug('No light sections found. Selector:', LIGHT_SECTIONS);
+      return;
+    }
+
+    const navHeight = 80;
+    const options = {
+      root: null,
+      rootMargin: `-${navHeight}px 0px 0px 0px`,
+      threshold: [0, 0.01, 0.5, 1]
+    };
+
+    let isOverLight = false;
+
+    const callback = (entries) => {
+      const overLight = entries.some(e => e.isIntersecting);
+      if (overLight !== isOverLight) {
+        isOverLight = overLight;
+        nav.classList.toggle('nav--over-light', isOverLight);
+      }
+    };
+
+    const observer = new IntersectionObserver(callback, options);
+    lightSections.forEach(section => observer.observe(section));
+
+    const checkUnderNav = () => {
+      const rect = nav.getBoundingClientRect();
+      const checkY = rect.bottom - 5;
+      const centerX = window.innerWidth / 2;
+      const elAtPoint = document.elementFromPoint(centerX, checkY);
+      const inLightSection = elAtPoint?.closest(LIGHT_SECTIONS);
+      const shouldBeLight = !!inLightSection;
+      if (shouldBeLight !== isOverLight) {
+        isOverLight = shouldBeLight;
+        nav.classList.toggle('nav--over-light', isOverLight);
+      }
+      return shouldBeLight;
+    };
+
+    checkUnderNav();
+    window.addEventListener('load', () => { checkUnderNav(); });
+
+    let scrollTicking = false;
+    const onScroll = () => {
+      if (scrollTicking) return;
+      scrollTicking = true;
+      requestAnimationFrame(() => {
+        checkUnderNav();
+        scrollTicking = false;
+      });
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    document.documentElement.addEventListener('scroll', onScroll, { passive: true });
+
+    const hookLenis = () => {
+      const ls = window.locomotiveScroll || window.scroll?.locomotive;
+      if (ls && ls.lenis) {
+        ls.lenis.on('scroll', onScroll);
+        return true;
+      }
+      return false;
+    };
+    if (!hookLenis()) {
+      document.addEventListener('DOMContentLoaded', () => { hookLenis() && checkUnderNav(); });
+      setTimeout(() => { hookLenis() && checkUnderNav(); }, 1500);
+    }
+  }
+
+  // ===== Init =====
+  function init() {
+    initCenteredScalingNavigationBar();
+    initNavContrast();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
