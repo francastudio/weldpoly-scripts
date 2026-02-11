@@ -178,14 +178,13 @@
     }
 
     // ===== Request-a-Quote Page List ([data-quote-list] on /get-a-quote) =====
-    const pageListContainer = document.querySelector('[data-quote-list]') || document.querySelector('.request-a-quote_list');
-    const pageTitleEl = document.querySelector('[data-request-a-quote-title]');
-    const pageTemplate = pageListContainer?.querySelector('[data-quote-placeholder]') || pageListContainer?.querySelector('[data-quote-item]') || pageListContainer?.querySelector('.quote_item');
-
     function renderRequestQuotePageList() {
+      const pageListContainer = document.querySelector('[data-quote-list]') || document.querySelector('.request-a-quote_list');
+      const pageTitleEl = document.querySelector('[data-request-a-quote-title]');
+      const pageTemplate = pageListContainer?.querySelector('[data-quote-placeholder]') || pageListContainer?.querySelector('[data-quote-item]') || pageListContainer?.querySelector('.quote_item');
+      const hasPage = !!document.querySelector('.request-a-quote_content, [quote-content]');
       if (!pageListContainer || !pageTemplate) {
-        if (pageTitleEl && !pageListContainer) console.warn('[Weldpoly] Request-a-quote: add [data-quote-list] or class .request-a-quote_list to the list container');
-        if (pageListContainer && !pageTemplate) console.warn('[Weldpoly] Request-a-quote: add [data-quote-placeholder] or [data-quote-item] to a template div INSIDE the list');
+        if (hasPage && cart.length > 0) console.warn('[Weldpoly] Request-a-quote: list NOT rendered. Container:', !!pageListContainer, '| Template:', !!pageTemplate, '— Add [data-quote-list] to a div and [data-quote-placeholder] inside it.');
         return;
       }
       pageTemplate.style.display = 'none';
@@ -411,6 +410,9 @@
     renderCart();
     renderRequestQuotePageList();
     updateNavQty();
+    if (document.querySelector('.request-a-quote_content, [quote-content]') && cart.length > 0) {
+      [300, 800, 1500].forEach(ms => setTimeout(renderRequestQuotePageList, ms));
+    }
     
     // Setup modal scroll on init (in case modal is already open)
     if (quoteModal && quoteModal.getAttribute('data-modal-status') === 'active') {
