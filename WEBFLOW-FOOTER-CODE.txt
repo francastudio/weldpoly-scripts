@@ -108,7 +108,11 @@ UPDATES:
 URLs use @main — o site no Webflow passa a usar a última versão ao publicar no GitHub.
 Não é preciso alterar o Footer Code no Webflow quando houver novo push.
 
-Latest commit: 447acb4 (2026-02-11 11:06:26)
+FORÇAR ATUALIZAÇÃO IMEDIATA (após push): O script atualizar-github-auto.sh purga o
+cache do jsDelivr automaticamente. Se precisar purgar manualmente, acesse:
+https://purge.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/nome-do-arquivo.js
+
+Latest commit: ed3b160 (2026-02-11 11:19:04)
 
 ✅ Vertical scroll inside modal div (`.quote_modal-content`)
 ✅ Dynamic max-height to keep actions visible

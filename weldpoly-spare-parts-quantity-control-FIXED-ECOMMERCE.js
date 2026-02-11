@@ -90,6 +90,7 @@ function getParentProductDescription(){
 }
 
 function openQuoteModal(){
+  if(typeof window.openQuoteModal==='function'){window.openQuoteModal();return;}
   const g=document.querySelector('[data-modal-group-status]');
   const m=document.querySelector('[data-modal-name="quote-modal"]');
   if(g)g.setAttribute('data-modal-group-status','active');
@@ -109,13 +110,17 @@ function isSparePartInCart(container){
 function updateSparePartButtonsState(){
   const sel='[spare-part-item], .spare-part-item, .collection_spare-part-item, .list-spare_parts .w-dyn-item';
   document.querySelectorAll(sel).forEach(container=>{
-    const trigger=container.querySelector('[spare-part-add]')||container.querySelector('.spare-part-qty-plus')||container.querySelector('.spare-part-checkbox input[type="checkbox"]')||container.querySelector('input[type="checkbox"]');
+    const trigger=container.querySelector('[spare-part-add]')||container.querySelector('.spare-part-qty-plus')||container.querySelector('.spare-part-checkbox input[type="checkbox"]')||container.querySelector('.spare-part-checkbox')||container.querySelector('.spare-part-check')||container.querySelector('input[type="checkbox"]');
     if(!trigger)return;
     const{inCart}=isSparePartInCart(container);
-    if(trigger.type==='checkbox'){
-      trigger.checked=inCart;
-      trigger.setAttribute('aria-checked',inCart?'true':'false');
-    }else{
+    const label=trigger.closest?.('label')||trigger;
+    const checkbox=trigger.type==='checkbox'?trigger:(container.querySelector('.spare-part-checkbox input[type="checkbox"]')||container.querySelector('input[type="checkbox"]'));
+    if(checkbox){
+      checkbox.checked=inCart;
+      checkbox.setAttribute('aria-checked',inCart?'true':'false');
+    }
+    if(label&&label!==trigger)label.classList.toggle('spare-part-in-quote',inCart);
+    if(trigger.type!=='checkbox'){
       trigger.setAttribute('data-in-quote',inCart?'true':'false');
       trigger.classList.toggle('spare-part-in-quote',inCart);
       const t=(trigger.textContent||'').trim();
@@ -175,7 +180,7 @@ function getCheckboxFromClickTarget(target){
 
 function init(){
   document.addEventListener('click',e=>{
-    let trigger=e.target.closest('[spare-part-add]')||e.target.closest('.spare-part-qty-plus');
+    let trigger=e.target.closest('[spare-part-add]')||e.target.closest('.spare-part-qty-plus')||e.target.closest('.spare-part-check');
     if(!trigger){
       const cb=getCheckboxFromClickTarget(e.target);
       if(cb&&getSparePartContainerFromTrigger(cb))trigger=cb;
