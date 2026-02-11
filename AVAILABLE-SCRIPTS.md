@@ -214,6 +214,12 @@ Both templates need `[data-quote-title]`, `[data-quote-description]`, `[data-quo
 
 **Important:** Set templates to `display: none` by default (in Webflow or via CSS) so they don't appear when the modal opens before the script renders. The scripts clone these elements and only the clones are shown.
 
+### Request-a-Quote Page (/get-a-quote)
+On the get-a-quote page, the quote system auto-renders the cart list when these elements exist:
+- **`[data-quote-list]`** — container for the list (e.g. `.request-a-quote_list`)
+- **`[data-request-a-quote-title]`** — e.g. `h2` showing "QUOTE (N ITEMS)"
+- **`[data-quote-placeholder]`** or **`[data-quote-item]`** — template inside the list (with `[data-quote-title]`, `[data-quote-description]`, `[data-quote-number]`, `.quote_plus`, `.quote_minus`, `[data-quote-remove]`)
+
 ### Modal
 - ✅ Opens automatically when adding products
 - ✅ Closes via `.modal__btn-close` or `[data-modal-close]`
