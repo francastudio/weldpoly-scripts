@@ -92,8 +92,10 @@
     lightSections.forEach(section => observer.observe(section));
 
     const checkUnderNav = () => {
+      if (document.querySelector('[data-navigation-status="active"]')) return isOverLight;
       const rect = nav.getBoundingClientRect();
-      const checkY = rect.bottom - 5;
+      const headerBarHeight = 60;
+      const checkY = rect.top + headerBarHeight + 2;
       const centerX = window.innerWidth / 2;
       const elAtPoint = document.elementFromPoint(centerX, checkY);
       const inLightSection = elAtPoint?.closest(LIGHT_SECTIONS);
@@ -131,6 +133,12 @@
     if (!hookLenis()) {
       document.addEventListener('DOMContentLoaded', () => { hookLenis() && checkUnderNav(); });
       setTimeout(() => { hookLenis() && checkUnderNav(); }, 1500);
+    }
+
+    const navStatusEl = document.querySelector('[data-navigation-status]');
+    if (navStatusEl) {
+      const obs = new MutationObserver(() => { if (navStatusEl.getAttribute('data-navigation-status') !== 'active') checkUnderNav(); });
+      obs.observe(navStatusEl, { attributes: true, attributeFilter: ['data-navigation-status'] });
     }
   }
 
