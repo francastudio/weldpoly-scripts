@@ -125,6 +125,18 @@ let systemInitialized=false;
       if (typeof window.updateSparePartButtonsState === 'function') window.updateSparePartButtonsState();
     }
 
+    function itemKey(o){return (o.isSparePart?'p':'n')+'\x01'+(o.title||'')+'\x01'+(o.parentProductTitle||'');}
+    function removeFromCart(item){
+      loadCart();
+      const i=cart.findIndex(c=>itemKey(c)===itemKey(item));
+      if(i>=0)cart.splice(i,1);
+      saveCart();
+      renderCart();
+      updateNavQty();
+      renderRequestQuotePageList();
+      refreshSparePartButtons();
+    }
+
     function renderCart() {
       if (!quoteContent || !templateItem) return;
       templateItem.style.display = 'none';
@@ -170,7 +182,7 @@ let systemInitialized=false;
         const removeBtn = clone.querySelector('[data-quote-remove]');
         if (plusBtn) plusBtn.addEventListener('click', () => { item.qty++; renderCart(); saveCart(); updateNavQty(); renderRequestQuotePageList(); refreshSparePartButtons(); });
         if (minusBtn) minusBtn.addEventListener('click', () => { if (item.qty > 1) item.qty--; renderCart(); saveCart(); updateNavQty(); renderRequestQuotePageList(); refreshSparePartButtons(); });
-        if (removeBtn) removeBtn.addEventListener('click', (e) => { e.preventDefault(); cart.splice(idx, 1); renderCart(); saveCart(); updateNavQty(); renderRequestQuotePageList(); refreshSparePartButtons(); });
+        if (removeBtn) removeBtn.addEventListener('click', (e) => { e.preventDefault(); removeFromCart(item); });
         ins?quoteContent.insertBefore(clone,ins):quoteContent.appendChild(clone);
       });
       updateTitle();
@@ -209,7 +221,7 @@ let systemInitialized=false;
         const removeBtn = clone.querySelector('[data-quote-remove]');
         if (plusBtn) plusBtn.addEventListener('click', () => { item.qty++; saveCart(); renderCart(); renderRequestQuotePageList(); updateNavQty(); refreshSparePartButtons(); });
         if (minusBtn) minusBtn.addEventListener('click', () => { if (item.qty > 1) item.qty--; saveCart(); renderCart(); renderRequestQuotePageList(); updateNavQty(); refreshSparePartButtons(); });
-        if (removeBtn) removeBtn.addEventListener('click', (e) => { e.preventDefault(); cart.splice(idx, 1); saveCart(); renderCart(); renderRequestQuotePageList(); updateNavQty(); refreshSparePartButtons(); });
+        if (removeBtn) removeBtn.addEventListener('click', (e) => { e.preventDefault(); removeFromCart(item); });
         pageListContainer.appendChild(clone);
       });
       if (pageTitleEl) pageTitleEl.textContent = `QUOTE (${cart.length} ${cart.length === 1 ? 'ITEM' : 'ITEMS'})`;
