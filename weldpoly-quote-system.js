@@ -149,6 +149,7 @@
             renderCart();
             saveCart();
             updateNavQty();
+            renderRequestQuotePageList();
           });
         }
         
@@ -158,6 +159,7 @@
             renderCart();
             saveCart();
             updateNavQty();
+            renderRequestQuotePageList();
           });
         }
         
@@ -168,6 +170,7 @@
             renderCart();
             saveCart();
             updateNavQty();
+            renderRequestQuotePageList();
           });
         }
         
