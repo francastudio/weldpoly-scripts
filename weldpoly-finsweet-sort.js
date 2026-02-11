@@ -32,21 +32,24 @@
     return 0;
   }
 
-  /** Extract min size in mm from description. Handles "40 to 160mm", "1600mm to 914mm" (both orders) */
-  function extractMinMm(str) {
-    if (!str || typeof str !== 'string') return Infinity;
+  /** Extract { min, max } in mm from description. Handles "40 to 160mm", "1600mm to 914mm", "90-630mm" */
+  function extractMinMaxMm(str) {
+    const fallback = { min: Infinity, max: Infinity };
+    if (!str || typeof str !== 'string') return fallback;
     const s = str.trim();
-    if (!s) return Infinity;
-    // Match range: "X to Ymm" or "Xmm to Ymm" - use the smaller number
-    const rangeMatch = s.match(/(\d+(?:\.\d+)?)\s*(?:mm\s*)?to\s*(\d+(?:\.\d+)?)\s*mm/i);
+    if (!s) return fallback;
+    // Match range: "X to Ymm" or "Xmm to Ymm" or "X-Ymm"
+    const rangeMatch = s.match(/(\d+(?:\.\d+)?)\s*(?:mm\s*)?(?:to|-)\s*(\d+(?:\.\d+)?)\s*mm/i) ||
+      s.match(/(\d+(?:\.\d+)?)\s+to\s+(\d+(?:\.\d+)?)\s*mm/i);
     if (rangeMatch) {
       const a = parseFloat(rangeMatch[1]);
       const b = parseFloat(rangeMatch[2]);
-      return Math.min(a, b);
+      return { min: Math.min(a, b), max: Math.max(a, b) };
     }
-    // Fallback: first number (e.g. "76.2mm to 254mm")
+    // Fallback: single number
     const m = s.match(/(\d+(?:\.\d+)?)/);
-    return m ? parseFloat(m[1]) : Infinity;
+    const n = m ? parseFloat(m[1]) : Infinity;
+    return { min: n, max: n };
   }
 
   window.FinsweetAttributes = window.FinsweetAttributes || [];
@@ -62,10 +65,15 @@
             const sortedItems = [...items].sort((a, b) => {
               const aDesc = a.fields.description?.value || '';
               const bDesc = b.fields.description?.value || '';
-              const aMm = extractMinMm(aDesc);
-              const bMm = extractMinMm(bDesc);
-              const comparison = aMm - bMm;
-              return direction === 'desc' ? -comparison : comparison;
+              const aRange = extractMinMaxMm(aDesc);
+              const bRange = extractMinMaxMm(bDesc);
+              if (aRange.min !== bRange.min) {
+                const cmp = aRange.min - bRange.min;
+                return direction === 'desc' ? -cmp : cmp;
+              }
+              // Tiebreaker: same min -> sort by max asc (smaller machine first, e.g. PolySaw630 before PolySaw800)
+              const cmpMax = aRange.max - bRange.max;
+              return direction === 'desc' ? -cmpMax : cmpMax;
             });
             return sortedItems;
           }
