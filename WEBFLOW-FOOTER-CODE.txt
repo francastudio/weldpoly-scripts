@@ -77,6 +77,15 @@ QUOTE MODAL - Templates hidden by default (add to Head Code):
 (Evita que os templates apareçam ao abrir o modal antes do script renderizar)
 
 ===========================================
+PRODUCT DETAIL PAGE - Para spare parts + remoção em grupo:
+No template da página de produto, adicione no elemento do título (ex: h1):
+
+- data-product-slug="[slug-do-produto]" — ex: field-basic-160 (identificador canônico)
+- data-quote-product-title="" — vazio; o script usa textContent. Ou vincule ao campo do CMS.
+
+Assim, ao remover o produto pai, os spare parts associados são removidos corretamente.
+
+===========================================
 REQUEST-A-QUOTE PAGE - Lista de itens:
 Na página /get-a-quote, adicione estes atributos (Custom Attributes no Webflow):
 
@@ -112,7 +121,7 @@ FORÇAR ATUALIZAÇÃO IMEDIATA (após push): O script atualizar-github-auto.sh p
 cache do jsDelivr automaticamente. Se precisar purgar manualmente, acesse:
 https://purge.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/nome-do-arquivo.js
 
-Latest commit: 40c4dfa (2026-02-11 11:41:38)
+Latest commit: 18986e0 (2026-02-11 12:08:42)
 
 ✅ Vertical scroll inside modal div (`.quote_modal-content`)
 ✅ Dynamic max-height to keep actions visible
