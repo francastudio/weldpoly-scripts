@@ -1,4 +1,4 @@
-/** Weldpoly Quote System — unified quote + spare parts | CDN: cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-quote-system.js */
+/** Weldpoly Quote System — cart, modal, products | CDN: cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-quote-system.js */
 (function(){
 'use strict';
 const CART_KEY='quoteCart',CART_SAVED_AT_KEY='quoteCartSavedAt',CART_TTL_MS=36e5;
@@ -121,6 +121,10 @@ let systemInitialized=false;
       return order;
     }
 
+    function refreshSparePartButtons() {
+      if (typeof window.updateSparePartButtonsState === 'function') window.updateSparePartButtonsState();
+    }
+
     function renderCart() {
       if (!quoteContent || !templateItem) return;
       templateItem.style.display = 'none';
@@ -164,9 +168,9 @@ let systemInitialized=false;
         const plusBtn = clone.querySelector('.quote_plus');
         const minusBtn = clone.querySelector('.quote_minus');
         const removeBtn = clone.querySelector('[data-quote-remove]');
-        if (plusBtn) plusBtn.addEventListener('click', () => { item.qty++; renderCart(); saveCart(); updateNavQty(); renderRequestQuotePageList(); });
-        if (minusBtn) minusBtn.addEventListener('click', () => { if (item.qty > 1) item.qty--; renderCart(); saveCart(); updateNavQty(); renderRequestQuotePageList(); });
-        if (removeBtn) removeBtn.addEventListener('click', (e) => { e.preventDefault(); cart.splice(idx, 1); renderCart(); saveCart(); updateNavQty(); renderRequestQuotePageList(); updateSparePartButtonsState(); });
+        if (plusBtn) plusBtn.addEventListener('click', () => { item.qty++; renderCart(); saveCart(); updateNavQty(); renderRequestQuotePageList(); refreshSparePartButtons(); });
+        if (minusBtn) minusBtn.addEventListener('click', () => { if (item.qty > 1) item.qty--; renderCart(); saveCart(); updateNavQty(); renderRequestQuotePageList(); refreshSparePartButtons(); });
+        if (removeBtn) removeBtn.addEventListener('click', (e) => { e.preventDefault(); cart.splice(idx, 1); renderCart(); saveCart(); updateNavQty(); renderRequestQuotePageList(); refreshSparePartButtons(); });
         ins?quoteContent.insertBefore(clone,ins):quoteContent.appendChild(clone);
       });
       updateTitle();
@@ -203,9 +207,9 @@ let systemInitialized=false;
         const plusBtn = clone.querySelector('.quote_plus');
         const minusBtn = clone.querySelector('.quote_minus');
         const removeBtn = clone.querySelector('[data-quote-remove]');
-        if (plusBtn) plusBtn.addEventListener('click', () => { item.qty++; saveCart(); renderCart(); renderRequestQuotePageList(); updateNavQty(); });
-        if (minusBtn) minusBtn.addEventListener('click', () => { if (item.qty > 1) item.qty--; saveCart(); renderCart(); renderRequestQuotePageList(); updateNavQty(); });
-        if (removeBtn) removeBtn.addEventListener('click', (e) => { e.preventDefault(); cart.splice(idx, 1); saveCart(); renderCart(); renderRequestQuotePageList(); updateNavQty(); updateSparePartButtonsState(); });
+        if (plusBtn) plusBtn.addEventListener('click', () => { item.qty++; saveCart(); renderCart(); renderRequestQuotePageList(); updateNavQty(); refreshSparePartButtons(); });
+        if (minusBtn) minusBtn.addEventListener('click', () => { if (item.qty > 1) item.qty--; saveCart(); renderCart(); renderRequestQuotePageList(); updateNavQty(); refreshSparePartButtons(); });
+        if (removeBtn) removeBtn.addEventListener('click', (e) => { e.preventDefault(); cart.splice(idx, 1); saveCart(); renderCart(); renderRequestQuotePageList(); updateNavQty(); refreshSparePartButtons(); });
         pageListContainer.appendChild(clone);
       });
       if (pageTitleEl) pageTitleEl.textContent = `QUOTE (${cart.length} ${cart.length === 1 ? 'ITEM' : 'ITEMS'})`;
@@ -271,7 +275,7 @@ let systemInitialized=false;
       renderCart();
       saveCart();
       updateNavQty();
-      updateSparePartButtonsState();
+      refreshSparePartButtons();
     }
 
     document.addEventListener('click',e=>{
@@ -300,7 +304,7 @@ let systemInitialized=false;
             const isActive = quoteModal.getAttribute('data-modal-status') === 'active';
             setTimeout(() => {
               if (isActive) { setupModalScroll(); handleModalScrollControl(true); renderCart(); }
-              else { handleModalScrollControl(false); updateSparePartButtonsState(); }
+              else { handleModalScrollControl(false); refreshSparePartButtons(); }
             }, 50);
           }
         });
@@ -308,98 +312,15 @@ let systemInitialized=false;
       modalObserver.observe(quoteModal, { attributes: true, attributeFilter: ['data-modal-status'] });
     }
 
-    const onCartEvt=()=>{loadCart();renderCart();renderRequestQuotePageList();updateNavQty();updateSparePartButtonsState();};
+    const onCartEvt=()=>{loadCart();renderCart();renderRequestQuotePageList();updateNavQty();refreshSparePartButtons();};
     document.addEventListener('quoteCartExpired',onCartEvt);
     document.addEventListener('quoteCartUpdated',onCartEvt);
-
-    function getSparePartTitle(container) {
-      const el = container.querySelector('.spare-part-name') || container.querySelector('[spare-part-content]');
-      if (el) { const t = (el.textContent || '').trim(); if (t && t.length > 1) return t; }
-      const two = (container.textContent || '').trim().split(/\s+/).slice(0, 2).join(' ').trim();
-      return (two && two.length > 1) ? two : 'Spare part';
-    }
-
-    function getSparePartDescription(container) {
-      for (const sel of ['.card_description', '[data-quote-description]', '.spare-part-description']) {
-        const el = container.querySelector(sel);
-        if (el) { const t = (el.textContent || '').trim(); if (t && t.length > 1) return t; }
-      }
-      return '';
-    }
-
-    function getParentProductTitle() {
-      const byAttr = document.querySelector('[data-quote-product-title]');
-      if (byAttr) { const t = (byAttr.getAttribute('data-quote-product-title') || byAttr.textContent || '').trim(); if (t) return t; }
-      const btn = document.querySelector('[data-add-quote][data-quote-title]');
-      if (btn) { const t = (btn.getAttribute('data-quote-title') || '').trim(); if (t) return t; }
-      return '';
-    }
-
-    const norm = s => (s || '').trim().toLowerCase();
-    function isSparePartInCart(container) {
-      const title = getSparePartTitle(container);
-      const parentTitle = getParentProductTitle();
-      const idx = cart.findIndex(i => i.isSparePart && norm(i.title) === norm(title) && norm(i.parentProductTitle) === norm(parentTitle));
-      return { inCart: idx >= 0, index: idx >= 0 ? idx : -1 };
-    }
-
-    function updateSparePartButtonsState() {
-      document.querySelectorAll('[spare-part-item], .spare-part-item, .collection_spare-part-item').forEach(container => {
-        const trigger = container.querySelector('[spare-part-add]') || container.querySelector('.spare-part-qty-plus') || container.querySelector('input[type="checkbox"]');
-        if (!trigger) return;
-        const { inCart } = isSparePartInCart(container);
-        if (trigger.type === 'checkbox') {
-          trigger.checked = inCart;
-          trigger.setAttribute('aria-checked', inCart ? 'true' : 'false');
-        } else {
-          trigger.setAttribute('data-in-quote', inCart ? 'true' : 'false');
-          trigger.classList.toggle('spare-part-in-quote', inCart);
-          const t = (trigger.textContent || '').trim();
-          if (t === '+' || t === '') trigger.textContent = inCart ? '\u2713' : '+';
-        }
-      });
-    }
-
-    function toggleSparePartInQuote(trigger) {
-      const container = trigger.closest('[spare-part-item]') || trigger.closest('.spare-part-item') || trigger.closest('.collection_spare-part-item');
-      if (!container) return;
-      const title = getSparePartTitle(container);
-      const description = getSparePartDescription(container);
-      const parentTitle = getParentProductTitle();
-      const same = cart.findIndex(i => i.isSparePart && norm(i.title) === norm(title) && norm(i.parentProductTitle) === norm(parentTitle));
-      if (same >= 0) {
-        cart.splice(same, 1);
-        saveCart();
-        updateSparePartButtonsState();
-        renderCart();
-        updateNavQty();
-      } else {
-        cart.push({ title, description, qty: 1, isSparePart: true, parentProductTitle: parentTitle || '' });
-        saveCart();
-        updateSparePartButtonsState();
-        renderCart();
-        updateNavQty();
-        openQuoteModal();
-      }
-    }
-
-    document.addEventListener('click',e=>{
-      let trigger=e.target.closest('[spare-part-add]')||e.target.closest('.spare-part-qty-plus');
-      if (!trigger && e.target.type === 'checkbox') {
-        const wrap = e.target.closest('[spare-part-item], .spare-part-item, .collection_spare-part-item');
-        if (wrap) trigger = e.target;
-      }
-      if (!trigger) return;
-      e.preventDefault();
-      e.stopPropagation();
-      toggleSparePartInQuote(trigger);
-    });
 
     loadCart();
     renderCart();
     renderRequestQuotePageList();
     updateNavQty();
-    updateSparePartButtonsState();
+    refreshSparePartButtons();
 
     if (quoteModal && quoteModal.getAttribute('data-modal-status') === 'active') {
       setupModalScroll();
