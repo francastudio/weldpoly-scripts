@@ -178,24 +178,33 @@
     }
 
     // ===== Request-a-Quote Page List ([data-quote-list] on /get-a-quote) =====
+    const pageListContainer = document.querySelector('[data-quote-list]') || document.querySelector('.request-a-quote_list');
+    const pageTitleEl = document.querySelector('[data-request-a-quote-title]');
+    // Template: inside page list, or fallback to modal template (when page list is empty)
+    const pageTemplate = pageListContainer?.querySelector('[data-quote-placeholder]') || pageListContainer?.querySelector('[data-quote-item]') || pageListContainer?.querySelector('.quote_item') || templateItem || templatePartItem;
+
     function renderRequestQuotePageList() {
-      const pageListContainer = document.querySelector('[data-quote-list]') || document.querySelector('.request-a-quote_list');
-      const pageTitleEl = document.querySelector('[data-request-a-quote-title]');
-      const pageTemplate = pageListContainer?.querySelector('[data-quote-placeholder]') || pageListContainer?.querySelector('[data-quote-item]') || pageListContainer?.querySelector('.quote_item');
-      const hasPage = !!document.querySelector('.request-a-quote_content, [quote-content]');
-      if (!pageListContainer || !pageTemplate) {
-        if (hasPage && cart.length > 0) console.warn('[Weldpoly] Request-a-quote: list NOT rendered. Container:', !!pageListContainer, '| Template:', !!pageTemplate, '— Add [data-quote-list] to a div and [data-quote-placeholder] inside it.');
+      if (!pageListContainer) {
+        if (pageTitleEl) console.warn('[Weldpoly] Request-a-quote: add [data-quote-list] or class .request-a-quote_list to the list container');
         return;
       }
-      pageTemplate.style.display = 'none';
+      const template = pageTemplate || templateItem || templatePartItem;
+      if (!template) {
+        console.warn('[Weldpoly] Request-a-quote: add [data-quote-placeholder] or [data-quote-item] inside [data-quote-list], or ensure quote modal with templates exists');
+        return;
+      }
+      template.style.display = 'none';
       pageListContainer.querySelectorAll('.quote_item, .quote_part-item').forEach(el => {
-        if (el !== pageTemplate && !el.hasAttribute('data-quote-placeholder') && !el.hasAttribute('data-quote-item')) el.remove();
+        if (el !== template && !el.hasAttribute('data-quote-placeholder') && !el.hasAttribute('data-quote-item') && !el.hasAttribute('data-quote-part-item')) el.remove();
       });
       cart.forEach((item, index) => {
-        const clone = pageTemplate.cloneNode(true);
+        const itemTemplate = (item.isSparePart && templatePartItem) ? templatePartItem : template;
+        const clone = itemTemplate.cloneNode(true);
         clone.style.display = 'flex';
         clone.removeAttribute('data-quote-placeholder');
         clone.removeAttribute('data-quote-item');
+        clone.removeAttribute('data-quote-part-item');
+        if (item.isSparePart) clone.classList.add('quote_part-item');
         const tEl = clone.querySelector('[data-quote-title]') || clone.querySelector('.quote_item-title');
         const dEl = clone.querySelector('[data-quote-description]') || clone.querySelector('.quote_item-description');
         const qEl = clone.querySelector('[data-quote-number]') || clone.querySelector('.quote_number');
@@ -410,9 +419,6 @@
     renderCart();
     renderRequestQuotePageList();
     updateNavQty();
-    if (document.querySelector('.request-a-quote_content, [quote-content]') && cart.length > 0) {
-      [300, 800, 1500].forEach(ms => setTimeout(renderRequestQuotePageList, ms));
-    }
     
     // Setup modal scroll on init (in case modal is already open)
     if (quoteModal && quoteModal.getAttribute('data-modal-status') === 'active') {
