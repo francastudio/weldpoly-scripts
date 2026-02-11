@@ -26,6 +26,7 @@
     const quoteModal = document.querySelector('[data-modal-name="quote-modal"]');
     const quoteContent = quoteModal?.querySelector('.quote_modal-content');
     const templateItem = quoteModal?.querySelector('[data-quote-item]');
+    const templatePartItem = quoteModal?.querySelector('[data-quote-part-item]');
     const titleEl = quoteModal?.querySelector('.quote_header-title');
     const emptyState = quoteModal?.querySelector('[quote-empty]');
     const actionsBlock = quoteModal?.querySelector('.quote_modal-content-bottom');
@@ -34,6 +35,7 @@
     // ===== Utilities =====
     function saveCart() {
       localStorage.setItem('quoteCart', JSON.stringify(cart));
+      try { localStorage.setItem('quoteCartSavedAt', String(Date.now())); } catch (_) {}
     }
 
     const navQty = document.querySelector("[data-nav-quote-qty]");
@@ -88,10 +90,21 @@
     // ===== Render content =====
     function renderCart() {
       if (!quoteContent || !templateItem) return;
-      quoteContent.querySelectorAll('.quote_item:not([style*="display: none"])').forEach(el => el.remove());
+      templateItem.style.display = 'none';
+      if (templatePartItem) templatePartItem.style.display = 'none';
+      quoteContent.querySelectorAll('.quote_item, .quote_part-item').forEach(el => {
+        if (!el.hasAttribute('data-quote-item') && !el.hasAttribute('data-quote-part-item')) el.remove();
+      });
+      const templateProduct = templateItem;
+      const templatePart = templatePartItem || templateItem;
       cart.forEach((item, index) => {
-        const clone = templateItem.cloneNode(true);
+        const isSparePart = item.isSparePart === true;
+        const template = isSparePart ? templatePart : templateProduct;
+        const clone = template.cloneNode(true);
         clone.style.display = 'flex';
+        clone.removeAttribute('data-quote-item');
+        clone.removeAttribute('data-quote-part-item');
+        if (isSparePart) clone.classList.add('quote_part-item');
         
         // Fill data - with null check
         const titleEl = clone.querySelector('[data-quote-title]');
@@ -319,6 +332,13 @@
         attributeFilter: ['data-modal-status']
       });
     }
+
+    // ===== Cart expiry (e.g. spare parts script clears after 1h) =====
+    document.addEventListener('quoteCartExpired', function () {
+      loadCart();
+      renderCart();
+      updateNavQty();
+    });
 
     // ===== Initialization =====
     loadCart();
