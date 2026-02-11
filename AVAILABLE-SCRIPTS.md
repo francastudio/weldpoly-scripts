@@ -50,38 +50,20 @@ https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-spare-pa
 
 ---
 
-### 3. **weldpoly-lenis-scroll-control.js**
-**Function:** Scroll control in specific sections using Lenis Scroll
-- Enables/disables scroll in specific sections
-- Supports attributes `data-lenis-scroll="disabled"` or `data-lenis-scroll="enabled"`
-- JavaScript API for dynamic control
-- Automatically detects new elements added to the DOM
-- Compatible with pure Lenis and Locomotive Scroll V5
+### 3. **weldpoly-webflow-core.js** ⭐ UNIFIED (Lenis + Locomotive + Content Reveal)
+**Function:** Combined script - Lenis scroll control, Locomotive Scroll init, GSAP content reveal
+- Lenis scroll control: `data-lenis-scroll="disabled"` / `enabled`, `disableLenisScroll()`, `enableLenisScroll()`
+- Locomotive Scroll: creates `window.locomotiveScroll`
+- Content reveal: `[data-reveal-group]`, `[data-reveal-group-nested]`, `data-stagger`, `data-distance`, `data-start`
 
 **URL:**
 ```
-https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-lenis-scroll-control.js
+https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-webflow-core.js
 ```
 
 **When to use:**
-- ✅ When you need to disable scroll in modals, forms or specific sections
-- ✅ For dynamic scroll control based on user interactions
-- ⚠️ Requires Lenis Scroll or Locomotive Scroll V5 to be loaded
-
-**Usage example:**
-```html
-<!-- Disable scroll in a section -->
-<section data-lenis-scroll="disabled">
-  Content without scroll
-</section>
-
-<!-- JavaScript -->
-<script>
-disableLenisScroll('.my-section');
-enableLenisScroll('.my-section');
-toggleLenisScroll('.my-section');
-</script>
-```
+- ✅ **Recommended** - Single script replaces weldpoly-lenis-scroll-control, weldpoly-locomotive-init, weldpoly-content-reveal
+- ⚠️ Requires Locomotive Scroll and GSAP + ScrollTrigger loaded first
 
 ---
 
@@ -104,33 +86,7 @@ https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-navigati
 
 ---
 
-### 5. **weldpoly-locomotive-init.js**
-**Function:** Initializes Locomotive Scroll with Lenis
-- Creates instance in `window.locomotiveScroll`
-- ⚠️ Requires Locomotive Scroll to be loaded first
-
-**URL:**
-```
-https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-locomotive-init.js
-```
-
----
-
-### 6. **weldpoly-content-reveal.js**
-**Function:** Scroll reveal animations with GSAP ScrollTrigger
-- `[data-reveal-group]` – element group
-- `[data-reveal-group-nested]` – subgroups
-- `data-stagger`, `data-distance`, `data-start` for configuration
-- ⚠️ Requires GSAP and ScrollTrigger loaded first
-
-**URL:**
-```
-https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-content-reveal.js
-```
-
----
-
-### 7. **weldpoly-finsweet-sort.js**
+### 5. **weldpoly-finsweet-sort.js**
 **Function:** Alphanumeric (natural) sort in Finsweet lists
 - Sorts by `name` field using natural sort (e.g. Item 2 before Item 10)
 - ⚠️ Requires Finsweet Attributes List API loaded first
@@ -160,10 +116,8 @@ https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-finsweet
 weldpoly-scripts/
 ├── weldpoly-quote-system.js
 ├── weldpoly-spare-parts-quantity-control-FIXED-ECOMMERCE.js
-├── weldpoly-lenis-scroll-control.js
+├── weldpoly-webflow-core.js    ← unified: Lenis + Locomotive + Content reveal
 ├── weldpoly-navigation.js
-├── weldpoly-locomotive-init.js
-├── weldpoly-content-reveal.js
 └── weldpoly-finsweet-sort.js
 ```
 

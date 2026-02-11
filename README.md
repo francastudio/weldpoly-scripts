@@ -6,13 +6,10 @@ This repository contains JavaScript scripts for the Weldpoly quote system on Web
 
 ```
 weldpoly-scripts/
+├── weldpoly-webflow-core.js    (unified: Lenis + Locomotive + Content reveal)
 ├── weldpoly-quote-system.js
 ├── weldpoly-spare-parts-quantity-control-FIXED-ECOMMERCE.js
-├── weldpoly-lenis-scroll-control.js
-├── weldpoly-nav-contrast.js
-├── weldpoly-centered-nav.js
-├── weldpoly-locomotive-init.js
-├── weldpoly-content-reveal.js
+├── weldpoly-navigation.js
 └── weldpoly-finsweet-sort.js
 ```
 
@@ -23,7 +20,7 @@ weldpoly-scripts/
 In **Webflow Footer Code** (Site Settings → Custom Code → Footer Code), add:
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-lenis-scroll-control.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-webflow-core.js" defer></script>
 <script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-quote-system.js" defer></script>
 <script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-spare-parts-quantity-control-FIXED-ECOMMERCE.js" defer></script>
 ```
