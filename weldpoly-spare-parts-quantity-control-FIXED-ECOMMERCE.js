@@ -48,10 +48,16 @@ function mergeDuplicateSpareParts(cart){
 }
 
 function getSparePartTitle(container){
-  const el=container.querySelector('.spare-part-name')||container.querySelector('[spare-part-content]');
-  if(el){const t=(el.textContent||'').trim();if(t&&t.length>1)return t;}
-  const two=(container.textContent||'').trim().split(/\s+/).slice(0,2).join(' ').trim();
-  return two&&two.length>1?two:'Spare part';
+  for(const sel of ['.spare-part-name','[spare-part-content]','.spare-part-code']){
+    const el=container.querySelector(sel);
+    if(el){const t=(el.textContent||'').trim();if(t&&t.length>0)return t;}
+  }
+  const txt=(container.textContent||'').trim().replace(/\s+/g,' ');
+  const parts=txt.split(/[•|·]/).map(s=>s.trim()).filter(Boolean);
+  if(parts[0])return parts[0];
+  if(parts[1])return parts[1];
+  const two=txt.split(/\s+/).slice(0,3).join(' ').trim();
+  return two&&two.length>0?two:'Spare part';
 }
 
 function getSparePartDescription(container){
@@ -88,7 +94,8 @@ function isSparePartInCart(container){
 }
 
 function updateSparePartButtonsState(){
-  document.querySelectorAll('[spare-part-item], .spare-part-item, .collection_spare-part-item').forEach(container=>{
+  const sel='[spare-part-item], .spare-part-item, .collection_spare-part-item, .list-spare_parts .w-dyn-item';
+  document.querySelectorAll(sel).forEach(container=>{
     const trigger=container.querySelector('[spare-part-add]')||container.querySelector('.spare-part-qty-plus')||container.querySelector('input[type="checkbox"]');
     if(!trigger)return;
     const{inCart}=isSparePartInCart(container);
@@ -105,8 +112,14 @@ function updateSparePartButtonsState(){
 }
 window.updateSparePartButtonsState=updateSparePartButtonsState;
 
+function getSparePartContainerFromTrigger(trigger){
+  let c=trigger.closest('[spare-part-item]')||trigger.closest('.spare-part-item')||trigger.closest('.collection_spare-part-item');
+  if(!c){const d=trigger.closest('.w-dyn-item'); if(d&&(d.closest('.list-spare_parts')||d.closest('.spare-part-form')))c=d;}
+  return c;
+}
+
 function toggleSparePartInQuote(trigger){
-  const container=trigger.closest('[spare-part-item]')||trigger.closest('.spare-part-item')||trigger.closest('.collection_spare-part-item');
+  const container=getSparePartContainerFromTrigger(trigger);
   if(!container)return;
   const title=getSparePartTitle(container);
   const description=getSparePartDescription(container);
@@ -128,18 +141,32 @@ function toggleSparePartInQuote(trigger){
   }
 }
 
+function getCheckboxFromClickTarget(target){
+  if(target&&target.type==='checkbox')return target;
+  if(target&&target.tagName==='LABEL'){
+    const cb=target.control||(target.htmlFor?document.getElementById(target.htmlFor):null)||target.querySelector('input[type="checkbox"]');
+    if(cb)return cb;
+  }
+  const wrapper=target?.closest?.('.w-checkbox, .fs-checkbox-5_wrapper, .checkbox_field, .form_checkbox');
+  if(wrapper){
+    const cb=wrapper.querySelector('input[type="checkbox"]');
+    if(cb)return cb;
+  }
+  return null;
+}
+
 function init(){
   document.addEventListener('click',e=>{
     let trigger=e.target.closest('[spare-part-add]')||e.target.closest('.spare-part-qty-plus');
-    if(!trigger&&e.target.type==='checkbox'){
-      const wrap=e.target.closest('[spare-part-item], .spare-part-item, .collection_spare-part-item');
-      if(wrap)trigger=e.target;
+    if(!trigger){
+      const cb=getCheckboxFromClickTarget(e.target);
+      if(cb&&getSparePartContainerFromTrigger(cb))trigger=cb;
     }
     if(!trigger)return;
     e.preventDefault();
     e.stopPropagation();
     toggleSparePartInQuote(trigger);
-  });
+  },{capture:true});
 
   const modal=document.querySelector('[data-modal-name="quote-modal"]');
   if(modal){
