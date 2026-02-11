@@ -36,7 +36,7 @@
     const templateItem = quoteModal?.querySelector('[data-quote-item]');
     const templatePartItem = quoteModal?.querySelector('[data-quote-part-item]');
     const titleEl = quoteModal?.querySelector('.quote_header-title');
-    const emptyState = quoteModal?.querySelector('[quote-empty]');
+    const emptyState = quoteModal?.querySelector('[quote-empty]') || quoteModal?.querySelector('.quote_empty-wrapper');
     const actionsBlock = quoteModal?.querySelector('.quote_modal-content-bottom');
     let cart = [];
 
@@ -154,8 +154,10 @@
       const templateProduct = templateItem;
       const templatePart = templatePartItem || templateItem;
       const order = buildCartOrder();
-      const titleSelectors = ['[data-quote-title]', '.quote_part-item-title', '.quote_item-title', '.quote_item_content p:first-child'];
-      const descSelectors = ['[data-quote-description]', '.quote_part-item-description', '.quote_item-description', '.quote_item_content p:nth-of-type(2)', '.quote_item_content p:last-of-type'];
+      const titleSelectors = ['[data-quote-title]', '.quote_part-item-title', '.quote_part-item_title', '.quote_item-title', '.quote_part-title', '.quote_item_content p:first-child', '.quote_item_content > *:first-child'];
+      const descSelectors = ['[data-quote-description]', '.quote_part-item-description', '.quote_part-item_description', '.quote_item-description', '.quote_part-description', '.quote_item_content p:nth-of-type(2)', '.quote_item_content p:last-of-type', '.quote_item_content > *:nth-child(2)', '.quote_item_content > *:last-child'];
+
+      const insertBeforeEl = emptyState || null;
 
       order.forEach(({ item, idx }) => {
         const isSparePart = item.isSparePart === true;
@@ -190,7 +192,8 @@
         if (plusBtn) plusBtn.addEventListener('click', () => { item.qty++; renderCart(); saveCart(); updateNavQty(); renderRequestQuotePageList(); });
         if (minusBtn) minusBtn.addEventListener('click', () => { if (item.qty > 1) item.qty--; renderCart(); saveCart(); updateNavQty(); renderRequestQuotePageList(); });
         if (removeBtn) removeBtn.addEventListener('click', (e) => { e.preventDefault(); cart.splice(idx, 1); renderCart(); saveCart(); updateNavQty(); renderRequestQuotePageList(); updateSparePartButtonsState(); });
-        quoteContent.appendChild(clone);
+        if (insertBeforeEl) quoteContent.insertBefore(clone, insertBeforeEl);
+        else quoteContent.appendChild(clone);
       });
       updateTitle();
       toggleEmptyState();
@@ -238,6 +241,7 @@
       if (!quoteContent) return;
       quoteContent.style.overflowY = 'auto';
       quoteContent.style.overflowX = 'hidden';
+      quoteContent.style.minHeight = '0';
       quoteContent.style.WebkitOverflowScrolling = 'touch';
       const modalCard = quoteModal?.querySelector('.modal__card') || quoteModal;
       if (modalCard) {

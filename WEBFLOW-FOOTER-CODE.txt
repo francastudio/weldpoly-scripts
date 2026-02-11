@@ -103,7 +103,7 @@ UPDATES:
 URLs use @main — o site no Webflow passa a usar a última versão ao publicar no GitHub.
 Não é preciso alterar o Footer Code no Webflow quando houver novo push.
 
-Latest commit: ba0a28e (2026-02-11 09:58:15)
+Latest commit: a8f824d (2026-02-11 10:36:28)
 
 ✅ Vertical scroll inside modal div (`.quote_modal-content`)
 ✅ Dynamic max-height to keep actions visible
