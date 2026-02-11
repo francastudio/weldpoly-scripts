@@ -82,6 +82,11 @@ To verify scripts are loading:
 4. Should return: true
 
 ===========================================
+QUOTE MODAL - Templates hidden by default (add to Head Code):
+[data-quote-item], [data-quote-part-item] { display: none !important; }
+(Evita que os templates apareçam ao abrir o modal antes do script renderizar)
+
+===========================================
 NAV CONTRAST - CSS (add to Head Code):
 ===========================================
 Target: .navigation_container (not .navigation)
@@ -103,7 +108,7 @@ UPDATES:
 URLs use @main — o site no Webflow passa a usar a última versão ao publicar no GitHub.
 Não é preciso alterar o Footer Code no Webflow quando houver novo push.
 
-Latest commit: bcf855c (2026-02-11 06:56:54)
+Latest commit: bbdaffd (2026-02-11 06:59:12)
 
 ✅ Vertical scroll inside modal div (`.quote_modal-content`)
 ✅ Dynamic max-height to keep actions visible
