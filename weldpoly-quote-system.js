@@ -36,6 +36,7 @@
     function saveCart() {
       localStorage.setItem('quoteCart', JSON.stringify(cart));
       try { localStorage.setItem('quoteCartSavedAt', String(Date.now())); } catch (_) {}
+      try { document.dispatchEvent(new CustomEvent('quoteCartUpdated')); } catch (_) {}
     }
 
     const navQty = document.querySelector("[data-nav-quote-qty]");
@@ -59,11 +60,26 @@
       });
     }
 
+    function mergeDuplicateSpareParts(arr) {
+      const norm = s => (s || '').trim().toLowerCase();
+      const seen = [];
+      const result = [];
+      for (let i = 0; i < arr.length; i++) {
+        const item = arr[i];
+        if (!item.isSparePart) { result.push(item); continue; }
+        const key = norm(item.title) + '\n' + norm(item.parentProductTitle || '');
+        const idx = seen.indexOf(key);
+        if (idx >= 0) { result[idx].qty = (result[idx].qty || 1) + (item.qty || 1); }
+        else { seen.push(key); result.push({ ...item, qty: item.qty || 1 }); }
+      }
+      return result;
+    }
+
     function loadCart() {
       const saved = localStorage.getItem('quoteCart');
       if (saved) {
         try {
-          cart = JSON.parse(saved);
+          cart = mergeDuplicateSpareParts(JSON.parse(saved));
         } catch {
           cart = [];
         }
@@ -159,6 +175,44 @@
       });
       updateTitle();
       toggleEmptyState();
+    }
+
+    // ===== Request-a-Quote Page List ([data-quote-list] on /get-a-quote) =====
+    const pageListContainer = document.querySelector('[data-quote-list]');
+    const pageTitleEl = document.querySelector('[data-request-a-quote-title]');
+    const pageTemplate = pageListContainer?.querySelector('[data-quote-placeholder]') || pageListContainer?.querySelector('[data-quote-item]');
+
+    function renderRequestQuotePageList() {
+      if (!pageListContainer || !pageTemplate) return;
+      pageTemplate.style.display = 'none';
+      pageListContainer.querySelectorAll('.quote_item, .quote_part-item').forEach(el => {
+        if (!el.hasAttribute('data-quote-placeholder') && !el.hasAttribute('data-quote-item')) el.remove();
+      });
+      cart.forEach((item, index) => {
+        const clone = pageTemplate.cloneNode(true);
+        clone.style.display = 'flex';
+        clone.removeAttribute('data-quote-placeholder');
+        clone.removeAttribute('data-quote-item');
+        const tEl = clone.querySelector('[data-quote-title]');
+        const dEl = clone.querySelector('[data-quote-description]');
+        const qEl = clone.querySelector('[data-quote-number]');
+        if (tEl) tEl.textContent = item.title || '';
+        if (dEl) dEl.textContent = item.description || '';
+        if (qEl) {
+          const q = item.qty || 1;
+          qEl.textContent = q;
+          const inner = qEl.querySelector('div');
+          if (inner) inner.textContent = q;
+        }
+        const plusBtn = clone.querySelector('.quote_plus');
+        const minusBtn = clone.querySelector('.quote_minus');
+        const removeBtn = clone.querySelector('[data-quote-remove]');
+        if (plusBtn) plusBtn.addEventListener('click', () => { item.qty++; saveCart(); renderCart(); renderRequestQuotePageList(); updateNavQty(); });
+        if (minusBtn) minusBtn.addEventListener('click', () => { if (item.qty > 1) item.qty--; saveCart(); renderCart(); renderRequestQuotePageList(); updateNavQty(); });
+        if (removeBtn) removeBtn.addEventListener('click', (e) => { e.preventDefault(); cart.splice(index, 1); saveCart(); renderCart(); renderRequestQuotePageList(); updateNavQty(); });
+        pageListContainer.appendChild(clone);
+      });
+      if (pageTitleEl) pageTitleEl.textContent = `QUOTE (${cart.length} ${cart.length === 1 ? 'ITEM' : 'ITEMS'})`;
     }
 
     // ===== Locomotive Scroll Integration =====
@@ -337,12 +391,21 @@
     document.addEventListener('quoteCartExpired', function () {
       loadCart();
       renderCart();
+      renderRequestQuotePageList();
+      updateNavQty();
+    });
+
+    document.addEventListener('quoteCartUpdated', function () {
+      loadCart();
+      renderCart();
+      renderRequestQuotePageList();
       updateNavQty();
     });
 
     // ===== Initialization =====
     loadCart();
     renderCart();
+    renderRequestQuotePageList();
     updateNavQty();
     
     // Setup modal scroll on init (in case modal is already open)
