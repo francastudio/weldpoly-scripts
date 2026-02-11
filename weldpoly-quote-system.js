@@ -126,16 +126,16 @@ let systemInitialized=false;
     }
 
     function itemKey(o){return (o.isSparePart?'p':'n')+'\x01'+(o.title||'')+'\x01'+(o.parentProductTitle||'');}
-    const normT=t=>(t||'').trim().toLowerCase();
+    const normT=t=>(t||'').trim().toLowerCase().replace(/\s+/g,' ');
     function removeFromCart(item){
       loadCart();
-      if(item.isSparePart){
+      if(item.isSparePart===true){
         const i=cart.findIndex(c=>itemKey(c)===itemKey(item));
         if(i>=0)cart.splice(i,1);
       }else{
         const productTitle=normT(item.title);
         cart=cart.filter(c=>{
-          if(c.isSparePart&&normT(c.parentProductTitle)===productTitle)return false;
+          if(c.isSparePart===true&&normT(c.parentProductTitle)===productTitle)return false;
           if(!c.isSparePart&&normT(c.title)===productTitle)return false;
           return true;
         });
