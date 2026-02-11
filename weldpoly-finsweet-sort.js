@@ -32,10 +32,20 @@
     return 0;
   }
 
-  /** Extract first number from string (min mm in "40 to 160mm" or "76.2mm to 254mm") */
+  /** Extract min size in mm from description. Handles "40 to 160mm", "1600mm to 914mm" (both orders) */
   function extractMinMm(str) {
     if (!str || typeof str !== 'string') return Infinity;
-    const m = str.match(/(\d+(?:\.\d+)?)/);
+    const s = str.trim();
+    if (!s) return Infinity;
+    // Match range: "X to Ymm" or "Xmm to Ymm" - use the smaller number
+    const rangeMatch = s.match(/(\d+(?:\.\d+)?)\s*(?:mm\s*)?to\s*(\d+(?:\.\d+)?)\s*mm/i);
+    if (rangeMatch) {
+      const a = parseFloat(rangeMatch[1]);
+      const b = parseFloat(rangeMatch[2]);
+      return Math.min(a, b);
+    }
+    // Fallback: first number (e.g. "76.2mm to 254mm")
+    const m = s.match(/(\d+(?:\.\d+)?)/);
     return m ? parseFloat(m[1]) : Infinity;
   }
 
