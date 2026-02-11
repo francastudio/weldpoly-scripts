@@ -1,30 +1,8 @@
-/**
- * Weldpoly Quote System — Unified (Quote + Spare Parts)
- *
- * Single script for quote cart, modal, and spare parts add-to-quote.
- * Load once from CDN — no separate spare parts script needed.
- *
- * INSTRUCTIONS:
- * 1. In Webflow: Site Settings → Custom Code → Footer Code
- * 2. Add: <script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-quote-system.js" defer></script>
- */
-
-(function () {
-  'use strict';
-
-  const CART_KEY = 'quoteCart';
-  const CART_SAVED_AT_KEY = 'quoteCartSavedAt';
-  const CART_TTL_MS = 60 * 60 * 1000; // 1 hour
-  const SPARE_PARTS_LOG = false;
-
-  console.log('[Weldpoly] Quote System loaded — cart, modal, spare parts (unified)');
-  let systemInitialized = false;
-
-  function log(step, detail) {
-    if (SPARE_PARTS_LOG && typeof console !== 'undefined' && console.log) {
-      console.log('[Weldpoly Quote]', step, detail !== undefined ? detail : '');
-    }
-  }
+/** Weldpoly Quote System — unified quote + spare parts | CDN: cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-quote-system.js */
+(function(){
+'use strict';
+const CART_KEY='quoteCart',CART_SAVED_AT_KEY='quoteCartSavedAt',CART_TTL_MS=36e5;
+let systemInitialized=false;
 
   function initQuoteSystem() {
     if (systemInitialized) return;
@@ -89,7 +67,6 @@
       if (savedAt && (Date.now() - savedAt > CART_TTL_MS)) {
         localStorage.removeItem(CART_KEY);
         localStorage.removeItem(CART_SAVED_AT_KEY);
-        log('cart', 'expired (1h), cleared');
         try { document.dispatchEvent(new CustomEvent('quoteCartExpired')); } catch (_) {}
         cart = [];
         return;
@@ -151,25 +128,23 @@
       quoteContent.querySelectorAll('.quote_item, .quote_part-item').forEach(el => {
         if (!el.hasAttribute('data-quote-item') && !el.hasAttribute('data-quote-part-item')) el.remove();
       });
-      const templateProduct = templateItem;
       const templatePart = templatePartItem || templateItem;
       const order = buildCartOrder();
-      const titleSelectors = ['[data-quote-title]', '.quote_part-item-title', '.quote_part-item_title', '.quote_item-title', '.quote_part-title', '.quote_item_content p:first-child', '.quote_item_content > *:first-child'];
-      const descSelectors = ['[data-quote-description]', '.quote_part-item-description', '.quote_part-item_description', '.quote_item-description', '.quote_part-description', '.quote_item_content p:nth-of-type(2)', '.quote_item_content p:last-of-type', '.quote_item_content > *:nth-child(2)', '.quote_item_content > *:last-child'];
+      const titleSel=['[data-quote-title]','.quote_part-item-title','.quote_part-item_title','.quote_item-title','.quote_part-title','.quote_item_content p:first-child','.quote_item_content > *:first-child'];
+      const descSel=['[data-quote-description]','.quote_part-item-description','.quote_part-item_description','.quote_item-description','.quote_part-description','.quote_item_content p:nth-of-type(2)','.quote_item_content p:last-of-type','.quote_item_content > *:nth-child(2)','.quote_item_content > *:last-child'];
 
-      const insertBeforeEl = emptyState || null;
-
-      order.forEach(({ item, idx }) => {
+      const ins=emptyState||null;
+      order.forEach(({item,idx})=>{
         const isSparePart = item.isSparePart === true;
-        const template = isSparePart ? templatePart : templateProduct;
+        const template = isSparePart ? templatePart : templateItem;
         const clone = template.cloneNode(true);
         clone.style.display = 'flex';
         clone.removeAttribute('data-quote-item');
         clone.removeAttribute('data-quote-part-item');
         if (isSparePart) clone.classList.add('quote_part-item');
 
-        const titleNode = findInClone(clone, titleSelectors) || clone.querySelector('[data-quote-title]');
-        const descNode = findInClone(clone, descSelectors) || clone.querySelector('[data-quote-description]');
+        const titleNode=findInClone(clone,titleSel)||clone.querySelector('[data-quote-title]');
+        const descNode=findInClone(clone,descSel)||clone.querySelector('[data-quote-description]');
         const qtyEl = clone.querySelector('[data-quote-number]');
         if (titleNode) titleNode.textContent = item.title || '';
         if (descNode) descNode.textContent = item.description || '';
@@ -192,8 +167,7 @@
         if (plusBtn) plusBtn.addEventListener('click', () => { item.qty++; renderCart(); saveCart(); updateNavQty(); renderRequestQuotePageList(); });
         if (minusBtn) minusBtn.addEventListener('click', () => { if (item.qty > 1) item.qty--; renderCart(); saveCart(); updateNavQty(); renderRequestQuotePageList(); });
         if (removeBtn) removeBtn.addEventListener('click', (e) => { e.preventDefault(); cart.splice(idx, 1); renderCart(); saveCart(); updateNavQty(); renderRequestQuotePageList(); updateSparePartButtonsState(); });
-        if (insertBeforeEl) quoteContent.insertBefore(clone, insertBeforeEl);
-        else quoteContent.appendChild(clone);
+        ins?quoteContent.insertBefore(clone,ins):quoteContent.appendChild(clone);
       });
       updateTitle();
       toggleEmptyState();
@@ -241,8 +215,7 @@
       if (!quoteContent) return;
       quoteContent.style.overflowY = 'auto';
       quoteContent.style.overflowX = 'hidden';
-      quoteContent.style.minHeight = '0';
-      quoteContent.style.WebkitOverflowScrolling = 'touch';
+      quoteContent.style.minHeight='0';
       const modalCard = quoteModal?.querySelector('.modal__card') || quoteModal;
       if (modalCard) {
         const headerHeight = quoteModal?.querySelector('.quote_header')?.offsetHeight || 0;
@@ -301,8 +274,8 @@
       updateSparePartButtonsState();
     }
 
-    document.addEventListener('click', function (e) {
-      const openBtn = e.target.closest('[data-modal-target="quote-modal"]');
+    document.addEventListener('click',e=>{
+      const openBtn=e.target.closest('[data-modal-target="quote-modal"]');
       if (openBtn) {
         e.preventDefault();
         if (openBtn.hasAttribute('data-add-quote')) addProductToCart(openBtn);
@@ -310,14 +283,14 @@
       }
     });
 
-    document.addEventListener('click', function (e) {
-      const closeBtn = e.target.closest('.modal__btn-close, [data-modal-close]');
+    document.addEventListener('click',e=>{
+      const closeBtn=e.target.closest('.modal__btn-close, [data-modal-close]');
       if (closeBtn) { e.preventDefault(); closeQuoteModal(); }
     });
 
-    document.querySelectorAll('[data-add-quote]').forEach(btn => {
-      if (btn.hasAttribute('data-modal-target')) return;
-      btn.addEventListener('click', (e) => { e.preventDefault(); addProductToCart(btn); openQuoteModal(); });
+    document.querySelectorAll('[data-add-quote]').forEach(btn=>{
+      if(btn.hasAttribute('data-modal-target'))return;
+      btn.addEventListener('click',e=>{e.preventDefault();addProductToCart(btn);openQuoteModal();});
     });
 
     if (quoteModal) {
@@ -335,8 +308,9 @@
       modalObserver.observe(quoteModal, { attributes: true, attributeFilter: ['data-modal-status'] });
     }
 
-    document.addEventListener('quoteCartExpired', () => { loadCart(); renderCart(); renderRequestQuotePageList(); updateNavQty(); updateSparePartButtonsState(); });
-    document.addEventListener('quoteCartUpdated', () => { loadCart(); renderCart(); renderRequestQuotePageList(); updateNavQty(); updateSparePartButtonsState(); });
+    const onCartEvt=()=>{loadCart();renderCart();renderRequestQuotePageList();updateNavQty();updateSparePartButtonsState();};
+    document.addEventListener('quoteCartExpired',onCartEvt);
+    document.addEventListener('quoteCartUpdated',onCartEvt);
 
     function getSparePartTitle(container) {
       const el = container.querySelector('.spare-part-name') || container.querySelector('[spare-part-content]');
@@ -409,8 +383,8 @@
       }
     }
 
-    document.addEventListener('click', function (e) {
-      let trigger = e.target.closest('[spare-part-add]') || e.target.closest('.spare-part-qty-plus');
+    document.addEventListener('click',e=>{
+      let trigger=e.target.closest('[spare-part-add]')||e.target.closest('.spare-part-qty-plus');
       if (!trigger && e.target.type === 'checkbox') {
         const wrap = e.target.closest('[spare-part-item], .spare-part-item, .collection_spare-part-item');
         if (wrap) trigger = e.target;
