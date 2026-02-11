@@ -112,7 +112,7 @@ FORÇAR ATUALIZAÇÃO IMEDIATA (após push): O script atualizar-github-auto.sh p
 cache do jsDelivr automaticamente. Se precisar purgar manualmente, acesse:
 https://purge.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/nome-do-arquivo.js
 
-Latest commit: 8f43d22 (2026-02-11 11:37:39)
+Latest commit: 40c4dfa (2026-02-11 11:41:38)
 
 ✅ Vertical scroll inside modal div (`.quote_modal-content`)
 ✅ Dynamic max-height to keep actions visible

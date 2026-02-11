@@ -111,7 +111,8 @@ let systemInitialized=false;
         if (!item.isSparePart) {
           order.push({ item, idx });
           cart.forEach((sp, j) => {
-            if (sp.isSparePart && norm(sp.parentProductTitle) === norm(item.title)) order.push({ item: sp, idx: j });
+            const same=(sp.isSparePart)&&(item.productSlug&&sp.parentProductSlug===item.productSlug||norm(sp.parentProductTitle)===norm(item.title));
+            if(same)order.push({ item: sp, idx: j });
           });
         }
       });
@@ -125,7 +126,7 @@ let systemInitialized=false;
       if (typeof window.updateSparePartButtonsState === 'function') window.updateSparePartButtonsState();
     }
 
-    function itemKey(o){return (o.isSparePart?'p':'n')+'\x01'+(o.title||'')+'\x01'+(o.parentProductTitle||'');}
+    function itemKey(o){return (o.isSparePart?'p':'n')+'\x01'+(o.title||'')+'\x01'+(o.parentProductSlug||o.parentProductTitle||'');}
     const normT=t=>(t||'').trim().toLowerCase().replace(/\s+/g,' ');
     function removeFromCart(item){
       loadCart();
@@ -133,12 +134,11 @@ let systemInitialized=false;
         const i=cart.findIndex(c=>itemKey(c)===itemKey(item));
         if(i>=0)cart.splice(i,1);
       }else{
+        const productSlug=item.productSlug||'';
         const productTitle=normT(item.title);
-        cart=cart.filter(c=>{
-          if(c.isSparePart===true&&normT(c.parentProductTitle)===productTitle)return false;
-          if(!c.isSparePart&&normT(c.title)===productTitle)return false;
-          return true;
-        });
+        const spareMatchesProduct=(c)=>(c.isSparePart===true)&&(productSlug&&c.parentProductSlug===productSlug||normT(c.parentProductTitle)===productTitle);
+        const productMatches=(c)=>(!c.isSparePart)&&(productSlug&&c.productSlug===productSlug||normT(c.title)===productTitle);
+        cart=cart.filter(c=>!(spareMatchesProduct(c)||productMatches(c)));
       }
       saveCart();
       renderCart();
@@ -291,9 +291,11 @@ let systemInitialized=false;
       loadCart();
       const title = button.getAttribute('data-quote-title') || 'Unnamed item';
       const description = button.getAttribute('data-quote-description') || '';
-      const existing = cart.find(i => i.title === title);
+      const slugSrc = button.getAttribute('data-quote-product-slug') || button.closest?.('[data-product-slug]')?.getAttribute?.('data-product-slug') || button.closest?.('.w-dyn-item')?.querySelector?.('[data-product-slug]')?.getAttribute?.('data-product-slug') || document.querySelector?.('[data-product-slug]')?.getAttribute?.('data-product-slug');
+      const slug = (slugSrc || '').trim();
+      const existing = cart.find(i => i.title === title || (slug && i.productSlug === slug));
       if (existing) existing.qty++;
-      else cart.push({ title, description, qty: 1 });
+      else { const p = { title, description, qty: 1 }; if (slug) p.productSlug = slug; cart.push(p); }
       renderCart();
       saveCart();
       updateNavQty();

@@ -39,7 +39,7 @@ function mergeDuplicateSpareParts(cart){
   for(let i=0;i<cart.length;i++){
     const item=cart[i];
     if(!item.isSparePart){result.push(item);continue;}
-    const key=norm(item.title)+'\n'+norm(item.parentProductTitle||'');
+    const key=norm(item.title)+'\n'+(item.parentProductSlug||norm(item.parentProductTitle||''));
     const idx=seen.indexOf(key);
     if(idx>=0)result[idx].qty=(result[idx].qty||1)+(item.qty||1);
     else{seen.push(key);result.push({...item,qty:item.qty||1});}
@@ -76,6 +76,11 @@ function getParentProductTitle(){
   return '';
 }
 
+function getParentProductSlug(){
+  const el=document.querySelector('[data-product-slug]');
+  return el?(el.getAttribute('data-product-slug')||'').trim():'';
+}
+
 function getParentProductDescription(){
   const byAttr=document.querySelector('[data-quote-product-description]');
   if(byAttr){const t=(byAttr.getAttribute('data-quote-product-description')||byAttr.textContent||'').trim();if(t)return t;}
@@ -102,8 +107,11 @@ const norm=s=>(s||'').trim().toLowerCase();
 function isSparePartInCart(container){
   const title=getSparePartTitle(container);
   const parentTitle=getParentProductTitle();
+  const parentSlug=getParentProductSlug();
   const cart=getCart();
-  const idx=cart.findIndex(i=>i.isSparePart&&norm(i.title)===norm(title)&&norm(i.parentProductTitle)===norm(parentTitle));
+  const normP=(a,b)=>norm(a)===norm(b);
+  const sameParent=(i)=>normP(i.parentProductTitle,parentTitle)||(parentSlug&&i.parentProductSlug===parentSlug);
+  const idx=cart.findIndex(i=>i.isSparePart&&norm(i.title)===norm(title)&&sameParent(i));
   return{inCart:idx>=0,index:idx>=0?idx:-1};
 }
 
@@ -142,21 +150,27 @@ function toggleSparePartInQuote(trigger){
   const title=getSparePartTitle(container);
   const description=getSparePartDescription(container);
   const parentTitle=getParentProductTitle();
+  const parentSlug=getParentProductSlug();
   const cart=getCart();
   const merged=mergeDuplicateSpareParts(cart);
-  const same=merged.findIndex(i=>i.isSparePart&&norm(i.title)===norm(title)&&norm(i.parentProductTitle)===norm(parentTitle));
+  const sameParent=(i)=>norm(i.parentProductTitle)===norm(parentTitle)||(parentSlug&&i.parentProductSlug===parentSlug);
+  const same=merged.findIndex(i=>i.isSparePart&&norm(i.title)===norm(title)&&sameParent(i));
   if(same>=0){
     merged.splice(same,1);
     setCart(merged);
     updateSparePartButtonsState();
     if(typeof window.updateNavQty==='function')window.updateNavQty();
   }else{
-    const hasParent=parentTitle&&merged.some(i=>!i.isSparePart&&norm(i.title)===norm(parentTitle));
-    if(!hasParent&&parentTitle){
+    const hasParent=(parentTitle&&merged.some(i=>!i.isSparePart&&norm(i.title)===norm(parentTitle)))||(parentSlug&&merged.some(i=>!i.isSparePart&&i.productSlug===parentSlug));
+    if(!hasParent&&(parentTitle||parentSlug)){
       const parentDesc=getParentProductDescription();
-      merged.push({title:parentTitle,description:parentDesc||'',qty:1});
+      const prod={title:parentTitle||'Product',description:parentDesc||'',qty:1};
+      if(parentSlug)prod.productSlug=parentSlug;
+      merged.push(prod);
     }
-    merged.push({title,description,qty:1,isSparePart:true,parentProductTitle:parentTitle||''});
+    const sp={title,description,qty:1,isSparePart:true,parentProductTitle:parentTitle||''};
+    if(parentSlug)sp.parentProductSlug=parentSlug;
+    merged.push(sp);
     setCart(merged);
     updateSparePartButtonsState();
     if(typeof window.updateNavQty==='function')window.updateNavQty();
