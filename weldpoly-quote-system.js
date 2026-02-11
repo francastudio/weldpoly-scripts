@@ -180,7 +180,8 @@ let systemInitialized=false;
         if (titleNode) titleNode.textContent = item.title || '';
         const descText=item.description||'';
         const sizeText=item.productSizeRange||'';
-        if (descNode) descNode.textContent = sizeRangeNode ? descText : (descText+(sizeText ? '\n'+sizeText : ''));
+        const fullDesc=sizeRangeNode ? descText : (sizeText && descText ? sizeText+'\n'+descText : (sizeText||descText));
+        if (descNode) descNode.textContent = fullDesc;
         if (sizeRangeNode) sizeRangeNode.textContent = sizeText;
         if (qtyEl) {
           const q = item.qty || 1;
@@ -234,7 +235,8 @@ let systemInitialized=false;
         const qEl = clone.querySelector('[data-quote-number]') || clone.querySelector('.quote_number');
         if (tEl) tEl.textContent = item.title || '';
         const descT=item.description||'', sizeT=item.productSizeRange||'';
-        if (dEl) dEl.textContent = sEl ? descT : (descT+(sizeT ? '\n'+sizeT : ''));
+        const fullD=sEl ? descT : (sizeT && descT ? sizeT+'\n'+descT : (sizeT||descT));
+        if (dEl) dEl.textContent = fullD;
         if (sEl) sEl.textContent = sizeT;
         if (qEl) { const q = item.qty || 1; qEl.textContent = q; const i = qEl.querySelector('div'); if (i) i.textContent = q; }
         const plusBtn = clone.querySelector('.quote_plus');

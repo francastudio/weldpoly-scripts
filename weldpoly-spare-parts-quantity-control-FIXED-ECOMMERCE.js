@@ -83,7 +83,9 @@ function getParentProductSlug(){
 
 function getParentProductSizeRange(){
   const el=document.querySelector('[data-product-size-range]');
-  return el?(el.getAttribute('data-product-size-range')||el.textContent||'').trim():'';
+  if(!el)return '';
+  const v=(el.getAttribute('data-product-size-range')||el.textContent||'').trim();
+  return v.replace(/\s+/g,' ').replace(/\s*\n\s*/g,' ');
 }
 
 function getParentProductDescription(){
@@ -166,10 +168,14 @@ function toggleSparePartInQuote(trigger){
     updateSparePartButtonsState();
     if(typeof window.updateNavQty==='function')window.updateNavQty();
   }else{
+    const sizeRange=getParentProductSizeRange();
     const hasParent=(parentTitle&&merged.some(i=>!i.isSparePart&&norm(i.title)===norm(parentTitle)))||(parentSlug&&merged.some(i=>!i.isSparePart&&i.productSlug===parentSlug));
+    if(hasParent&&sizeRange){
+      const ex=merged.find(i=>!i.isSparePart&&(norm(i.title)===norm(parentTitle)||(parentSlug&&i.productSlug===parentSlug)));
+      if(ex&&!ex.productSizeRange)ex.productSizeRange=sizeRange;
+    }
     if(!hasParent&&(parentTitle||parentSlug)){
       const parentDesc=getParentProductDescription();
-      const sizeRange=getParentProductSizeRange();
       const prod={title:parentTitle||'Product',description:parentDesc||'',qty:1};
       if(parentSlug)prod.productSlug=parentSlug;
       if(sizeRange)prod.productSizeRange=sizeRange;
