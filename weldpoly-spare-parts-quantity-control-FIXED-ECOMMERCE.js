@@ -76,6 +76,19 @@ function getParentProductTitle(){
   return '';
 }
 
+function getParentProductDescription(){
+  const byAttr=document.querySelector('[data-quote-product-description]');
+  if(byAttr){const t=(byAttr.getAttribute('data-quote-product-description')||byAttr.textContent||'').trim();if(t)return t;}
+  const btn=document.querySelector('[data-add-quote][data-quote-description]');
+  if(btn){const t=(btn.getAttribute('data-quote-description')||'').trim();if(t)return t;}
+  const titleEl=document.querySelector('[data-quote-product-title]');
+  if(titleEl){
+    const sibling=titleEl.nextElementSibling||titleEl.parentElement?.querySelector('[data-quote-description]');
+    if(sibling){const t=(sibling.textContent||'').trim();if(t)return t;}
+  }
+  return '';
+}
+
 function openQuoteModal(){
   const g=document.querySelector('[data-modal-group-status]');
   const m=document.querySelector('[data-modal-name="quote-modal"]');
@@ -96,7 +109,7 @@ function isSparePartInCart(container){
 function updateSparePartButtonsState(){
   const sel='[spare-part-item], .spare-part-item, .collection_spare-part-item, .list-spare_parts .w-dyn-item';
   document.querySelectorAll(sel).forEach(container=>{
-    const trigger=container.querySelector('[spare-part-add]')||container.querySelector('.spare-part-qty-plus')||container.querySelector('input[type="checkbox"]');
+    const trigger=container.querySelector('[spare-part-add]')||container.querySelector('.spare-part-qty-plus')||container.querySelector('.spare-part-checkbox input[type="checkbox"]')||container.querySelector('input[type="checkbox"]');
     if(!trigger)return;
     const{inCart}=isSparePartInCart(container);
     if(trigger.type==='checkbox'){
@@ -133,6 +146,11 @@ function toggleSparePartInQuote(trigger){
     updateSparePartButtonsState();
     if(typeof window.updateNavQty==='function')window.updateNavQty();
   }else{
+    const hasParent=parentTitle&&merged.some(i=>!i.isSparePart&&norm(i.title)===norm(parentTitle));
+    if(!hasParent&&parentTitle){
+      const parentDesc=getParentProductDescription();
+      merged.push({title:parentTitle,description:parentDesc||'',qty:1});
+    }
     merged.push({title,description,qty:1,isSparePart:true,parentProductTitle:parentTitle||''});
     setCart(merged);
     updateSparePartButtonsState();
@@ -147,7 +165,7 @@ function getCheckboxFromClickTarget(target){
     const cb=target.control||(target.htmlFor?document.getElementById(target.htmlFor):null)||target.querySelector('input[type="checkbox"]');
     if(cb)return cb;
   }
-  const wrapper=target?.closest?.('.w-checkbox, .fs-checkbox-5_wrapper, .checkbox_field, .form_checkbox');
+  const wrapper=target?.closest?.('.w-checkbox, .spare-part-checkbox, .fs-checkbox-5_wrapper, .checkbox_field, .form_checkbox');
   if(wrapper){
     const cb=wrapper.querySelector('input[type="checkbox"]');
     if(cb)return cb;
