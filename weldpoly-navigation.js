@@ -1,16 +1,11 @@
 /**
  * Weldpoly Navigation — Unified script
- * Combines: centered nav toggle + nav contrast + scroll background
+ * Only acts on scroll or menu open. Initial state: component CSS (variants).
  *
  * 1) Centered Nav: [data-navigation-toggle="toggle"], [data-navigation-toggle="close"]
  *    [data-navigation-status] active/not-active. ESC closes.
- * 2) Nav Contrast: Add .nav--over-light to .navigation_container when over light sections.
- *    Initial state: CSS uses data-wf--navigation--variant (base = white text, dark/variant = dark text).
- * 3) Scroll Background: Add .nav--scrolled to .navigation when user scrolls down.
- * 4) Scroll Hide/Show: Add .nav--hidden when scrolling down, remove when scrolling up.
- * Text colors: CSS only (nav--over-light, nav--scrolled, data-navigation-status).
- *
- * DEBUG: ?nav_debug=1 or window.NAV_CONTRAST_DEBUG = true
+ * 2) Scroll Background: Add .nav--scrolled to .navigation when user scrolls down.
+ * 3) Scroll Hide/Show: Add .nav--hidden when scrolling down, remove when scrolling up.
  */
 (function() {
   'use strict';
@@ -53,101 +48,7 @@
     });
   }
 
-  // ===== 2) Nav Contrast (logo/menu color by section) =====
-  const LIGHT_SECTIONS = '.background-color-white, .background-color-primary, .color-scheme-1, .section_solutions, .section_about-us, .section_product-header, [data-nav-contrast="light"]';
-  const NAV_CONTRAST_DEBUG = !!(window.NAV_CONTRAST_DEBUG || /[?&]nav_debug=1/.test(location.search));
-
-  function navContrastDebug(...args) {
-    if (NAV_CONTRAST_DEBUG) console.log('[Nav Contrast]', ...args);
-  }
-
-  function initNavContrast() {
-    const nav = document.querySelector('.navigation_container');
-    if (!nav) {
-      navContrastDebug('Nav not found (.navigation_container)');
-      return;
-    }
-
-    const lightSections = document.querySelectorAll(LIGHT_SECTIONS);
-    const navHeight = 80;
-    const options = {
-      root: null,
-      rootMargin: `-${navHeight}px 0px 0px 0px`,
-      threshold: [0, 0.01, 0.5, 1]
-    };
-
-    let isOverLight = false;
-
-    const callback = (entries) => {
-      const overLight = entries.some(e => e.isIntersecting);
-      if (overLight !== isOverLight) {
-        isOverLight = overLight;
-        nav.classList.toggle('nav--over-light', isOverLight);
-      }
-    };
-
-    if (lightSections.length) {
-      const observer = new IntersectionObserver(callback, options);
-      lightSections.forEach(section => observer.observe(section));
-    }
-
-    const checkUnderNav = () => {
-      if (document.querySelector('[data-navigation-status="active"]') || document.querySelector('[data-modal-group-status="active"]')) return isOverLight;
-      const rect = nav.getBoundingClientRect();
-      const headerBarHeight = 60;
-      const checkY = rect.top + headerBarHeight + 2;
-      const centerX = window.innerWidth / 2;
-      const elAtPoint = document.elementFromPoint(centerX, checkY);
-      const inLightSection = elAtPoint?.closest(LIGHT_SECTIONS);
-      const shouldBeLight = !!inLightSection;
-      if (shouldBeLight !== isOverLight) {
-        isOverLight = shouldBeLight;
-        nav.classList.toggle('nav--over-light', isOverLight);
-      }
-      return shouldBeLight;
-    };
-
-    checkUnderNav();
-    window.addEventListener('load', () => { checkUnderNav(); });
-
-    let scrollTicking = false;
-    const onScroll = () => {
-      if (scrollTicking) return;
-      scrollTicking = true;
-      requestAnimationFrame(() => {
-        checkUnderNav();
-        scrollTicking = false;
-      });
-    };
-    window.addEventListener('scroll', onScroll, { passive: true });
-    document.documentElement.addEventListener('scroll', onScroll, { passive: true });
-
-    const hookLenis = () => {
-      const ls = window.locomotiveScroll || window.scroll?.locomotive;
-      if (ls && ls.lenis) {
-        ls.lenis.on('scroll', onScroll);
-        return true;
-      }
-      return false;
-    };
-    if (!hookLenis()) {
-      document.addEventListener('DOMContentLoaded', () => { hookLenis() && checkUnderNav(); });
-      setTimeout(() => { hookLenis() && checkUnderNav(); }, 1500);
-    }
-
-    const navStatusEl = document.querySelector('[data-navigation-status]');
-    if (navStatusEl) {
-      const obs = new MutationObserver(() => { if (navStatusEl.getAttribute('data-navigation-status') !== 'active') checkUnderNav(); });
-      obs.observe(navStatusEl, { attributes: true, attributeFilter: ['data-navigation-status'] });
-    }
-    const modalGroupEl = document.querySelector('[data-modal-group-status]');
-    if (modalGroupEl) {
-      const obsModal = new MutationObserver(() => { if (modalGroupEl.getAttribute('data-modal-group-status') !== 'active') checkUnderNav(); });
-      obsModal.observe(modalGroupEl, { attributes: true, attributeFilter: ['data-modal-group-status'] });
-    }
-  }
-
-  // ===== 3) Nav Scroll Background =====
+  // ===== 2) Nav Scroll Background =====
   const SCROLL_THRESHOLD = 60;
 
   function getScrollY() {
@@ -190,7 +91,7 @@
     }
   }
 
-  // ===== 4) Nav Scroll Hide/Show =====
+  // ===== 3) Nav Scroll Hide/Show =====
   const SCROLL_HIDE_TOP_THRESHOLD = 80;
   const SCROLL_HIDE_DELTA = 50;
 
@@ -265,7 +166,6 @@
   // ===== Init =====
   function init() {
     initCenteredScalingNavigationBar();
-    initNavContrast();
     initNavScrollBackground();
     initNavScrollHide();
   }

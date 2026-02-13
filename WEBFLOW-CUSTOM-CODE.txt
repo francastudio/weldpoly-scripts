@@ -658,14 +658,11 @@ nav[variant="variant"] .hamburger-nav__p {
 [data-quote-item], [data-quote-part-item] { display: none !important; }
 
 /* ============================================================
-   NAVIGATION — CSS only (no JS color state)
-   ============================================================
-   Bar: transparent at top, white when scrolled. Menu: dark when open.
-   Text: top/dark → white. Over light or scrolled → black. Menu open → white inside .centered-nav.
+   NAVIGATION — Script only on scroll or menu open
+   Initial state: component CSS (variants). No overrides.
    ============================================================ */
 
 .navigation {
-  background-color: transparent !important;
   transition: transform 0.3s ease, background-color 0.3s ease;
 }
 .navigation.nav--scrolled {
@@ -680,78 +677,12 @@ nav[variant="variant"] .hamburger-nav__p {
   background-color: var(--color-scheme--dark--background) !important;
 }
 
-/* Default (top, over dark): white text */
-.navigation_container,
-.navigation_container .nav__logo,
-.navigation_container .nav__button-text,
-.navigation_container .centered-nav__header,
-.navigation_container .centered-nav__header .hide-tablet,
-.navigation_container .right-nav,
-.navigation_container .nav__category-text,
-.navigation_container a,
-.navigation_container .hamburger-nav__a,
-.navigation_container .hamburger-nav__p,
-.navigation_container span {
-  color: var(--color-scheme--dark--text) !important;
-}
-.navigation_container .nav__icon {
-  color: var(--color-scheme--dark--text) !important;
-}
-
-/* Initial state: variant dark/variant = white header, dark text (CSS only) */
-.navigation[data-wf--navigation--variant="dark" i] .navigation_container,
-.navigation[data-wf--navigation--variant="variant" i] .navigation_container,
-.navigation[data-wf--navigation--variant="dark" i] .navigation_container .nav__logo,
-.navigation[data-wf--navigation--variant="variant" i] .navigation_container .nav__logo,
-.navigation[data-wf--navigation--variant="dark" i] .navigation_container .nav__button-text,
-.navigation[data-wf--navigation--variant="variant" i] .navigation_container .nav__button-text,
-.navigation[data-wf--navigation--variant="dark" i] .navigation_container .centered-nav__header,
-.navigation[data-wf--navigation--variant="variant" i] .navigation_container .centered-nav__header,
-.navigation[data-wf--navigation--variant="dark" i] .navigation_container .centered-nav__header .hide-tablet,
-.navigation[data-wf--navigation--variant="variant" i] .navigation_container .centered-nav__header .hide-tablet,
-.navigation[data-wf--navigation--variant="dark" i] .navigation_container .right-nav,
-.navigation[data-wf--navigation--variant="variant" i] .navigation_container .right-nav,
-.navigation[data-wf--navigation--variant="dark" i] .navigation_container .nav__category-text,
-.navigation[data-wf--navigation--variant="variant" i] .navigation_container .nav__category-text,
-.navigation[data-wf--navigation--variant="dark" i] .navigation_container a,
-.navigation[data-wf--navigation--variant="variant" i] .navigation_container a,
-.navigation[data-wf--navigation--variant="dark" i] .navigation_container .hamburger-nav__a,
-.navigation[data-wf--navigation--variant="variant" i] .navigation_container .hamburger-nav__a,
-.navigation[data-wf--navigation--variant="dark" i] .navigation_container .hamburger-nav__p,
-.navigation[data-wf--navigation--variant="variant" i] .navigation_container .hamburger-nav__p,
-.navigation[data-wf--navigation--variant="dark" i] .navigation_container span,
-.navigation[data-wf--navigation--variant="variant" i] .navigation_container span {
-  color: var(--color-scheme--light--text) !important;
-}
-.navigation[data-wf--navigation--variant="dark" i] .navigation_container .nav__icon,
-.navigation[data-wf--navigation--variant="variant" i] .navigation_container .nav__icon {
-  color: var(--color-scheme--light--text) !important;
-}
-
-/* Toggle-bar (hamburger): same color as navigation_container — currentColor uses inherited text color */
+/* Toggle-bar: currentColor inherits from component/scrolled/menu */
 .centered-nav__toggle-bar {
   background-color: currentColor !important;
 }
 
-/* Over light section: black text */
-.navigation_container.nav--over-light,
-.navigation_container.nav--over-light .nav__logo,
-.navigation_container.nav--over-light .nav__button-text,
-.navigation_container.nav--over-light .centered-nav__header,
-.navigation_container.nav--over-light .centered-nav__header .hide-tablet,
-.navigation_container.nav--over-light .right-nav,
-.navigation_container.nav--over-light .nav__category-text,
-.navigation_container.nav--over-light a,
-.navigation_container.nav--over-light .hamburger-nav__a,
-.navigation_container.nav--over-light .hamburger-nav__p,
-.navigation_container.nav--over-light span {
-  color: var(--color-scheme--light--text) !important;
-}
-.navigation_container.nav--over-light .nav__icon {
-  color: var(--color-scheme--light--text) !important;
-}
-
-/* Scrolled (white bar): black text for bar items */
+/* Scrolled (white bar): dark text for bar items */
 .navigation.nav--scrolled .navigation_container,
 .navigation.nav--scrolled .navigation_container .nav__logo,
 .navigation.nav--scrolled .navigation_container .nav__button-text,
@@ -835,4 +766,4 @@ NAV VARIANT: For get-a-quote page dark bg when scrolled, set Navigation variant 
 GitHub: https://github.com/francastudio/weldpoly-scripts
 Purge cache: https://purge.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/[filename].js
 
-Latest commit: ee88c00 (2026-02-13 12:49:46)
+Latest commit: 1c50d06 (2026-02-13 12:52:39)
