@@ -743,6 +743,11 @@ nav[variant="variant"] .hamburger-nav__p {
 .navigation[data-navigation-status="active"] .centered-nav * {
   color: var(--color-scheme--dark--text) !important;
 }
+/* Scrolled + menu open: override nav--scrolled black text inside .centered-nav */
+.navigation.nav--scrolled[data-navigation-status="active"] .centered-nav,
+.navigation.nav--scrolled[data-navigation-status="active"] .centered-nav * {
+  color: var(--color-scheme--dark--text) !important;
+}
 
 /* GET-A-QUOTE PAGE: Empty cart layout */
 body.quote-request-empty .request-quote_wrapper,
@@ -799,4 +804,4 @@ NAV VARIANT: For get-a-quote page dark bg when scrolled, set Navigation variant 
 GitHub: https://github.com/francastudio/weldpoly-scripts
 Purge cache: https://purge.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/[filename].js
 
-Latest commit: 086b733 (2026-02-13 12:16:07)
+Latest commit: 0ca3b90 (2026-02-13 12:29:15)
