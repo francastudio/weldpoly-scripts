@@ -248,6 +248,19 @@ let systemInitialized=false;
         pageListContainer.appendChild(clone);
       });
       if (pageTitleEl) pageTitleEl.textContent = `QUOTE (${cart.length} ${cart.length === 1 ? 'ITEM' : 'ITEMS'})`;
+      updateRequestQuotePageEmptyState();
+    }
+
+    function updateRequestQuotePageEmptyState() {
+      const isRequestQuotePage = /\/get-a-quote\/?$/.test(window.location.pathname) || /get-a-quote\.html/.test(window.location.pathname);
+      if (!isRequestQuotePage) return;
+      const pageQuoteSection = document.querySelector('.request-a-quote_content');
+      if (!pageQuoteSection) return;
+      if (cart.length === 0) {
+        document.body.classList.add('quote-request-empty');
+      } else {
+        document.body.classList.remove('quote-request-empty');
+      }
     }
 
     function setupModalScroll() {
@@ -351,13 +364,14 @@ let systemInitialized=false;
       modalObserver.observe(quoteModal, { attributes: true, attributeFilter: ['data-modal-status'] });
     }
 
-    const onCartEvt=()=>{loadCart();renderCart();renderRequestQuotePageList();updateNavQty();refreshSparePartButtons();};
+    const onCartEvt=()=>{loadCart();renderCart();renderRequestQuotePageList();updateRequestQuotePageEmptyState();updateNavQty();refreshSparePartButtons();};
     document.addEventListener('quoteCartExpired',onCartEvt);
     document.addEventListener('quoteCartUpdated',onCartEvt);
 
     loadCart();
     renderCart();
     renderRequestQuotePageList();
+    updateRequestQuotePageEmptyState();
     updateNavQty();
     refreshSparePartButtons();
 

@@ -113,27 +113,39 @@ Menu aberto — background mais escuro (adicione ao Head Code):
 ===========================================
 NAV SCROLL BACKGROUND - CSS (add to Head Code):
 ===========================================
-Quando o usuário rola a página, o menu ganha background sólido para melhor legibilidade.
+No topo: transparente. Ao rolar: cor sólida. Target: .navigation (não .centered-nav__bg).
 
-.navigation.nav--scrolled .centered-nav__bg {
-  background-color: rgba(255, 255, 255, 0.95) !important;
-  -webkit-backdrop-filter: blur(8px);
-  backdrop-filter: blur(8px);
+/* No topo da página: background transparente */
+.navigation {
+  background-color: transparent !important;
+  transition: transform 0.3s ease, background-color 0.3s ease;
 }
-.centered-nav__bg { transition: background-color 0.3s ease, backdrop-filter 0.3s ease; }
+/* Ao rolar: background com cor selecionada */
+.navigation.nav--scrolled {
+  background-color: rgba(255, 255, 255, 0.95) !important;
+}
 
 ===========================================
 NAV SCROLL HIDE/SHOW - CSS (add to Head Code):
 ===========================================
 Esconde o menu ao rolar para baixo, mostra ao rolar para cima. Sempre visível no topo.
+(transition já incluída no bloco NAV SCROLL BACKGROUND acima)
 
-.navigation {
-  transition: transform 0.3s ease;
-}
 .navigation.nav--hidden {
   transform: translateY(-100%);
 }
-(ajuste: #050505 = quase preto, #111 = um pouco mais claro)
+
+===========================================
+GET-A-QUOTE PAGE - Empty cart layout (add to Head Code):
+===========================================
+When cart is empty on /get-a-quote: hide "QUOTE (0 ITEMS) continue browsing", show form on the left.
+
+body.quote-request-empty .request-a-quote_content {
+  display: none !important;
+}
+body.quote-request-empty .about__grid-content {
+  grid-template-columns: 1fr;
+}
 
 ===========================================
 UPDATES:
@@ -146,7 +158,7 @@ FORÇAR ATUALIZAÇÃO IMEDIATA (após push): O script atualizar-github-auto.sh p
 cache do jsDelivr automaticamente. Se precisar purgar manualmente, acesse:
 https://purge.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/nome-do-arquivo.js
 
-Latest commit: 1493af9 (2026-02-13 08:45:23)
+Latest commit: c105a39 (2026-02-13 10:25:20)
 
 ✅ Vertical scroll inside modal div (`.quote_modal-content`)
 ✅ Dynamic max-height to keep actions visible

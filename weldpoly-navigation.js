@@ -7,7 +7,7 @@
  * 2) Nav Contrast: Logo/menu color by section. Add .nav--over-light to .navigation_container
  *    when nav is over light sections (.background-color-white, .background-color-primary, etc.)
  * 3) Scroll Background: Add .nav--scrolled to .navigation when user scrolls down (background
- *    appears for better visibility). Requires CSS: .navigation.nav--scrolled .centered-nav__bg
+ *    appears for better visibility). Requires CSS: .navigation.nav--scrolled { background-color }
  * 4) Scroll Hide/Show: Add .nav--hidden when scrolling down, remove when scrolling up.
  *    Nav visible at top. Requires CSS: .navigation.nav--hidden { transform: translateY(-100%); }
  *
