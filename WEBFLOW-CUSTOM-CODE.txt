@@ -694,8 +694,9 @@ nav[variant="variant"] .hamburger-nav__p {
 .navigation_container span {
   color: var(--color-scheme--dark--text) !important;
 }
-.navigation_container .centered-nav__toggle-bar {
-  background-color: var(--color-scheme--dark--text) !important;
+/* Toggle-bar (hamburger): same color as navigation_container — currentColor uses inherited text color */
+.centered-nav__toggle-bar {
+  background-color: currentColor !important;
 }
 .navigation_container .nav__icon {
   color: var(--color-scheme--dark--text) !important;
@@ -715,9 +716,6 @@ nav[variant="variant"] .hamburger-nav__p {
 .navigation_container.nav--over-light span {
   color: var(--color-scheme--light--text) !important;
 }
-.navigation_container.nav--over-light .centered-nav__toggle-bar {
-  background-color: var(--color-scheme--light--text) !important;
-}
 .navigation_container.nav--over-light .nav__icon {
   color: var(--color-scheme--light--text) !important;
 }
@@ -736,9 +734,6 @@ nav[variant="variant"] .hamburger-nav__p {
 .navigation.nav--scrolled .navigation_container span {
   color: var(--color-scheme--light--text) !important;
 }
-.navigation.nav--scrolled .navigation_container .centered-nav__toggle-bar {
-  background-color: var(--color-scheme--light--text) !important;
-}
 .navigation.nav--scrolled .navigation_container .nav__icon {
   color: var(--color-scheme--light--text) !important;
 }
@@ -747,9 +742,6 @@ nav[variant="variant"] .hamburger-nav__p {
 .navigation[data-navigation-status="active"] .centered-nav,
 .navigation[data-navigation-status="active"] .centered-nav * {
   color: var(--color-scheme--dark--text) !important;
-}
-.navigation[data-navigation-status="active"] .centered-nav .centered-nav__toggle-bar {
-  background-color: var(--color-scheme--dark--text) !important;
 }
 
 /* GET-A-QUOTE PAGE: Empty cart layout */
@@ -807,4 +799,4 @@ NAV VARIANT: For get-a-quote page dark bg when scrolled, set Navigation variant 
 GitHub: https://github.com/francastudio/weldpoly-scripts
 Purge cache: https://purge.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/[filename].js
 
-Latest commit: 6149a83 (2026-02-13 12:05:45)
+Latest commit: 086b733 (2026-02-13 12:16:07)
