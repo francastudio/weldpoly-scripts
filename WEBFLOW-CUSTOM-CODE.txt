@@ -694,12 +694,43 @@ nav[variant="variant"] .hamburger-nav__p {
 .navigation_container span {
   color: var(--color-scheme--dark--text) !important;
 }
+.navigation_container .nav__icon {
+  color: var(--color-scheme--dark--text) !important;
+}
+
+/* Initial state: variant dark/variant = white header, dark text (CSS only) */
+.navigation[data-wf--navigation--variant="dark" i] .navigation_container,
+.navigation[data-wf--navigation--variant="variant" i] .navigation_container,
+.navigation[data-wf--navigation--variant="dark" i] .navigation_container .nav__logo,
+.navigation[data-wf--navigation--variant="variant" i] .navigation_container .nav__logo,
+.navigation[data-wf--navigation--variant="dark" i] .navigation_container .nav__button-text,
+.navigation[data-wf--navigation--variant="variant" i] .navigation_container .nav__button-text,
+.navigation[data-wf--navigation--variant="dark" i] .navigation_container .centered-nav__header,
+.navigation[data-wf--navigation--variant="variant" i] .navigation_container .centered-nav__header,
+.navigation[data-wf--navigation--variant="dark" i] .navigation_container .centered-nav__header .hide-tablet,
+.navigation[data-wf--navigation--variant="variant" i] .navigation_container .centered-nav__header .hide-tablet,
+.navigation[data-wf--navigation--variant="dark" i] .navigation_container .right-nav,
+.navigation[data-wf--navigation--variant="variant" i] .navigation_container .right-nav,
+.navigation[data-wf--navigation--variant="dark" i] .navigation_container .nav__category-text,
+.navigation[data-wf--navigation--variant="variant" i] .navigation_container .nav__category-text,
+.navigation[data-wf--navigation--variant="dark" i] .navigation_container a,
+.navigation[data-wf--navigation--variant="variant" i] .navigation_container a,
+.navigation[data-wf--navigation--variant="dark" i] .navigation_container .hamburger-nav__a,
+.navigation[data-wf--navigation--variant="variant" i] .navigation_container .hamburger-nav__a,
+.navigation[data-wf--navigation--variant="dark" i] .navigation_container .hamburger-nav__p,
+.navigation[data-wf--navigation--variant="variant" i] .navigation_container .hamburger-nav__p,
+.navigation[data-wf--navigation--variant="dark" i] .navigation_container span,
+.navigation[data-wf--navigation--variant="variant" i] .navigation_container span {
+  color: var(--color-scheme--light--text) !important;
+}
+.navigation[data-wf--navigation--variant="dark" i] .navigation_container .nav__icon,
+.navigation[data-wf--navigation--variant="variant" i] .navigation_container .nav__icon {
+  color: var(--color-scheme--light--text) !important;
+}
+
 /* Toggle-bar (hamburger): same color as navigation_container — currentColor uses inherited text color */
 .centered-nav__toggle-bar {
   background-color: currentColor !important;
-}
-.navigation_container .nav__icon {
-  color: var(--color-scheme--dark--text) !important;
 }
 
 /* Over light section: black text */
@@ -804,4 +835,4 @@ NAV VARIANT: For get-a-quote page dark bg when scrolled, set Navigation variant 
 GitHub: https://github.com/francastudio/weldpoly-scripts
 Purge cache: https://purge.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/[filename].js
 
-Latest commit: 3057e59 (2026-02-13 12:49:22)
+Latest commit: ee88c00 (2026-02-13 12:49:46)

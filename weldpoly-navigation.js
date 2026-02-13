@@ -5,8 +5,7 @@
  * 1) Centered Nav: [data-navigation-toggle="toggle"], [data-navigation-toggle="close"]
  *    [data-navigation-status] active/not-active. ESC closes.
  * 2) Nav Contrast: Add .nav--over-light to .navigation_container when over light sections.
- *    At top: uses data-wf--navigation--variant — "base" = header with images (white text),
- *    "variant" = header with white bg (dark text).
+ *    Initial state: CSS uses data-wf--navigation--variant (base = white text, dark/variant = dark text).
  * 3) Scroll Background: Add .nav--scrolled to .navigation when user scrolls down.
  * 4) Scroll Hide/Show: Add .nav--hidden when scrolling down, remove when scrolling up.
  * Text colors: CSS only (nav--over-light, nav--scrolled, data-navigation-status).
@@ -57,7 +56,6 @@
   // ===== 2) Nav Contrast (logo/menu color by section) =====
   const LIGHT_SECTIONS = '.background-color-white, .background-color-primary, .color-scheme-1, .section_solutions, .section_about-us, .section_product-header, [data-nav-contrast="light"]';
   const NAV_CONTRAST_DEBUG = !!(window.NAV_CONTRAST_DEBUG || /[?&]nav_debug=1/.test(location.search));
-  const VARIANT_AT_TOP_LIGHT = ['variant', 'dark']; /* Pages with white header: dark text at top (case-insensitive) */
 
   function navContrastDebug(...args) {
     if (NAV_CONTRAST_DEBUG) console.log('[Nav Contrast]', ...args);
@@ -65,7 +63,6 @@
 
   function initNavContrast() {
     const nav = document.querySelector('.navigation_container');
-    const navWrapper = document.querySelector('.navigation');
     if (!nav) {
       navContrastDebug('Nav not found (.navigation_container)');
       return;
@@ -94,20 +91,8 @@
       lightSections.forEach(section => observer.observe(section));
     }
 
-    const variant = (navWrapper?.getAttribute('data-wf--navigation--variant') || 'base').trim();
-    const atTopNeedsLight = VARIANT_AT_TOP_LIGHT.some(v => v.toLowerCase() === variant.toLowerCase());
-
     const checkUnderNav = () => {
       if (document.querySelector('[data-navigation-status="active"]') || document.querySelector('[data-modal-group-status="active"]')) return isOverLight;
-      const scrollY = getScrollY();
-      const atTop = scrollY < 80;
-      if (atTop && atTopNeedsLight) {
-        if (!isOverLight) {
-          isOverLight = true;
-          nav.classList.add('nav--over-light');
-        }
-        return true;
-      }
       const rect = nav.getBoundingClientRect();
       const headerBarHeight = 60;
       const checkY = rect.top + headerBarHeight + 2;
