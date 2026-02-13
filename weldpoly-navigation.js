@@ -57,7 +57,7 @@
   // ===== 2) Nav Contrast (logo/menu color by section) =====
   const LIGHT_SECTIONS = '.background-color-white, .background-color-primary, .color-scheme-1, .section_solutions, .section_about-us, .section_product-header, [data-nav-contrast="light"]';
   const NAV_CONTRAST_DEBUG = !!(window.NAV_CONTRAST_DEBUG || /[?&]nav_debug=1/.test(location.search));
-  const VARIANT_AT_TOP_LIGHT = ['variant', 'dark']; /* Pages with white header: dark text at top */
+  const VARIANT_AT_TOP_LIGHT = ['variant', 'dark']; /* Pages with white header: dark text at top (case-insensitive) */
 
   function navContrastDebug(...args) {
     if (NAV_CONTRAST_DEBUG) console.log('[Nav Contrast]', ...args);
@@ -94,8 +94,8 @@
       lightSections.forEach(section => observer.observe(section));
     }
 
-    const variant = navWrapper?.getAttribute('data-wf--navigation--variant') || 'base';
-    const atTopNeedsLight = VARIANT_AT_TOP_LIGHT.includes(variant);
+    const variant = (navWrapper?.getAttribute('data-wf--navigation--variant') || 'base').trim();
+    const atTopNeedsLight = VARIANT_AT_TOP_LIGHT.some(v => v.toLowerCase() === variant.toLowerCase());
 
     const checkUnderNav = () => {
       if (document.querySelector('[data-navigation-status="active"]') || document.querySelector('[data-modal-group-status="active"]')) return isOverLight;
