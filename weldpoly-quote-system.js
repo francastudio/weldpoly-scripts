@@ -252,9 +252,10 @@ let systemInitialized=false;
     }
 
     function updateRequestQuotePageEmptyState() {
-      const isRequestQuotePage = /\/get-a-quote\/?$/.test(window.location.pathname) || /get-a-quote\.html/.test(window.location.pathname);
+      const path = window.location.pathname || '';
+      const isRequestQuotePage = /\/(get-a-quote|request-a-quote)\/?$/.test(path) || /(get-a-quote|request-a-quote)\.html/.test(path) || document.querySelector('[data-request-a-quote-title]');
       if (!isRequestQuotePage) return;
-      const pageQuoteSection = document.querySelector('.request-a-quote_content');
+      const pageQuoteSection = document.querySelector('.request-a-quote_content, [quote-content], .request-quote_wrapper');
       if (!pageQuoteSection) return;
       if (cart.length === 0) {
         document.body.classList.add('quote-request-empty');
