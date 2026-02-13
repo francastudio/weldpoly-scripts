@@ -1,14 +1,13 @@
 /**
  * Weldpoly Navigation — Unified script
- * Combines: centered nav toggle + nav contrast + scroll background + text mode
+ * Combines: centered nav toggle + nav contrast + scroll background
  *
  * 1) Centered Nav: [data-navigation-toggle="toggle"], [data-navigation-toggle="close"]
  *    [data-navigation-status] active/not-active. ESC closes.
  * 2) Nav Contrast: Add .nav--over-light to .navigation_container when over light sections.
  * 3) Scroll Background: Add .nav--scrolled to .navigation when user scrolls down.
  * 4) Scroll Hide/Show: Add .nav--hidden when scrolling down, remove when scrolling up.
- * 5) Text Mode: Add .nav--dark-bg to .navigation when background is dark (white text).
- *    Light bg → dark text. Dark bg → white text. Covers both nav bar and menu (.centered-nav).
+ * Text colors: CSS only (nav--over-light, nav--scrolled, data-navigation-status).
  *
  * DEBUG: ?nav_debug=1 or window.NAV_CONTRAST_DEBUG = true
  */
@@ -193,51 +192,7 @@
     }
   }
 
-  // ===== 4) Nav Text Mode (nav--dark-bg = white text, else dark text) =====
-  const REQUEST_QUOTE_VARIANTS = ['request-a-quote'];
-
-  function initNavTextMode() {
-    const nav = document.querySelector('.navigation');
-    const navContainer = document.querySelector('.navigation_container');
-    if (!nav || !navContainer) return;
-
-    function updateNavDarkBg() {
-      const menuOpen = !!document.querySelector('[data-navigation-status="active"]');
-      const scrolled = nav.classList.contains('nav--scrolled');
-      const overLight = navContainer.classList.contains('nav--over-light');
-      const variant = nav.getAttribute('data-wf--navigation--variant') || '';
-
-      let darkBg = false;
-      if (menuOpen) {
-        darkBg = true; /* Menu open: centered-nav has dark bg */
-      } else if (overLight) {
-        darkBg = false; /* Over light section: dark text */
-      } else if (scrolled && REQUEST_QUOTE_VARIANTS.includes(variant)) {
-        darkBg = true; /* Scrolled + request-a-quote: dark nav bar */
-      } else if (scrolled) {
-        darkBg = false; /* Scrolled + default: light nav bar */
-      } else {
-        darkBg = true; /* Top, not over light: transparent/dark */
-      }
-
-      nav.classList.toggle('nav--dark-bg', darkBg);
-    }
-
-    updateNavDarkBg();
-    window.addEventListener('load', updateNavDarkBg);
-
-    const navStatusEl = document.querySelector('[data-navigation-status]');
-    if (navStatusEl) {
-      const obs = new MutationObserver(updateNavDarkBg);
-      obs.observe(navStatusEl, { attributes: true, attributeFilter: ['data-navigation-status'] });
-    }
-
-    const scrollObserver = new MutationObserver(updateNavDarkBg);
-    scrollObserver.observe(nav, { attributes: true, attributeFilter: ['class'] });
-    scrollObserver.observe(navContainer, { attributes: true, attributeFilter: ['class'] });
-  }
-
-  // ===== 5) Nav Scroll Hide/Show =====
+  // ===== 4) Nav Scroll Hide/Show =====
   const SCROLL_HIDE_TOP_THRESHOLD = 80;
   const SCROLL_HIDE_DELTA = 50;
 
@@ -314,7 +269,6 @@
     initCenteredScalingNavigationBar();
     initNavContrast();
     initNavScrollBackground();
-    initNavTextMode();
     initNavScrollHide();
   }
 

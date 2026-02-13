@@ -658,11 +658,10 @@ nav[variant="variant"] .hamburger-nav__p {
 [data-quote-item], [data-quote-part-item] { display: none !important; }
 
 /* ============================================================
-   NAVIGATION — Simplified: 2 backgrounds, 2 text modes
+   NAVIGATION — CSS only (no JS color state)
    ============================================================
-   Background 1: .navigation (nav bar) — transparent at top, solid when scrolled
-   Background 2: .centered-nav (menu) — dark when open
-   Text: nav--dark-bg → white. nav--over-light → black. (script adds classes)
+   Bar: transparent at top, white when scrolled. Menu: dark when open.
+   Text: top/dark → white. Over light or scrolled → black. Menu open → white inside .centered-nav.
    ============================================================ */
 
 .navigation {
@@ -672,19 +671,37 @@ nav[variant="variant"] .hamburger-nav__p {
 .navigation.nav--scrolled {
   background-color: color-mix(in srgb, var(--color-scheme--light--background-white) 95%, transparent) !important;
 }
-.navigation.nav--scrolled.nav--dark-bg {
-  background-color: color-mix(in srgb, var(--color-scheme--dark--background) 90%, transparent) !important;
-}
 .navigation.nav--hidden {
   transform: translateY(-100%);
 }
 
-/* Menu open: centered-nav dark background */
+/* Menu open: only .centered-nav gets dark bg (bar stays white) */
 [data-navigation-status="active"] .centered-nav {
   background-color: var(--color-scheme--dark--background) !important;
 }
 
-/* Light bg (nav--over-light) → dark text */
+/* Default (top, over dark): white text */
+.navigation_container,
+.navigation_container .nav__logo,
+.navigation_container .nav__button-text,
+.navigation_container .centered-nav__header,
+.navigation_container .centered-nav__header .hide-tablet,
+.navigation_container .right-nav,
+.navigation_container .nav__category-text,
+.navigation_container a,
+.navigation_container .hamburger-nav__a,
+.navigation_container .hamburger-nav__p,
+.navigation_container span {
+  color: var(--color-scheme--dark--text) !important;
+}
+.navigation_container .centered-nav__toggle-bar {
+  background-color: var(--color-scheme--dark--text) !important;
+}
+.navigation_container .nav__icon {
+  color: var(--color-scheme--dark--text) !important;
+}
+
+/* Over light section: black text */
 .navigation_container.nav--over-light,
 .navigation_container.nav--over-light .nav__logo,
 .navigation_container.nav--over-light .nav__button-text,
@@ -705,25 +722,34 @@ nav[variant="variant"] .hamburger-nav__p {
   color: var(--color-scheme--light--text) !important;
 }
 
-/* Dark bg (nav--dark-bg) → white text */
-.navigation.nav--dark-bg .navigation_container,
-.navigation.nav--dark-bg .navigation_container .nav__logo,
-.navigation.nav--dark-bg .navigation_container .nav__button-text,
-.navigation.nav--dark-bg .navigation_container .centered-nav__header,
-.navigation.nav--dark-bg .navigation_container .centered-nav__header .hide-tablet,
-.navigation.nav--dark-bg .navigation_container .right-nav,
-.navigation.nav--dark-bg .navigation_container .nav__category-text,
-.navigation.nav--dark-bg .navigation_container a,
-.navigation.nav--dark-bg .navigation_container .hamburger-nav__a,
-.navigation.nav--dark-bg .navigation_container .hamburger-nav__p,
-.navigation.nav--dark-bg .navigation_container span {
+/* Scrolled (white bar): black text for bar items */
+.navigation.nav--scrolled .navigation_container,
+.navigation.nav--scrolled .navigation_container .nav__logo,
+.navigation.nav--scrolled .navigation_container .nav__button-text,
+.navigation.nav--scrolled .navigation_container .centered-nav__header,
+.navigation.nav--scrolled .navigation_container .centered-nav__header .hide-tablet,
+.navigation.nav--scrolled .navigation_container .right-nav,
+.navigation.nav--scrolled .navigation_container .nav__category-text,
+.navigation.nav--scrolled .navigation_container a,
+.navigation.nav--scrolled .navigation_container .hamburger-nav__a,
+.navigation.nav--scrolled .navigation_container .hamburger-nav__p,
+.navigation.nav--scrolled .navigation_container span {
+  color: var(--color-scheme--light--text) !important;
+}
+.navigation.nav--scrolled .navigation_container .centered-nav__toggle-bar {
+  background-color: var(--color-scheme--light--text) !important;
+}
+.navigation.nav--scrolled .navigation_container .nav__icon {
+  color: var(--color-scheme--light--text) !important;
+}
+
+/* Menu open: white text only inside .centered-nav (dropdown) */
+.navigation[data-navigation-status="active"] .centered-nav,
+.navigation[data-navigation-status="active"] .centered-nav * {
   color: var(--color-scheme--dark--text) !important;
 }
-.navigation.nav--dark-bg .navigation_container .centered-nav__toggle-bar {
+.navigation[data-navigation-status="active"] .centered-nav .centered-nav__toggle-bar {
   background-color: var(--color-scheme--dark--text) !important;
-}
-.navigation.nav--dark-bg .navigation_container .nav__icon {
-  color: var(--color-scheme--dark--text) !important;
 }
 
 /* GET-A-QUOTE PAGE: Empty cart layout */
@@ -781,4 +807,4 @@ NAV VARIANT: For get-a-quote page dark bg when scrolled, set Navigation variant 
 GitHub: https://github.com/francastudio/weldpoly-scripts
 Purge cache: https://purge.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/[filename].js
 
-Latest commit: (updated by atualizar-github-auto.sh)
+Latest commit: 6149a83 (2026-02-13 12:05:45)
