@@ -1,0 +1,784 @@
+===========================================
+WEBFLOW CUSTOM CODE — Single file
+===========================================
+Webflow → Site Settings → Custom Code
+1. Paste HEAD CODE in Head Code
+2. Paste FOOTER CODE in Footer Code
+3. Save and Publish
+
+===========================================
+HEAD CODE (paste in Head Code)
+===========================================
+
+<style>
+
+/* Ensure all elements inherit the color from its parent */
+a,
+.w-input,
+.w-select,
+.w-tab-link,
+.w-nav-link,
+.w-nav-brand,
+.w-dropdown-btn,
+.w-dropdown-toggle,
+.w-slider-arrow-left,
+.w-slider-arrow-right,
+.w-dropdown-link {
+  color: inherit;
+  text-decoration: inherit;
+  font-size: inherit;
+}
+
+/* Focus state style for keyboard navigation for the focusable elements */
+*[tabindex]:focus-visible,
+  input[type="file"]:focus-visible {
+   outline: 0.125rem solid var(--color-scheme--light--accent);
+   outline-offset: 0.125rem;
+}
+
+/* Get rid of top margin on first element in any rich text element */
+.w-richtext > :not(div):first-child, .w-richtext > div:first-child > :first-child {
+  margin-top: 0 !important;
+}
+
+/* Get rid of bottom margin on last element in any rich text element */
+.w-richtext>:last-child, .w-richtext ol li:last-child, .w-richtext ul li:last-child {
+	margin-bottom: 0 !important;
+}
+
+/* Prevent all click and hover interaction with an element */
+.pointer-events-off {
+	pointer-events: none;
+}
+
+/* Enables all click and hover interaction with an element */
+.pointer-events-on {
+  pointer-events: auto;
+}
+
+/* Create a class of .div-square which maintains a 1:1 dimension of a div */
+.div-square::after {
+	content: "";
+	display: block;
+	padding-bottom: 100%;
+}
+
+/* Make sure containers never lose their center alignment */
+.container-medium,.container-small, .container-large {
+	margin-right: auto !important;
+  margin-left: auto !important;
+}
+
+
+/* Apply "..." after 3 lines of text */
+.text-style-3lines {
+	display: -webkit-box;
+	overflow: hidden;
+	-webkit-line-clamp: 3;
+	-webkit-box-orient: vertical;
+}
+
+/* Apply "..." after 2 lines of text */
+.text-style-2lines {
+	display: -webkit-box;
+	overflow: hidden;
+	-webkit-line-clamp: 2;
+	-webkit-box-orient: vertical;
+}
+
+/* Adds inline flex display */
+.display-inlineflex {
+  display: inline-flex;
+}
+
+/* These classes are never overwritten */
+.hide {
+  display: none !important;
+}
+
+/* Remove default Webflow chevron from form select */
+select{
+  -webkit-appearance:none;
+}
+
+
+@media screen and (max-width: 991px) {
+    .hide, .hide-tablet {
+        display: none !important;
+    }
+}
+  @media screen and (max-width: 767px) {
+    .hide-mobile-landscape{
+      display: none !important;
+    }
+}
+  @media screen and (max-width: 479px) {
+    .hide-mobile{
+      display: none !important;
+    }
+}
+ 
+.margin-0 {
+  margin: 0rem !important;
+}
+  
+.padding-0 {
+  padding: 0rem !important;
+}
+
+.spacing-clean {
+padding: 0rem !important;
+margin: 0rem !important;
+}
+
+.margin-top {
+  margin-right: 0rem !important;
+  margin-bottom: 0rem !important;
+  margin-left: 0rem !important;
+}
+
+.padding-top {
+  padding-right: 0rem !important;
+  padding-bottom: 0rem !important;
+  padding-left: 0rem !important;
+}
+  
+.margin-right {
+  margin-top: 0rem !important;
+  margin-bottom: 0rem !important;
+  margin-left: 0rem !important;
+}
+
+.padding-right {
+  padding-top: 0rem !important;
+  padding-bottom: 0rem !important;
+  padding-left: 0rem !important;
+}
+
+.margin-bottom {
+  margin-top: 0rem !important;
+  margin-right: 0rem !important;
+  margin-left: 0rem !important;
+}
+
+.padding-bottom {
+  padding-top: 0rem !important;
+  padding-right: 0rem !important;
+  padding-left: 0rem !important;
+}
+
+.margin-left {
+  margin-top: 0rem !important;
+  margin-right: 0rem !important;
+  margin-bottom: 0rem !important;
+}
+  
+.padding-left {
+  padding-top: 0rem !important;
+  padding-right: 0rem !important;
+  padding-bottom: 0rem !important;
+}
+  
+.margin-horizontal {
+  margin-top: 0rem !important;
+  margin-bottom: 0rem !important;
+}
+
+.padding-horizontal {
+  padding-top: 0rem !important;
+  padding-bottom: 0rem !important;
+}
+
+.margin-vertical {
+  margin-right: 0rem !important;
+  margin-left: 0rem !important;
+}
+  
+.padding-vertical {
+  padding-right: 0rem !important;
+  padding-left: 0rem !important;
+}
+
+/* Apply "..." at 100% width */
+.truncate-width { 
+		width: 100%; 
+    white-space: nowrap; 
+    overflow: hidden; 
+    text-overflow: ellipsis; 
+}
+/* Removes native scrollbar */
+.no-scrollbar {
+    -ms-overflow-style: none;
+    overflow: -moz-scrollbars-none; 
+}
+
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+/* ------------------------- Scaling System by Osmo [https://osmo.supply/] -------------------------  */
+
+body {
+  font-size: var(--size-font);
+}
+
+.container-large {
+  max-width: var(--size-container);
+}
+
+.container-medium {
+  max-width: calc(var(--size-container) * 0.85);
+}
+
+.container-small {
+  max-width: calc(var(--size-container) * 0.7);
+}
+/* Desktop */
+:root {
+  --size-unit: 16; /* body font-size in design - no px */
+  --size-container-ideal: 1440; /* screen-size in design - no px */
+  --size-container-min: 992px;
+  --size-container-max: 1440px;
+  --size-container: clamp(var(--size-container-min), 100vw, var(--size-container-max));
+  --size-font: calc(var(--size-container) / (var(--size-container-ideal) / var(--size-unit)));
+}
+
+/* Tablet */
+@media screen and (max-width: 991px) {
+  :root {
+    --size-container-ideal: 834; /* screen-size in design - no px */
+    --size-container-min: 768px;
+    --size-container-max: 991px;
+  }
+}
+
+/* Mobile Landscape */
+@media screen and (max-width: 767px) {
+  :root {
+    --size-container-ideal: 550; /* screen-size in design - no px */
+    --size-container-min: 480px;
+    --size-container-max: 767px;
+  }
+}
+
+/* Mobile Portrait */
+@media screen and (max-width: 479px) {
+  :root {
+    --size-container-ideal: 390; /* screen-size in design - no px */
+    --size-container-min: 320px;
+    --size-container-max: 479px;
+  }
+}		
+
+/* Show/Hide content */
+.centered-nav__content {
+  transition: grid-template-rows 0.6s cubic-bezier(0.625, 0.05, 0, 1);
+}
+[data-navigation-status="active"] .centered-nav__content {
+  grid-template-rows: 1fr;
+}
+
+/* Nav content animation (menu items) */
+[data-navigation-item] {
+  transition: all 0.6s cubic-bezier(0.625, 0.05, 0, 1);
+  opacity: 0;
+  transform: translate(0px, 2em);
+}
+[data-navigation-status="active"] [data-navigation-item] {
+  opacity: 1;
+  transform: translate(0px, 0em);
+}
+
+/* Link underline */
+.hamburger-nav__a::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+	height: 0px !important;
+  background: currentColor;
+  opacity: 0.2;
+  transition-delay: inherit;
+  transform: scaleX(0);
+  transition: transform 0.6s cubic-bezier(.65, 0, 0, 1);
+}
+[data-navigation-status="active"] .hamburger-nav__a::after {
+  transform: scaleX(1);
+}
+.hamburger-nav__a:hover::after {
+  opacity: 0.4;
+}
+
+/* Link text slide */
+.hamburger-nav__p {
+  transition: transform 0.6s cubic-bezier(.65, 0, 0, 1);
+  transform: translate(0px, 150%);
+  transition-delay: inherit;
+}
+[data-navigation-status="active"] .hamburger-nav__p {
+  transform: translate(0px, 0%);
+}
+
+/* Active Link underline */
+.hamburger-nav__a[aria-current]::after {
+  opacity: 1;
+}
+
+/* Hamburger Button animation */
+.centered-nav__toggle .centered-nav__toggle-bar {
+  transition: transform 0.6s cubic-bezier(.65, 0, 0, 1);
+  transform: translateY(-0.25em) rotate(0.001deg);
+}
+.centered-nav__toggle:hover .centered-nav__toggle-bar {
+  transform: translateY(0.25em) rotate(0.001deg);
+}
+.centered-nav__toggle .centered-nav__toggle-bar:nth-child(2) {
+  transform: translateY(0.15em) rotate(0.001deg);
+}
+.centered-nav__toggle:hover .centered-nav__toggle-bar:nth-child(2) {
+  transform: translateY(-0.15em) rotate(0.001deg);
+}
+[data-navigation-status="active"] .centered-nav__toggle .centered-nav__toggle-bar {
+  transform: translateY(0em) rotate(45deg);
+}
+[data-navigation-status="active"] .centered-nav__toggle .centered-nav__toggle-bar:nth-child(2) {
+  transform: translateY(0em) rotate(-45deg);
+}
+
+
+[data-underline-link] {
+  text-decoration: none;
+  position: relative;
+}
+
+[data-underline-link]::before,
+[data-underline-link="alt"]::before,
+[data-underline-link="alt"]::after{
+  content: "";
+  position: absolute;
+  bottom: -0.0625em;
+  left: 0;
+  width: 100%;
+  height: 0.0625em;
+  background-color: currentColor;
+  transition: transform 0.735s cubic-bezier(0.625, 0.05, 0, 1);
+  transform-origin: right;
+  transform: scaleX(0) rotate(0.001deg);
+}
+
+[data-underline-link="alt"]::before {
+  transform-origin: left;
+  transform: scaleX(1) rotate(0.001deg);
+  transition-delay: 0.3s;
+}
+
+[data-underline-link="alt"]::after {
+  transform-origin: right;
+  transform: scaleX(0) rotate(0.001deg);
+  transition-delay: 0s;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  [data-hover]:hover [data-underline-link]::before,
+  [data-underline-link]:hover::before {
+    transform-origin: left;
+    transform: scaleX(1) rotate(0.001deg);
+  }  
+  
+  [data-hover]:hover [data-underline-link="alt"]::before,
+  [data-underline-link="alt"]:hover::before {
+    transform-origin: right;
+    transform: scaleX(1) rotate(0.001deg);
+    transition-delay: 0s;
+  }
+  
+  [data-hover]:hover [data-underline-link="alt"]::after,
+  [data-underline-link="alt"]:hover::after {
+    transform-origin: left;
+    transform: scaleX(1) rotate(0.001deg);
+    transition-delay: 0.3s;
+  }
+}
+
+.u-sr-only {
+    white-space: nowrap;
+    clip: rect(0, 0, 0, 0);
+    border-width: 0;
+    width: 1px;
+    height: 1px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0;
+    position: absolute;
+    inset: 0% 0% auto;
+    overflow: hidden;
+}
+
+
+.gallery_mask {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+
+  /* Apply SVG mask */
+  -webkit-mask-image: url('https://cdn.prod.website-files.com/68fe7d3f3bfe25362c6b3255/690375ac4c13dc8dbd6fb66c_folder-mask.svg');
+  mask-image: url('https://cdn.prod.website-files.com/68fe7d3f3bfe25362c6b3255/690375ac4c13dc8dbd6fb66c_folder-mask.svg');
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: cover;
+  mask-size: cover;
+  -webkit-mask-position: center;
+  mask-position: center;
+  mask-type: alpha;
+
+  /* Fallback background (if image fails) */
+  background-color: var(--color-scheme--dark--background);
+}
+
+/* Image remains as visible background inside the mask */
+.gallery_mask img.gallery-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease;
+}
+
+/* Optional hover effect */
+.gallery_mask:hover img.gallery-img {
+  transform: scale(1.05);
+}
+
+/* =======================================================
+   Menu variants (dark and light background)
+   ======================================================= */
+
+/* Default variant (dark background) */
+nav[variant="base"] .centered-nav_bg {
+  background-color: color-mix(in srgb, var(--color-scheme--dark--background) 60%, transparent);
+  backdrop-filter: blur(10px);
+}
+
+/* Light variant (white background) */
+nav[variant="variant"] .centered-nav_bg {
+  background-color: color-mix(in srgb, var(--color-scheme--light--background-white) 80%, transparent);
+  backdrop-filter: blur(10px);
+}
+
+/* Active state (menu open) */
+[data-navigation-status="active"][variant="base"] .centered-nav_bg {
+  background-color: color-mix(in srgb, var(--color-scheme--dark--background) 60%, transparent);
+}
+
+[data-navigation-status="active"][variant="variant"] .centered-nav_bg {
+  background-color: color-mix(in srgb, var(--color-scheme--light--background-white) 90%, transparent);
+}
+
+/* Menu items in dark mode */
+nav[variant="base"] .hamburger-nav__a,
+nav[variant="base"] .hamburger-nav__p {
+  color: var(--color-scheme--dark--text);
+}
+
+/* Menu items in light mode */
+nav[variant="variant"] .hamburger-nav__a,
+nav[variant="variant"] .hamburger-nav__p {
+  color: var(--color-scheme--light--text);
+}
+
+
+/* Nav content animation (menu items) */
+[data-navigation-item] {
+  transition: all 0.6s cubic-bezier(0.625, 0.05, 0, 1);
+  opacity: 0;
+  transform: translate(0px, 2em);
+}
+[data-navigation-status="active"] [data-navigation-item] {
+  opacity: 1;
+  transform: translate(0px, 0em);
+}
+
+/* Link underline */
+.hamburger-nav__a::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.2;
+  transition-delay: inherit;
+  transform: scaleX(0);
+  transition: transform 0.6s cubic-bezier(.65, 0, 0, 1);
+}
+[data-navigation-status="active"] .hamburger-nav__a::after {
+  transform: scaleX(1);
+}
+.hamburger-nav__a:hover::after {
+  opacity: 0.4;
+}
+
+/* Link text slide */
+.hamburger-nav__p {
+  transition: transform 0.6s cubic-bezier(.65, 0, 0, 1);
+  transform: translate(0px, 150%);
+  transition-delay: inherit;
+}
+[data-navigation-status="active"] .hamburger-nav__p {
+  transform: translate(0px, 0%);
+}
+
+/* Active Link underline */
+.hamburger-nav__a[aria-current]::after {
+  opacity: 1;
+}
+
+/* ==========================================================
+   Hover underline animation for hamburger menu links
+   ========================================================== */
+.hamburger-nav__a {
+  position: relative;
+  text-decoration: none;
+  overflow: hidden;
+}
+
+/* Initial invisible line (base style) */
+.hamburger-nav__a::before,
+.hamburger-nav__a::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background-color: currentColor;
+  transform: scaleX(0) rotate(0.001deg);
+  transform-origin: right;
+  transition: transform 0.735s cubic-bezier(0.625, 0.05, 0, 1);
+}
+
+/* Alternate effect (like data-underline-link="alt") */
+.hamburger-nav__a::after {
+  transform-origin: left;
+  transition-delay: 0.3s;
+}
+
+/* Hover — activates underline sequence */
+@media (hover: hover) and (pointer: fine) {
+  .hamburger-nav__a:hover::before {
+    transform-origin: left;
+    transform: scaleX(1) rotate(0.001deg);
+    transition-delay: 0s;
+  }
+
+  .hamburger-nav__a:hover::after {
+    transform-origin: right;
+    transform: scaleX(1) rotate(0.001deg);
+    transition-delay: 0.3s;
+  }
+}
+
+/* Hamburger Button animation */
+.centered-nav__toggle .centered-nav__toggle-bar {
+  transition: transform 0.6s cubic-bezier(.65, 0, 0, 1);
+  transform: translateY(-0.25em) rotate(0.001deg);
+}
+.centered-nav__toggle:hover .centered-nav__toggle-bar {
+  transform: translateY(0.25em) rotate(0.001deg);
+}
+.centered-nav__toggle .centered-nav__toggle-bar:nth-child(2) {
+  transform: translateY(0.15em) rotate(0.001deg);
+}
+.centered-nav__toggle:hover .centered-nav__toggle-bar:nth-child(2) {
+  transform: translateY(-0.15em) rotate(0.001deg);
+}
+[data-navigation-status="active"] .centered-nav__toggle .centered-nav__toggle-bar {
+  transform: translateY(0em) rotate(45deg);
+}
+[data-navigation-status="active"] .centered-nav__toggle .centered-nav__toggle-bar:nth-child(2) {
+  transform: translateY(0em) rotate(-45deg);
+}
+
+
+[data-navigation-status="active"] .centered-nav__content.custom {
+  max-height: 80vh; /* adjust according to menu size */
+  opacity: 1;
+}
+
+[data-modal-group-status] {
+  transition: all 0.2s linear;
+}
+
+[data-modal-group-status="active"] {
+  opacity: 1;
+  visibility: visible;
+}
+
+[quote-modal][data-modal-status="active"] {
+  display: flex;
+}
+
+.quote_modal-content-bottom,
+[quote-empty] {
+  transition: opacity 0.3s ease;
+}
+
+/* Even items (2nd, 4th, 6th...) → inverted layout */
+#feature-list .w-dyn-item:nth-child(even) .card-layout_component {
+  margin-left: auto; /* move to right side */
+  margin-right: 0;
+}
+
+
+/* Highlight line on even items (mirror position) */
+#feature-list .w-dyn-item:nth-child(even) .highlight-line {
+  left: -20%;
+  right: 0%;
+  transform: rotate(180deg);
+}
+
+.request-a-quote_list .quote_item {
+  border-bottom: 1px solid var(--_ui-styles---stroke--border-color);
+}
+
+.request-a-quote_list .quote_item:last-child {
+  border-bottom: none;
+}
+
+[data-hide-if-empty-cms]:not(:has(.w-dyn-item)) {
+	display: none;
+}
+
+
+[data-quote-item], [data-quote-part-item] { display: none !important; }
+
+/* ============================================================
+   NAVIGATION — Simplified: 2 backgrounds, 2 text modes
+   ============================================================
+   Background 1: .navigation (nav bar) — transparent at top, solid when scrolled
+   Background 2: .centered-nav (menu) — dark when open
+   Text: nav--dark-bg → white. nav--over-light → black. (script adds classes)
+   ============================================================ */
+
+.navigation {
+  background-color: transparent !important;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+.navigation.nav--scrolled {
+  background-color: color-mix(in srgb, var(--color-scheme--light--background-white) 95%, transparent) !important;
+}
+.navigation.nav--scrolled.nav--dark-bg {
+  background-color: color-mix(in srgb, var(--color-scheme--dark--background) 90%, transparent) !important;
+}
+.navigation.nav--hidden {
+  transform: translateY(-100%);
+}
+
+/* Menu open: centered-nav dark background */
+[data-navigation-status="active"] .centered-nav {
+  background-color: var(--color-scheme--dark--background) !important;
+}
+
+/* Light bg (nav--over-light) → dark text */
+.navigation_container.nav--over-light,
+.navigation_container.nav--over-light .nav__logo,
+.navigation_container.nav--over-light .nav__button-text,
+.navigation_container.nav--over-light .centered-nav__header,
+.navigation_container.nav--over-light .centered-nav__header .hide-tablet,
+.navigation_container.nav--over-light .right-nav,
+.navigation_container.nav--over-light .nav__category-text,
+.navigation_container.nav--over-light a,
+.navigation_container.nav--over-light .hamburger-nav__a,
+.navigation_container.nav--over-light .hamburger-nav__p,
+.navigation_container.nav--over-light span {
+  color: var(--color-scheme--light--text) !important;
+}
+.navigation_container.nav--over-light .centered-nav__toggle-bar {
+  background-color: var(--color-scheme--light--text) !important;
+}
+.navigation_container.nav--over-light .nav__icon {
+  color: var(--color-scheme--light--text) !important;
+}
+
+/* Dark bg (nav--dark-bg) → white text */
+.navigation.nav--dark-bg .navigation_container,
+.navigation.nav--dark-bg .navigation_container .nav__logo,
+.navigation.nav--dark-bg .navigation_container .nav__button-text,
+.navigation.nav--dark-bg .navigation_container .centered-nav__header,
+.navigation.nav--dark-bg .navigation_container .centered-nav__header .hide-tablet,
+.navigation.nav--dark-bg .navigation_container .right-nav,
+.navigation.nav--dark-bg .navigation_container .nav__category-text,
+.navigation.nav--dark-bg .navigation_container a,
+.navigation.nav--dark-bg .navigation_container .hamburger-nav__a,
+.navigation.nav--dark-bg .navigation_container .hamburger-nav__p,
+.navigation.nav--dark-bg .navigation_container span {
+  color: var(--color-scheme--dark--text) !important;
+}
+.navigation.nav--dark-bg .navigation_container .centered-nav__toggle-bar {
+  background-color: var(--color-scheme--dark--text) !important;
+}
+.navigation.nav--dark-bg .navigation_container .nav__icon {
+  color: var(--color-scheme--dark--text) !important;
+}
+
+/* GET-A-QUOTE PAGE: Empty cart layout */
+body.quote-request-empty .request-quote_wrapper,
+body.quote-request-empty .request-a-quote_content,
+body.quote-request-empty [quote-content] {
+  display: none !important;
+}
+body.quote-request-empty .about__grid-content {
+  grid-template-columns: 1fr;
+}
+body.quote-request-empty .contact_content {
+  grid-column: 1;
+}
+
+</style>
+
+===========================================
+FOOTER CODE (paste in Footer Code)
+===========================================
+
+PREREQUISITES (load before, in Head or Footer):
+- Locomotive Scroll: https://cdn.jsdelivr.net/npm/locomotive-scroll@beta/bundled/locomotive-scroll.min.js
+- GSAP + ScrollTrigger: https://cdn.prod.website-files.com/gsap/3.14.2/gsap.min.js, ScrollTrigger.min.js
+- Finsweet Attributes (for lists): https://attributes.finsweet.com/list/list.js
+
+<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-webflow-core.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-quote-system.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-spare-parts-quantity-control-FIXED-ECOMMERCE.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-navigation.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-finsweet-sort.js" defer></script>
+
+===========================================
+INSTRUCTIONS & DOCUMENTATION
+===========================================
+
+SCRIPT ORDER:
+1. weldpoly-webflow-core.js (Lenis + Locomotive + Content reveal)
+2. weldpoly-quote-system.js (quote cart, modal, products)
+3. weldpoly-spare-parts-quantity-control-FIXED-ECOMMERCE.js (load AFTER quote-system)
+4. weldpoly-navigation.js (menu toggle + nav contrast)
+5. weldpoly-finsweet-sort.js (requires Finsweet Attributes)
+
+PRODUCT DETAIL PAGE - For spare parts:
+- h1: data-product-slug="[slug]", data-quote-product-title=""
+- Size range: data-product-size-range="" (uses textContent)
+
+REQUEST-A-QUOTE PAGE - On /get-a-quote:
+- Container: data-quote-list
+- Title: data-request-a-quote-title (on h2 "QUOTE (X ITEMS)")
+- Template: data-quote-placeholder with [data-quote-title], [data-quote-description], [data-quote-number], .quote_plus, .quote_minus, [data-quote-remove]
+
+NAV VARIANT: For get-a-quote page dark bg when scrolled, set Navigation variant to "request-a-quote" in Webflow Designer.
+
+GitHub: https://github.com/francastudio/weldpoly-scripts
+Purge cache: https://purge.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/[filename].js
+
+Latest commit: (updated by atualizar-github-auto.sh)
