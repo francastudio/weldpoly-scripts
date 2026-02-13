@@ -140,8 +140,17 @@ Target: .navigation_container (not .navigation)
 .navigation.nav--scrolled .navigation_container.w-variant-786667dd-68f0-ad1b-a709-087eee46453b .hamburger-nav__p { color: #fff !important; }
 .navigation.nav--scrolled .navigation_container.w-variant-786667dd-68f0-ad1b-a709-087eee46453b .centered-nav__toggle-bar { background-color: #fff !important; }
 
-Menu aberto — background mais escuro (adicione ao Head Code):
+Menu aberto — background escuro + texto branco para legibilidade (adicione ao Head Code):
 [data-navigation-status="active"] .centered-nav { background-color: #0a0a0a !important; }
+[data-navigation-status="active"] .centered-nav,
+[data-navigation-status="active"] .centered-nav .nav__logo,
+[data-navigation-status="active"] .centered-nav .nav__button-text,
+[data-navigation-status="active"] .centered-nav a,
+[data-navigation-status="active"] .centered-nav .hamburger-nav__a,
+[data-navigation-status="active"] .centered-nav .hamburger-nav__p,
+[data-navigation-status="active"] .centered-nav .centered-nav__link,
+[data-navigation-status="active"] .centered-nav span { color: #fff !important; }
+[data-navigation-status="active"] .centered-nav .centered-nav__toggle-bar { background-color: #fff !important; }
 
 ===========================================
 NAV SCROLL BACKGROUND - CSS (add to Head Code):
@@ -201,7 +210,7 @@ FORÇAR ATUALIZAÇÃO IMEDIATA (após push): O script atualizar-github-auto.sh p
 cache do jsDelivr automaticamente. Se precisar purgar manualmente, acesse:
 https://purge.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/nome-do-arquivo.js
 
-Latest commit: a80e742 (2026-02-13 11:15:37)
+Latest commit: 2e03837 (2026-02-13 11:20:03)
 
 ✅ Vertical scroll inside modal div (`.quote_modal-content`)
 ✅ Dynamic max-height to keep actions visible
