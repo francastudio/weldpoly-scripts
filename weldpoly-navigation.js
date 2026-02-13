@@ -1,11 +1,13 @@
 /**
  * Weldpoly Navigation — Unified script
- * Combines: centered nav toggle + nav contrast (logo/menu color by section)
+ * Combines: centered nav toggle + nav contrast + scroll background
  *
  * 1) Centered Nav: [data-navigation-toggle="toggle"], [data-navigation-toggle="close"]
  *    [data-navigation-status] active/not-active. ESC closes.
  * 2) Nav Contrast: Logo/menu color by section. Add .nav--over-light to .navigation_container
  *    when nav is over light sections (.background-color-white, .background-color-primary, etc.)
+ * 3) Scroll Background: Add .nav--scrolled to .navigation when user scrolls down (background
+ *    appears for better visibility). Requires CSS: .navigation.nav--scrolled .centered-nav__bg
  *
  * DEBUG: ?nav_debug=1 or window.NAV_CONTRAST_DEBUG = true
  */
@@ -147,10 +149,54 @@
     }
   }
 
+  // ===== 3) Nav Scroll Background =====
+  const SCROLL_THRESHOLD = 60;
+
+  function getScrollY() {
+    if (typeof window === 'undefined') return 0;
+    const ls = window.locomotiveScroll || window.scroll?.locomotive;
+    if (ls && ls.lenis && typeof ls.lenis.scroll === 'number') return ls.lenis.scroll;
+    return window.scrollY || window.pageYOffset || document.documentElement.scrollTop || 0;
+  }
+
+  function initNavScrollBackground() {
+    const nav = document.querySelector('.navigation');
+    if (!nav) return;
+
+    let isScrolled = false;
+
+    const update = () => {
+      const scrollY = getScrollY();
+      const shouldBeScrolled = scrollY > SCROLL_THRESHOLD;
+      if (shouldBeScrolled !== isScrolled) {
+        isScrolled = shouldBeScrolled;
+        nav.classList.toggle('nav--scrolled', isScrolled);
+      }
+    };
+
+    update();
+    window.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('load', update);
+
+    const hookLenis = () => {
+      const ls = window.locomotiveScroll || window.scroll?.locomotive;
+      if (ls && ls.lenis) {
+        ls.lenis.on('scroll', update);
+        return true;
+      }
+      return false;
+    };
+    if (!hookLenis()) {
+      document.addEventListener('DOMContentLoaded', () => hookLenis());
+      setTimeout(() => hookLenis(), 1500);
+    }
+  }
+
   // ===== Init =====
   function init() {
     initCenteredScalingNavigationBar();
     initNavContrast();
+    initNavScrollBackground();
   }
 
   if (document.readyState === 'loading') {

@@ -109,6 +109,18 @@ Target: .navigation_container (not .navigation)
 
 Menu aberto — background mais escuro (adicione ao Head Code):
 [data-navigation-status="active"] .centered-nav { background-color: #0a0a0a !important; }
+
+===========================================
+NAV SCROLL BACKGROUND - CSS (add to Head Code):
+===========================================
+Quando o usuário rola a página, o menu ganha background sólido para melhor legibilidade.
+
+.navigation.nav--scrolled .centered-nav__bg {
+  background-color: rgba(255, 255, 255, 0.95) !important;
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+.centered-nav__bg { transition: background-color 0.3s ease, backdrop-filter 0.3s ease; }
 (ajuste: #050505 = quase preto, #111 = um pouco mais claro)
 
 ===========================================
@@ -122,7 +134,7 @@ FORÇAR ATUALIZAÇÃO IMEDIATA (após push): O script atualizar-github-auto.sh p
 cache do jsDelivr automaticamente. Se precisar purgar manualmente, acesse:
 https://purge.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/nome-do-arquivo.js
 
-Latest commit: d04ea05 (2026-02-11 12:20:03)
+Latest commit: a2822c2 (2026-02-11 12:28:40)
 
 ✅ Vertical scroll inside modal div (`.quote_modal-content`)
 ✅ Dynamic max-height to keep actions visible
