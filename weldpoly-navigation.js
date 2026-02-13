@@ -8,6 +8,8 @@
  *    when nav is over light sections (.background-color-white, .background-color-primary, etc.)
  * 3) Scroll Background: Add .nav--scrolled to .navigation when user scrolls down (background
  *    appears for better visibility). Requires CSS: .navigation.nav--scrolled .centered-nav__bg
+ * 4) Scroll Hide/Show: Add .nav--hidden when scrolling down, remove when scrolling up.
+ *    Nav visible at top. Requires CSS: .navigation.nav--hidden { transform: translateY(-100%); }
  *
  * DEBUG: ?nav_debug=1 or window.NAV_CONTRAST_DEBUG = true
  */
@@ -192,11 +194,84 @@
     }
   }
 
+  // ===== 4) Nav Scroll Hide/Show =====
+  const SCROLL_HIDE_TOP_THRESHOLD = 80;
+  const SCROLL_HIDE_DELTA = 50;
+
+  function initNavScrollHide() {
+    const nav = document.querySelector('.navigation');
+    if (!nav) return;
+
+    let lastScrollY = getScrollY();
+    let isHidden = false;
+
+    const update = () => {
+      if (document.querySelector('[data-navigation-status="active"]')) return;
+
+      const scrollY = getScrollY();
+
+      if (scrollY <= SCROLL_HIDE_TOP_THRESHOLD) {
+        if (isHidden) {
+          isHidden = false;
+          nav.classList.remove('nav--hidden');
+        }
+        lastScrollY = scrollY;
+        return;
+      }
+
+      const delta = scrollY - lastScrollY;
+
+      if (delta > SCROLL_HIDE_DELTA) {
+        lastScrollY = scrollY;
+        if (!isHidden) {
+          isHidden = true;
+          nav.classList.add('nav--hidden');
+        }
+      } else if (delta < -SCROLL_HIDE_DELTA) {
+        lastScrollY = scrollY;
+        if (isHidden) {
+          isHidden = false;
+          nav.classList.remove('nav--hidden');
+        }
+      }
+    };
+
+    let scrollTicking = false;
+    const onScroll = () => {
+      if (scrollTicking) return;
+      scrollTicking = true;
+      requestAnimationFrame(() => {
+        update();
+        scrollTicking = false;
+      });
+    };
+
+    lastScrollY = getScrollY();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('load', () => { lastScrollY = getScrollY(); });
+
+    const hookLenis = () => {
+      const ls = window.locomotiveScroll || window.scroll?.locomotive;
+      if (ls && ls.lenis) {
+        ls.lenis.on('scroll', () => {
+          requestAnimationFrame(update);
+        });
+        return true;
+      }
+      return false;
+    };
+    if (!hookLenis()) {
+      document.addEventListener('DOMContentLoaded', () => hookLenis());
+      setTimeout(() => hookLenis(), 1500);
+    }
+  }
+
   // ===== Init =====
   function init() {
     initCenteredScalingNavigationBar();
     initNavContrast();
     initNavScrollBackground();
+    initNavScrollHide();
   }
 
   if (document.readyState === 'loading') {
