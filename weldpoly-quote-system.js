@@ -252,11 +252,13 @@ let systemInitialized=false;
     }
 
     function updateRequestQuotePageEmptyState() {
-      const path = window.location.pathname || '';
-      const isRequestQuotePage = /\/(get-a-quote|request-a-quote)\/?$/.test(path) || /(get-a-quote|request-a-quote)\.html/.test(path) || document.querySelector('[data-request-a-quote-title]');
+      const path = (window.location.pathname || '').toLowerCase();
+      const hasQuoteTitle = !!document.querySelector('[data-request-a-quote-title]');
+      const isRequestQuotePage = /\/(get-a-quote|request-a-quote)(\/|$)/.test(path) || /(get-a-quote|request-a-quote)\.html/.test(path) || hasQuoteTitle;
       if (!isRequestQuotePage) return;
       const pageQuoteSection = document.querySelector('.request-a-quote_content, [quote-content], .request-quote_wrapper');
       if (!pageQuoteSection) return;
+      loadCart();
       if (cart.length === 0) {
         document.body.classList.add('quote-request-empty');
       } else {
@@ -375,6 +377,11 @@ let systemInitialized=false;
     updateRequestQuotePageEmptyState();
     updateNavQty();
     refreshSparePartButtons();
+
+    window.updateRequestQuotePageEmptyState = updateRequestQuotePageEmptyState;
+    window.addEventListener('load', updateRequestQuotePageEmptyState);
+    setTimeout(updateRequestQuotePageEmptyState, 300);
+    setTimeout(updateRequestQuotePageEmptyState, 1000);
 
     if (quoteModal && quoteModal.getAttribute('data-modal-status') === 'active') {
       setupModalScroll();
