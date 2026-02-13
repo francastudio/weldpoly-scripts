@@ -55,7 +55,7 @@
   }
 
   // ===== 2) Nav Contrast (logo/menu color by section) =====
-  const LIGHT_SECTIONS = '.background-color-white, .background-color-primary, .color-scheme-1, .section_solutions, .section_about-us, [data-nav-contrast="light"]';
+  const LIGHT_SECTIONS = '.background-color-white, .background-color-primary, .color-scheme-1, .section_solutions, .section_about-us, .section_product-header, [data-nav-contrast="light"]';
   const NAV_CONTRAST_DEBUG = !!(window.NAV_CONTRAST_DEBUG || /[?&]nav_debug=1/.test(location.search));
   const VARIANT_AT_TOP_LIGHT = ['variant', 'dark']; /* Pages with white header: dark text at top */
 
