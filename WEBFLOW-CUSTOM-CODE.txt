@@ -744,7 +744,6 @@ PREREQUISITES (load before, in Head or Footer):
 <script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-quote-system.js" defer></script>
 <script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-spare-parts-quantity-control-FIXED-ECOMMERCE.js" defer></script>
 <script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-navigation.js" defer></script>
-<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-finsweet-sort.js" defer></script>
 
 ===========================================
 INSTRUCTIONS & DOCUMENTATION
@@ -755,7 +754,8 @@ SCRIPT ORDER:
 2. weldpoly-quote-system.js (quote cart, modal, products)
 3. weldpoly-spare-parts-quantity-control-FIXED-ECOMMERCE.js (load AFTER quote-system)
 4. weldpoly-navigation.js (menu toggle + nav contrast)
-5. weldpoly-finsweet-sort.js (requires Finsweet Attributes)
+
+Sorting: Use Finsweet Attributes native sort only (weldpoly-finsweet-sort.js disabled).
 
 PRODUCT DETAIL PAGE - For spare parts:
 - h1: data-product-slug="[slug]", data-quote-product-title=""
@@ -771,4 +771,4 @@ NAV VARIANT: For get-a-quote page dark bg when scrolled, set Navigation variant 
 GitHub: https://github.com/francastudio/weldpoly-scripts
 Purge cache: https://purge.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/[filename].js
 
-Latest commit: cfd7331 (2026-02-13 13:00:13)
+Latest commit: 9a4aa10 (2026-02-26 20:10:52)
