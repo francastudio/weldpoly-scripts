@@ -2,7 +2,7 @@
  * Weldpoly Finsweet Alphanumeric Sort
  * Natural sort for product lists using Finsweet Attributes API
  * - name: natural sort (Item 2 before Item 10)
- * - description: sort by min size in mm (e.g. "40 to 160mm" -> 40, smallest first)
+ * - description: sort by pipe-max-mm only (smallest/largest first; ties unordered)
  * Requires: Finsweet Attributes (https://attributes.finsweet.com/list/list.js)
  * Docs: https://github.com/finsweet/attributes/blob/master/packages/list/README.md
  */
@@ -75,22 +75,16 @@
 
           if (fieldKey === 'description') {
             const sortedItems = [...items].sort((a, b) => {
-              const aMin = a.fields['pipe-min-mm']?.value;
-              const bMin = b.fields['pipe-min-mm']?.value;
               const aMax = a.fields['pipe-max-mm']?.value;
               const bMax = b.fields['pipe-max-mm']?.value;
-              const aRange = (aMin != null && !isNaN(Number(aMin)))
-                ? { min: Number(aMin), max: (aMax != null && !isNaN(Number(aMax))) ? Number(aMax) : Number(aMin) }
-                : extractMinMaxMm(a.fields.description?.value || '');
-              const bRange = (bMin != null && !isNaN(Number(bMin)))
-                ? { min: Number(bMin), max: (bMax != null && !isNaN(Number(bMax))) ? Number(bMax) : Number(bMin) }
-                : extractMinMaxMm(b.fields.description?.value || '');
-              if (aRange.min !== bRange.min) {
-                const cmp = aRange.min - bRange.min;
-                return direction === 'desc' ? -cmp : cmp;
-              }
-              const cmpMax = aRange.max - bRange.max;
-              return direction === 'desc' ? -cmpMax : cmpMax;
+              const aMaxVal = (aMax != null && !isNaN(Number(aMax)))
+                ? Number(aMax)
+                : extractMinMaxMm(a.fields.description?.value || '').max;
+              const bMaxVal = (bMax != null && !isNaN(Number(bMax)))
+                ? Number(bMax)
+                : extractMinMaxMm(b.fields.description?.value || '').max;
+              const cmp = aMaxVal - bMaxVal;
+              return direction === 'desc' ? -cmp : cmp;
             });
             return sortedItems;
           }

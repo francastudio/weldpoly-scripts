@@ -657,6 +657,11 @@ nav[variant="variant"] .hamburger-nav__p {
 
 [data-quote-item], [data-quote-part-item] { display: none !important; }
 
+/* Blog category filter: label text white when radio is checked */
+.category-filter-menu .radio_field:has(.w--redirected-checked) {
+  color: white !important;
+}
+
 /* ============================================================
    NAVIGATION — Script only on scroll or menu open
    Initial state: component CSS (variants). No overrides.
@@ -766,4 +771,4 @@ NAV VARIANT: For get-a-quote page dark bg when scrolled, set Navigation variant 
 GitHub: https://github.com/francastudio/weldpoly-scripts
 Purge cache: https://purge.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/[filename].js
 
-Latest commit: 1c50d06 (2026-02-13 12:52:39)
+Latest commit: cfd7331 (2026-02-13 13:00:13)
