@@ -1,10 +1,15 @@
-/** Weldpoly Quote System — cart, modal, products | CDN: cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-quote-system.js */
+/** Weldpoly Quote System — cart, modal, products | CDN: cdn.jsdelivr.net/gh/lillocal/weldpoly-scripts@main/weldpoly-quote-system.js */
 (function(){
 'use strict';
 const CART_KEY='quoteCart',CART_SAVED_AT_KEY='quoteCartSavedAt',CART_TTL_MS=36e5;
-// GA4 conversion config — fired on successful quote submission (no thank-you redirect).
+// GA4 conversion config — fired on the success page after a confirmed quote submission.
 // Adjust value/currency to match the Google Ads conversion you want to report.
 const GA4_LEAD_EVENT='generate_lead',GA4_LEAD_CURRENCY='AUD',GA4_LEAD_VALUE=1;
+// Flag set on the quote form submit and read on the success page. Captured at load
+// time (before the success page's own script clears it) so the conversion is reliable.
+const QUOTE_SUBMIT_FLAG='quoteSubmitted';
+let cameFromQuoteSubmit=false;
+try{cameFromQuoteSubmit=sessionStorage.getItem(QUOTE_SUBMIT_FLAG)==='true';}catch(_){}
 let systemInitialized=false;
 
   function initQuoteSystem() {
@@ -392,21 +397,22 @@ let systemInitialized=false;
     }
 
     function setupQuoteLeadTracking() {
+      // Case 1: we landed on the success page after a confirmed quote submit.
+      // Most reliable point to fire — gtag is loaded and no redirect can cancel it.
+      // We only read the flag here (captured at load); the success page's own script
+      // is responsible for clearing it, so we don't break its access gate.
+      if (cameFromQuoteSubmit && !document.querySelector('[data-quote-hidden]')) {
+        fireQuoteLeadConversion();
+        return;
+      }
+      // Case 2: on the quote request page, mark the submit so the success page fires
+      // the conversion. Redundant with the page's inline flag, kept as a safety net.
       const hidden = document.querySelector('[data-quote-hidden]');
       const form = hidden ? hidden.closest('form') : null;
-      if (!form) return; // only wire on the quote request page
-      let fired = false;
-      const fireOnce = () => { if (fired) return; fired = true; fireQuoteLeadConversion(); };
-      // Fire on submit so it runs before a possible Webflow success redirect.
-      form.addEventListener('submit', fireOnce);
-      // Backup for AJAX (no-redirect) forms: Webflow reveals .w-form-done on success.
-      const wrapper = form.closest('.w-form') || form.parentElement;
-      const done = wrapper ? wrapper.querySelector('.w-form-done') : null;
-      if (done) {
-        const isVisible = () => done.offsetParent !== null || getComputedStyle(done).display !== 'none';
-        const observer = new MutationObserver(() => { if (isVisible()) fireOnce(); });
-        observer.observe(done, { attributes: true, attributeFilter: ['style', 'class'] });
-      }
+      if (!form) return;
+      form.addEventListener('submit', () => {
+        try { sessionStorage.setItem(QUOTE_SUBMIT_FLAG, 'true'); } catch (_) {}
+      });
     }
 
     loadCart();
