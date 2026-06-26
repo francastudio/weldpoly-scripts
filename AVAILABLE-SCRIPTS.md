@@ -1,7 +1,7 @@
 # Scripts Available on GitHub
 
 ## 📦 Repository
-**GitHub:** https://github.com/francastudio/weldpoly-scripts
+**GitHub:** https://github.com/lillocal/weldpoly-scripts
 
 All scripts are at the **repository root** (same level, no subfolders).
 
@@ -9,44 +9,38 @@ All scripts are at the **repository root** (same level, no subfolders).
 
 ## 📋 Available Scripts
 
-### 1. **weldpoly-quote-system.js** ⭐ UNIFIED
-**Function:** Complete quote and modal system (unified)
+### 1. **weldpoly-quote-system.js**
+**Function:** Quote cart, modal, products
 - Manages cart in `localStorage`
-- Renders items in the modal
+- Renders items in the modal (products + spare parts when spare-parts script loads)
 - Updates quantity in the browser
-- Controls add/remove product buttons
-- Opens/closes modal automatically
-- Handles buttons with `data-modal-target="quote-modal"`
-- Handles buttons with `data-add-quote`
+- Handles `[data-add-quote]`, `[data-modal-target="quote-modal"]`
 - Closes modal via `.modal__btn-close` or `[data-modal-close]`
 
 **URL:**
 ```
-https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-quote-system.js
+https://cdn.jsdelivr.net/gh/lillocal/weldpoly-scripts@main/weldpoly-quote-system.js
 ```
 
 **When to use:**
-- ✅ **ALWAYS** - This is the main quote system script
-- ✅ Must be loaded BEFORE the spare parts script
-- ✅ Unifies quote and modal in a single system
+- ✅ **ALWAYS** - Load first; spare-parts script loads after
 
 ---
 
 ### 2. **weldpoly-spare-parts-quantity-control-FIXED-ECOMMERCE.js**
-**Function:** Quantity control for spare parts
-- Quantity control (-, input, +) for spare parts
-- Automatic cart synchronization
-- Adds/removes automatically when quantity changes
-- Opens modal automatically when item is added
+**Function:** Add spare parts to quote
+- Toggle spare parts in/out of cart via `[spare-part-add]`, `.spare-part-qty-plus`, or checkbox
+- Uses same cart as quote system; quote system renders the modal
+- Button state: checkmark when in quote, + when not
 
 **URL:**
 ```
-https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-spare-parts-quantity-control-FIXED-ECOMMERCE.js
+https://cdn.jsdelivr.net/gh/lillocal/weldpoly-scripts@main/weldpoly-spare-parts-quantity-control-FIXED-ECOMMERCE.js
 ```
 
 **When to use:**
-- ✅ When you need quantity control for spare parts
-- ⚠️ Requires `weldpoly-quote-system.js` to work
+- ✅ When you need spare parts on product pages
+- ⚠️ Must load AFTER weldpoly-quote-system.js
 
 ---
 
@@ -58,7 +52,7 @@ https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-spare-pa
 
 **URL:**
 ```
-https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-webflow-core.js
+https://cdn.jsdelivr.net/gh/lillocal/weldpoly-scripts@main/weldpoly-webflow-core.js
 ```
 
 **When to use:**
@@ -77,7 +71,7 @@ https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-webflow-
 
 **URL:**
 ```
-https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-navigation.js
+https://cdn.jsdelivr.net/gh/lillocal/weldpoly-scripts@main/weldpoly-navigation.js
 ```
 
 **When to use:**
@@ -93,7 +87,7 @@ https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-navigati
 
 **URL:**
 ```
-https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-finsweet-sort.js
+https://cdn.jsdelivr.net/gh/lillocal/weldpoly-scripts@main/weldpoly-finsweet-sort.js
 ```
 
 ---
@@ -102,11 +96,11 @@ https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-finsweet
 
 ### Complete System (Quote + Spare Parts)
 ```html
-<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-quote-system.js" defer></script>
-<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-spare-parts-quantity-control-FIXED-ECOMMERCE.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/lillocal/weldpoly-scripts@main/weldpoly-quote-system.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/lillocal/weldpoly-scripts@main/weldpoly-spare-parts-quantity-control-FIXED-ECOMMERCE.js" defer></script>
 ```
 
-⚠️ **IMPORTANT:** Always load `weldpoly-quote-system.js` first!
+Load quote-system first, then spare-parts.
 
 ---
 
@@ -162,11 +156,11 @@ The `weldpoly-quote-system.js` manages:
 ### Modal — 2 Component Templates
 Inside `.quote_modal-content` you must have:
 1. **`[data-quote-item]`** — product template (class `quote_item`). Used for products added via `[data-add-quote]`.
-2. **`[data-quote-part-item]`** — spare part template (class `quote_part-item`). Used for spare parts added via the spare parts script.
+2. **`[data-quote-part-item]`** — spare part template (class `quote_part-item`). Used for spare parts added via the spare-parts script (`[spare-part-add]`).
 
 Both templates need `[data-quote-title]`, `[data-quote-description]`, `[data-quote-number]`, `.quote_plus`, `.quote_minus`, `[data-quote-remove]`.
 
-**Important:** Set templates to `display: none` by default (in Webflow or via CSS) so they don't appear when the modal opens before the script renders. The scripts clone these elements and only the clones are shown.
+**Important:** Set templates to `display: none` by default (in Webflow or via CSS) so they don't appear when the modal opens before the script renders. The script clones these elements and only the clones are shown.
 
 ### Request-a-Quote Page (/get-a-quote)
 On the get-a-quote page, the quote system auto-renders the cart list when these elements exist:

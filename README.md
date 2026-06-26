@@ -20,9 +20,9 @@ weldpoly-scripts/
 In **Webflow Footer Code** (Site Settings → Custom Code → Footer Code), add:
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-webflow-core.js" defer></script>
-<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-quote-system.js" defer></script>
-<script src="https://cdn.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/weldpoly-spare-parts-quantity-control-FIXED-ECOMMERCE.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/lillocal/weldpoly-scripts@main/weldpoly-webflow-core.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/lillocal/weldpoly-scripts@main/weldpoly-quote-system.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/lillocal/weldpoly-scripts@main/weldpoly-spare-parts-quantity-control-FIXED-ECOMMERCE.js" defer></script>
 ```
 
 **⚠️ IMPORTANT:**
@@ -62,4 +62,4 @@ To verify scripts are loading correctly:
 
 For full script list and details, see `AVAILABLE-SCRIPTS.md`.
 
-For Webflow embed code and prerequisites, see `WEBFLOW-FOOTER-CODE.txt`.
+For Webflow embed code and prerequisites, see `WEBFLOW-CUSTOM-CODE.txt`.
