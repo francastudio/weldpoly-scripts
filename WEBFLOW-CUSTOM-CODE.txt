@@ -771,4 +771,4 @@ NAV VARIANT: For get-a-quote page dark bg when scrolled, set Navigation variant 
 GitHub: https://github.com/francastudio/weldpoly-scripts
 Purge cache: https://purge.jsdelivr.net/gh/francastudio/weldpoly-scripts@main/[filename].js
 
-Latest commit: 9a4aa10 (2026-02-26 20:10:52)
+Latest commit: 29b2c65 (2026-02-26 20:35:21)

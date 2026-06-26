@@ -2,6 +2,9 @@
 (function(){
 'use strict';
 const CART_KEY='quoteCart',CART_SAVED_AT_KEY='quoteCartSavedAt',CART_TTL_MS=36e5;
+// GA4 conversion config — fired on successful quote submission (no thank-you redirect).
+// Adjust value/currency to match the Google Ads conversion you want to report.
+const GA4_LEAD_EVENT='generate_lead',GA4_LEAD_CURRENCY='AUD',GA4_LEAD_VALUE=1;
 let systemInitialized=false;
 
   function initQuoteSystem() {
@@ -371,12 +374,48 @@ let systemInitialized=false;
     document.addEventListener('quoteCartExpired',onCartEvt);
     document.addEventListener('quoteCartUpdated',onCartEvt);
 
+    function fireQuoteLeadConversion() {
+      loadCart();
+      const itemsCount = Array.isArray(cart) ? cart.reduce((sum, i) => sum + (i && i.qty ? i.qty : 1), 0) : 0;
+      const payload = { currency: GA4_LEAD_CURRENCY, value: GA4_LEAD_VALUE, items_count: itemsCount };
+      try {
+        if (typeof window.gtag === 'function') {
+          window.gtag('event', GA4_LEAD_EVENT, payload);
+        } else {
+          window.dataLayer = window.dataLayer || [];
+          window.dataLayer.push(Object.assign({ event: GA4_LEAD_EVENT }, payload));
+        }
+        console.log('[Weldpoly Quote] GA4 generate_lead fired', payload);
+      } catch (err) {
+        console.warn('[Weldpoly Quote] GA4 generate_lead failed', err);
+      }
+    }
+
+    function setupQuoteLeadTracking() {
+      const hidden = document.querySelector('[data-quote-hidden]');
+      const form = hidden ? hidden.closest('form') : null;
+      if (!form) return; // only wire on the quote request page
+      let fired = false;
+      const fireOnce = () => { if (fired) return; fired = true; fireQuoteLeadConversion(); };
+      // Fire on submit so it runs before a possible Webflow success redirect.
+      form.addEventListener('submit', fireOnce);
+      // Backup for AJAX (no-redirect) forms: Webflow reveals .w-form-done on success.
+      const wrapper = form.closest('.w-form') || form.parentElement;
+      const done = wrapper ? wrapper.querySelector('.w-form-done') : null;
+      if (done) {
+        const isVisible = () => done.offsetParent !== null || getComputedStyle(done).display !== 'none';
+        const observer = new MutationObserver(() => { if (isVisible()) fireOnce(); });
+        observer.observe(done, { attributes: true, attributeFilter: ['style', 'class'] });
+      }
+    }
+
     loadCart();
     renderCart();
     renderRequestQuotePageList();
     updateRequestQuotePageEmptyState();
     updateNavQty();
     refreshSparePartButtons();
+    setupQuoteLeadTracking();
 
     window.updateRequestQuotePageEmptyState = updateRequestQuotePageEmptyState;
     window.addEventListener('load', updateRequestQuotePageEmptyState);
